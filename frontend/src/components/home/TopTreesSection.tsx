@@ -57,9 +57,10 @@ export default async function TopTreesSection() {
           {/* Carte fixe dédiée aux entreprises */}
           <div className="relative flex h-[470px] w-72 flex-col justify-between overflow-hidden rounded-xl bg-brand-dark p-6 text-brand-white shadow-lg transition-shadow hover:shadow-xl">
             <Image
-              src="/images/impact/impact-6.jpg"
+              src="/images/home/impact/impact-6.jpg"
               alt="Forêt illustrant la section dédiée aux offres d'entreprise de reforestation"
               fill
+              sizes="288px"
               className="object-cover opacity-30"
             />
             <div className="relative z-10">

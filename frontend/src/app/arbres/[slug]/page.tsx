@@ -19,13 +19,6 @@ type ProjectHasTree = {
   };
 };
 
-// NOTE SEO — déduplication possible (évolution)
-// generateMetadata et le composant page appellent tous deux getOneTree(slug),
-// ce qui déclenche 2 fetchs. Acceptable pour le MVP (coût négligeable sur une
-// fiche produit). Optimisation future : wrapper getOneTree avec cache() de React
-// pour mémoïser le résultat sur la durée d'un seul render serveur.
-//   import { cache } from 'react'
-//   const getCachedTree = cache((slug: string) => getOneTree(slug))
 export async function generateMetadata({
   params,
 }: {
@@ -38,7 +31,6 @@ export async function generateMetadata({
 
   return {
     title: tree.commonName,
-    // Optimisation post MVP : meta descriptions dédiées et optimisées, distinctes du contenu de page
     description: tree.shortDescription,
   };
 }
@@ -95,40 +87,43 @@ export default async function TreeDetailsPage({
     <main>
       <Title title={treeData.commonName} />
 
-      <section className="bg-brand-dark px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+      <section
+        className="bg-brand-dark px-4 py-16 sm:px-6 lg:px-8 lg:py-20"
+        aria-label={`Fiche produit : ${treeData.commonName}`}
+      >
         <div className="mx-auto max-w-7xl p-8 text-brand-white">
           <div className="flex flex-col lg:flex-row gap-12 items-stretch lg:h-[550px]">
-            {/* IMAGE */}
             <div className="relative w-full lg:w-1/2 aspect-square rounded-2xl overflow-hidden bg-gray-100">
               <Image
                 src={getImageUrl(treeData.picture)}
-                alt={treeData.commonName}
+                alt={`Photo de ${treeData.commonName} (${treeData.scientificName})`}
                 fill
                 sizes="(min-width: 1024px) 50vw, 100vw"
                 className="object-cover"
               />
             </div>
 
-            {/* BLOCK DROIT */}
             <div className="flex flex-col gap-4 lg:w-1/2 bg-brand-bg/5 rounded-2xl p-8 h-full justify-between">
               <div>
                 <span className="bg-brand-accent text-white px-4 py-1 text-sm font-semibold rounded-md inline-block">
-                  Origine : {treeData.origin}
+                  Origine&nbsp;: {treeData.origin}
                 </span>
               </div>
 
               <p className="text-sm text-brand-white italic">
-                Famille de produits : {treeData.family}
+                Famille de produits&nbsp;: {treeData.family}
               </p>
 
               <div>
                 <h2 className="text-3xl font-bold">{treeData.commonName}</h2>
                 <p className="text-sm italic text-brand-white">
+                  <span className="sr-only">Nom scientifique : </span>
                   {treeData.scientificName}
                 </p>
               </div>
 
               <p className="text-4xl font-bold">
+                <span className="sr-only">Prix : </span>
                 {new Intl.NumberFormat('fr-FR', {
                   style: 'currency',
                   currency: 'EUR',
@@ -140,10 +135,10 @@ export default async function TreeDetailsPage({
               </p>
 
               <p className="text-sm text-brand-white">
-                Description : <br /> {treeData.shortDescription}
+                Description&nbsp;:
+                <br /> {treeData.shortDescription}
               </p>
 
-              {/* ACHAT */}
               <TreeQuantity
                 treeId={treeData.id}
                 projects={projectsForPurchase}
@@ -151,16 +146,16 @@ export default async function TreeDetailsPage({
               />
 
               <p className="text-xs text-brand-white">
-                Réf. produit : {treeData.id}
+                <span className="sr-only">Référence produit : </span>
+                Réf. produit&nbsp;: {treeData.id}
               </p>
             </div>
           </div>
 
-          {/* DESCRIPTION */}
           <div className="mt-12 bg-brand-bg text-brand-dark rounded-2xl p-8">
-            <h3 className="text-lg font-bold mb-4">
+            <h2 className="text-lg font-bold mb-4">
               Description &amp; caractéristiques
-            </h3>
+            </h2>
             <p className="text-sm text-muted-foreground">
               {treeData.longDescription}
             </p>
@@ -168,9 +163,11 @@ export default async function TreeDetailsPage({
         </div>
       </section>
 
-      {/* CARROUSEL */}
       {suggestions.length > 0 && (
-        <section className="bg-brand-bg px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+        <section
+          className="bg-brand-bg px-4 py-16 sm:px-6 lg:px-8 lg:py-20"
+          aria-label="Autres arbres disponibles"
+        >
           <div className="mx-auto max-w-7xl p-8">
             <h2 className="text-xl font-bold uppercase mb-8 text-brand-dark">
               Sélection d&apos;autres arbres

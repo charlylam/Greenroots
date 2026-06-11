@@ -17,6 +17,8 @@ import { Field, FieldLabel } from '@/components/ui/field';
 import type { ProjectsSearchParams } from '@/types/index';
 import ProjectsFilters from '@/components/layout/ProjectsFilters';
 import { getImageUrl } from '@/lib/images';
+import { ApiError } from '@/lib/errors';
+import { redirect } from 'next/navigation';
 
 interface ProjectsContentProps {
   searchParams: ProjectsSearchParams;
@@ -33,6 +35,12 @@ export default async function ProjectsContent({
   let total = 0;
   let limit = 0;
 
+  // Signal : la page demandée est hors limite (l'API a renvoyé une 404).
+  // On l'isole dans un flag car redirect() ne peut pas être appelé
+  // dans le catch (Next.js l'implémente via une exception, qui serait
+  // de nouveau interceptée par le catch).
+  let pageOutOfRange = false;
+
   try {
     const projectsData = await getProjects(
       currentPage,
@@ -48,10 +56,28 @@ export default async function ProjectsContent({
     const localisationsData = await getProjectsLocalisations();
     localisations = localisationsData.localisations;
   } catch (error) {
-    console.error(
-      'Erreur lors de la récupération des données des projets :',
-      error
-    );
+    // L'API renvoie une 404 quand la page demandée dépasse le nombre
+    // de pages disponibles (ex: /projets?page=999). On l'utilise comme
+    // signal pour rediriger l'utilisateur vers la page 1, plutôt que de
+    // le laisser bloqué sur une page sans pagination.
+    // Note : une recherche sans résultat ne déclenche PAS de 404
+    // (l'API renvoie un 200 avec une liste vide et total=0), donc cette
+    // redirection ne casse pas le cas "aucun projet ne correspond".
+    if (error instanceof ApiError && error.status === 404) {
+      pageOutOfRange = true;
+    } else {
+      // Autres erreurs (500, réseau...) : projects reste null,
+      // ce qui déclenche l'affichage du message "non disponibles".
+      console.error(
+        'Erreur lors de la récupération des données des projets :',
+        error
+      );
+    }
+  }
+  // Redirection hors du try/catch pour éviter que l'exception interne
+  // de redirect() soit interceptée par le catch ci-dessus.
+  if (pageOutOfRange) {
+    redirect('/projets?page=1');
   }
 
   const totalPages = Math.ceil(total / limit);

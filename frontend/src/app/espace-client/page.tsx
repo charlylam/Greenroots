@@ -12,6 +12,7 @@ import { getMe, getMyOrders } from '@/lib/api';
 import type { Order, User } from '@/types';
 import { redirect } from 'next/dist/client/components/navigation';
 import { Metadata } from 'next';
+import DeleteAccountButton from '@/components/layout/DeleteAccountButton';
 
 export const metadata: Metadata = {
   title: 'Mon espace client',
@@ -204,6 +205,11 @@ export default async function CustomerAreaPage() {
               ))}
             </ul>
           </section>
+
+          {/* Bouton de suppression du compte  */}
+          <div className="flex justify-end pt-4">
+            <DeleteAccountButton />
+          </div>
         </div>
       </section>
     </main>

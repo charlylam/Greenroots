@@ -54,6 +54,7 @@ components:
 paths:
   /api/orders:
     post:
+      tags: [Orders]
       summary: Convertit le panier actif en commande
       description: |
         - Décrémente le stock des arbres dans la même transaction.

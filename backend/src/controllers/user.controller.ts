@@ -5,6 +5,7 @@ import {
   updateUserBodySchema,
   orderIdParamSchema,
 } from '../validators/user.validator.js';
+import { sendAccountDeletionEmail } from '../services/mail.service.js';
 
 // Champs renvoyés pour le profil — on exclut password.
 const userSelect = {
@@ -74,6 +75,28 @@ export const userController = {
    */
   async remove(req: Request, res: Response): Promise<void> {
     const userId = req.user!.userId;
+
+    // On récupère l'utilisateur concerné
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        email: true,
+        firstName: true,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundError('Utilisateur introuvable');
+    }
+    // On envoie l'email avant la suppression du compte
+    try {
+      await sendAccountDeletionEmail(user.email, user.firstName);
+    } catch (error) {
+      console.error(
+        '[userController.remove] Erreur envoi email suppression compte :',
+        error
+      );
+    }
 
     // Compte le nombre de commandes pour déterminer la stratégie.
     const orderCount = await prisma.order.count({ where: { userId } });

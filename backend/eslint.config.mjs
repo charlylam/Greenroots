@@ -1,11 +1,11 @@
-import typescript from '@typescript-eslint/eslint-plugin'
-import parser from '@typescript-eslint/parser'
+import typescript from '@typescript-eslint/eslint-plugin';
+import parser from '@typescript-eslint/parser';
 
 export default [
   {
     files: ['**/*.ts'],
 
-    ignores: ['prisma/generated/**'],
+    ignores: ['prisma/generated/**', 'dist/**'],
 
     languageOptions: {
       parser,
@@ -20,4 +20,4 @@ export default [
       '@typescript-eslint/no-explicit-any': 'warn',
     },
   },
-]
+];

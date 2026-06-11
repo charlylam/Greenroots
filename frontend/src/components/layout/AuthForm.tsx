@@ -10,43 +10,18 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 
-// ================================================================
-// PAGE D'AUTHENTIFICATION
-// ================================================================
-// Ce composant gère les deux écrans d'authentification :
-// - connexion (login)
-// - inscription (register)
-//
-// Il conserve l'état local des formulaires, traite la logique de
-// soumission et bascule l'affichage entre les deux modes.
-
 type AuthMode = 'login' | 'register';
 type AccountType = 'particulier' | 'entreprise';
 
 export default function AuthForm() {
   const router = useRouter();
 
-  // Mode de la page : indique si l'utilisateur est en train de se connecter
-  // ou de créer un compte. Cette valeur pilote l'affichage de l'interface.
   const [mode, setMode] = useState<AuthMode>('login');
-
-  // Type de compte choisi pour l'inscription.
-  // Le parcours est légèrement différent selon qu'il s'agit d'un particulier
-  // ou d'un professionnel, notamment pour les champs SIRET et raison sociale.
   const [accountType, setAccountType] = useState<AccountType>('particulier');
 
-  // === CONNEXION (login) ===
-  // Données du formulaire de connexion stockées dans des variables séparées.
-  // Cette séparation est volontaire : elle rend les validations et l'envoi de la requête
-  // plus lisibles que si tout était regroupé dans un objet unique, surtout pour une page
-  // qui gère aussi un second parcours d'inscription.
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // === INSCRIPTION (register) ===
-  // Données du formulaire d'inscription regroupées dans un objet unique.
-  // Ce choix facilite la mise à jour dynamique de plusieurs champs avec une seule fonction
-  // de mise à jour, et permet de construire facilement le payload envoyé au backend.
   const [registerData, setRegisterData] = useState({
     lastName: '',
     firstName: '',
@@ -60,62 +35,28 @@ export default function AuthForm() {
     companyName: '',
   });
 
-  // Message d'erreur affiché à l'utilisateur si la validation locale
-  // ou la requête serveur échoue. Il est réinitialisé au démarrage de chaque action
-  // pour éviter qu'un ancien message reste visible alors que l'utilisateur tente autre chose.
   const [errorMessage, setErrorMessage] = useState('');
-
-  // Indique si une requête réseau est en cours.
-  // Cette variable sert à désactiver les boutons et à afficher un état de chargement
-  // pendant la connexion ou l'inscription, pour éviter les actions multiples.
   const [isLoading, setIsLoading] = useState(false);
-
-  // État du consentement aux CGU et politique de confidentialité.
-  // La case doit être cochée avant toute création de compte, sinon l'inscription est bloquée.
   const [acceptTerms, setAcceptTerms] = useState(false);
 
-  /**
-   * Met à jour un champ du formulaire d'inscription.
-   * On travaille sur une copie de l'objet pour conserver l'immuabilité du state React.
-   * Cela permet de garder un rendu propre et prévisible lors des saisies utilisateur.
-   */
   function updateRegisterField(
     field: keyof typeof registerData,
     value: string
   ) {
-    setRegisterData({
-      ...registerData,
-      [field]: value,
-    });
+    setRegisterData({ ...registerData, [field]: value });
   }
 
-  /**
-   * Bascule entre l'écran de connexion et l'écran d'inscription.
-   * On réinitialise également le message d'erreur pour éviter qu'un ancien message
-   * reste affiché quand l'utilisateur change de mode.
-   */
   function switchMode(nextMode: AuthMode) {
     setMode(nextMode);
     setErrorMessage('');
   }
 
-  // === LOGIQUE: CONNEXION ===
-  /**
-   * Gère la soumission du formulaire de connexion.
-   * La page envoie une requête à l'API interne Next.js /api/auth/login,
-   * qui elle-même délègue la vérification des identifiants au backend.
-   */
   const handleLogin: SubmitEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
-
     setErrorMessage('');
     setIsLoading(true);
 
-    // Validation côté navigateur du format de l'adresse email.
-    // Elle évite d'envoyer une requête inutile si l'utilisateur a déjà saisi
-    // une valeur manifestement invalide.
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
     if (!emailRegex.test(email)) {
       setErrorMessage('Veuillez saisir une adresse email valide.');
       setIsLoading(false);
@@ -123,28 +64,17 @@ export default function AuthForm() {
     }
 
     try {
-      // Requête vers l'API interne Next.js qui sert de passerelle au backend.
-      // Cette étape est essentielle pour que le navigateur puisse gérer les cookies
-      // d'authentification lors de la connexion.
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
+        body: JSON.stringify({ email, password }),
       });
 
       if (!response.ok) {
-        // Si l'API répond avec une erreur, on affiche un message générique
-        // sans révéler de détails techniques sur le fonctionnement du backend.
         setErrorMessage('Email ou mot de passe incorrect.');
         return;
       }
 
-      // Si la connexion réussit, on redirige l'utilisateur vers son espace client.
-      // La méthode refresh force Next.js à remettre à jour les données de navigation
-      // après une connexion qui a pu modifier l'état de l'application.
       router.push('/espace-client');
       router.refresh();
     } catch {
@@ -154,28 +84,16 @@ export default function AuthForm() {
     }
   };
 
-  // === LOGIQUE: INSCRIPTION ===
-  /**
-   * Gère la soumission du formulaire d'inscription.
-   * Cette fonction effectue d'abord une validation locale (champs obligatoires,
-   * format email, mot de passe, SIRET si professionnel, etc.), puis envoie
-   * les données au backend pour créer le compte utilisateur.
-   */
   const handleRegister: SubmitEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
-
     setErrorMessage('');
     setIsLoading(true);
 
-    // Validation des champs obligatoires avant d'appeler le backend.
-    // Cette étape évite les requêtes inutiles et donne un retour immédiat
-    // à l'utilisateur lorsqu'un champ essentiel est manquant.
     if (!registerData.lastName.trim()) {
       setErrorMessage('Le nom est obligatoire.');
       setIsLoading(false);
       return;
     }
-
     if (!registerData.firstName.trim()) {
       setErrorMessage('Le prénom est obligatoire.');
       setIsLoading(false);
@@ -183,60 +101,47 @@ export default function AuthForm() {
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
     if (!emailRegex.test(registerData.email)) {
       setErrorMessage('Veuillez saisir une adresse email valide.');
       setIsLoading(false);
       return;
     }
-
     if (registerData.password.length < 8) {
       setErrorMessage('Le mot de passe doit contenir au moins 8 caractères.');
       setIsLoading(false);
       return;
     }
-
     if (registerData.password !== registerData.confirmPassword) {
       setErrorMessage('Les mots de passe ne correspondent pas.');
       setIsLoading(false);
       return;
     }
-
     if (!registerData.address.trim()) {
       setErrorMessage("L'adresse est obligatoire.");
       setIsLoading(false);
       return;
     }
-
     if (!/^\d{5}$/.test(registerData.postalCode)) {
       setErrorMessage('Le code postal doit contenir 5 chiffres.');
       setIsLoading(false);
       return;
     }
-
     if (!registerData.city.trim()) {
       setErrorMessage('La ville est obligatoire.');
       setIsLoading(false);
       return;
     }
-
-    // Validation spécifique aux comptes professionnels.
-    // Le SIRET est obligatoire pour les entreprises et doit respecter un format précis.
     if (accountType === 'entreprise' && !/^\d{14}$/.test(registerData.siret)) {
       setErrorMessage('Le numéro de SIRET doit contenir 14 chiffres.');
       setIsLoading(false);
       return;
     }
-
     if (accountType === 'entreprise' && !registerData.companyName.trim()) {
-      // Pour un compte entreprise, la raison sociale est essentielle pour identifier la structure.
       setErrorMessage('La raison sociale est obligatoire.');
       setIsLoading(false);
       return;
     }
-
     if (!acceptTerms) {
-      // La validation des mentions légales est obligatoire avant toute création de compte.
       setErrorMessage(
         "Vous devez accepter les Conditions d'utilisation et la Politique de confidentialité."
       );
@@ -244,9 +149,6 @@ export default function AuthForm() {
       return;
     }
 
-    // Construction du payload envoyé au backend.
-    // On distingue les champs communs et les champs spécifiques aux professionnels
-    // pour respecter le format attendu par l'API d'inscription.
     const payload = {
       lastName: registerData.lastName,
       firstName: registerData.firstName,
@@ -264,8 +166,6 @@ export default function AuthForm() {
     };
 
     try {
-      // Appel au backend d'inscription, avec l'URL publique définie côté Next.js.
-      // Cette requête est distincte de la connexion car elle crée le compte avant de l'authentifier.
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`,
         {
@@ -276,21 +176,16 @@ export default function AuthForm() {
       );
 
       if (!response.ok) {
-        // Si le backend signale un conflit, cela veut souvent dire qu'un compte
-        // existe déjà avec la même adresse email ou le même SIRET.
         if (response.status === 409) {
           setErrorMessage('Un compte existe déjà avec cet email ou ce SIRET.');
           return;
         }
-
         setErrorMessage(
           'Impossible de créer le compte. Vérifiez les informations saisies.'
         );
         return;
       }
 
-      // Après inscription, on revient au mode connexion et on pré-remplit
-      // l'email pour faciliter la connexion immédiate de l'utilisateur.
       setMode('login');
       setEmail(registerData.email);
       setPassword('');
@@ -306,7 +201,8 @@ export default function AuthForm() {
       <section className="relative isolate min-h-screen overflow-hidden">
         <Image
           src="/images/background-image-main.jpg"
-          alt="Forêt et reforestation"
+          alt=""
+          aria-hidden="true"
           fill
           priority
           sizes="100vw"
@@ -314,7 +210,7 @@ export default function AuthForm() {
         />
 
         <div className="relative z-10">
-          <section
+          <div
             className={
               mode === 'login'
                 ? 'flex min-h-screen items-start justify-center px-4 pt-28 pb-10 md:pt-36'
@@ -329,7 +225,13 @@ export default function AuthForm() {
               }
             >
               {mode === 'login' ? (
-                <form onSubmit={handleLogin} className="space-y-6">
+                <form
+                  onSubmit={handleLogin}
+                  className="space-y-6"
+                  aria-label="Formulaire de connexion"
+                  aria-busy={isLoading}
+                  noValidate
+                >
                   <div className="space-y-5">
                     <div>
                       <h1 className="text-3xl font-bold">Connexion</h1>
@@ -341,9 +243,10 @@ export default function AuthForm() {
                     <FormField
                       id="login-email"
                       label="Email"
-                      type="text"
+                      type="email"
                       value={email}
                       onChange={setEmail}
+                      required
                     />
 
                     <FormField
@@ -352,6 +255,7 @@ export default function AuthForm() {
                       type="password"
                       value={password}
                       onChange={setPassword}
+                      required
                     />
                   </div>
 
@@ -361,36 +265,56 @@ export default function AuthForm() {
                     <Button
                       type="submit"
                       disabled={isLoading}
+                      aria-disabled={isLoading}
                       className="h-11 cursor-pointer rounded-md bg-brand-dark px-6 font-semibold text-brand-white hover:bg-brand-accent disabled:cursor-not-allowed disabled:opacity-60"
                     >
-                      {isLoading ? 'Connexion...' : 'Suivant'}
+                      {isLoading ? (
+                        <>
+                          <span aria-hidden="true">Connexion...</span>
+                          <span className="sr-only">
+                            Connexion en cours, veuillez patienter
+                          </span>
+                        </>
+                      ) : (
+                        'Suivant'
+                      )}
                     </Button>
                   </div>
 
                   <div className="space-y-3 pt-4">
                     <p className="text-sm">
-                      Pas de compte ? Créez-en un en quelques clics !
+                      Pas de compte ? Créez-en un en quelques clics&nbsp;!
                     </p>
-
                     <Button
                       type="button"
                       onClick={() => switchMode('register')}
-                      className="h-11 cursor-pointer rounded-md bg-brand-accent px-6 font-semibold text-brand-white hover:bg-brand-dark"
+                      className="h-11 cursor-pointer rounded-md bg-brand-dark px-6 font-semibold text-brand-white hover:bg-brand-accent"
                     >
                       Inscription
                     </Button>
                   </div>
                 </form>
               ) : (
-                <form onSubmit={handleRegister} className="space-y-4">
+                <form
+                  onSubmit={handleRegister}
+                  className="space-y-4"
+                  aria-label="Formulaire d'inscription"
+                  aria-busy={isLoading}
+                  noValidate
+                >
                   <div>
                     <h1 className="text-3xl font-bold">Créer un compte</h1>
                   </div>
 
-                  <div className="flex flex-col gap-3 sm:flex-row sm:gap-16">
+                  <div
+                    role="group"
+                    aria-label="Type de compte"
+                    className="flex flex-col gap-3 sm:flex-row sm:gap-16"
+                  >
                     <button
                       type="button"
                       onClick={() => setAccountType('particulier')}
+                      aria-pressed={accountType === 'particulier'}
                       className={
                         accountType === 'particulier'
                           ? 'cursor-pointer border-b-2 border-brand-accent pb-1 font-semibold text-brand-dark'
@@ -403,6 +327,7 @@ export default function AuthForm() {
                     <button
                       type="button"
                       onClick={() => setAccountType('entreprise')}
+                      aria-pressed={accountType === 'entreprise'}
                       className={
                         accountType === 'entreprise'
                           ? 'cursor-pointer border-b-2 border-brand-accent pb-1 font-semibold text-brand-dark'
@@ -421,6 +346,7 @@ export default function AuthForm() {
                       onChange={(value) =>
                         updateRegisterField('lastName', value)
                       }
+                      required
                     />
 
                     <FormField
@@ -430,17 +356,19 @@ export default function AuthForm() {
                       onChange={(value) =>
                         updateRegisterField('firstName', value)
                       }
+                      required
                     />
 
                     <div className="md:col-span-2">
                       <FormField
                         id="register-email"
                         label="Email"
-                        type="text"
+                        type="email"
                         value={registerData.email}
                         onChange={(value) =>
                           updateRegisterField('email', value)
                         }
+                        required
                       />
                     </div>
 
@@ -453,9 +381,13 @@ export default function AuthForm() {
                         onChange={(value) =>
                           updateRegisterField('password', value)
                         }
+                        required
+                        describedBy="password-hint"
                       />
-
-                      <p className="mt-1 text-xs text-brand-muted">
+                      <p
+                        id="password-hint"
+                        className="mt-1 text-xs text-brand-muted"
+                      >
                         Minimum 8 caractères, avec une majuscule, un chiffre et
                         un caractère spécial.
                       </p>
@@ -469,6 +401,7 @@ export default function AuthForm() {
                       onChange={(value) =>
                         updateRegisterField('confirmPassword', value)
                       }
+                      required
                     />
 
                     <div className="md:col-span-2">
@@ -479,6 +412,7 @@ export default function AuthForm() {
                         onChange={(value) =>
                           updateRegisterField('address', value)
                         }
+                        required
                       />
                     </div>
 
@@ -489,6 +423,8 @@ export default function AuthForm() {
                       onChange={(value) =>
                         updateRegisterField('postalCode', value)
                       }
+                      required
+                      inputMode="numeric"
                     />
 
                     <FormField
@@ -496,6 +432,7 @@ export default function AuthForm() {
                       label="Ville"
                       value={registerData.city}
                       onChange={(value) => updateRegisterField('city', value)}
+                      required
                     />
 
                     {accountType === 'entreprise' && (
@@ -507,8 +444,9 @@ export default function AuthForm() {
                           onChange={(value) =>
                             updateRegisterField('siret', value)
                           }
+                          required
+                          inputMode="numeric"
                         />
-
                         <FormField
                           id="companyName"
                           label="Raison sociale"
@@ -516,21 +454,22 @@ export default function AuthForm() {
                           onChange={(value) =>
                             updateRegisterField('companyName', value)
                           }
+                          required
                         />
                       </>
                     )}
                   </div>
 
                   <div className="rounded-md border border-gray-200 p-3">
-                    {/* Bloc de validation légale obligatoire pour l'inscription. */}
                     <label className="flex items-start gap-3 text-sm">
                       <input
                         type="checkbox"
                         checked={acceptTerms}
                         onChange={(e) => setAcceptTerms(e.target.checked)}
                         className="mt-1"
+                        required
+                        aria-required="true"
                       />
-
                       <span>
                         J&apos;ai lu et j&apos;accepte les{' '}
                         <Link
@@ -556,7 +495,6 @@ export default function AuthForm() {
                   {errorMessage && <ErrorMessage message={errorMessage} />}
 
                   <div className="flex items-center justify-between gap-4 pt-1">
-                    {/* Lien retour vers le mode connexion et bouton de validation de l'inscription. */}
                     <button
                       type="button"
                       onClick={() => switchMode('login')}
@@ -568,15 +506,25 @@ export default function AuthForm() {
                     <Button
                       type="submit"
                       disabled={isLoading}
-                      className="h-11 cursor-pointer rounded-md bg-brand-accent px-6 font-semibold text-brand-white hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-60"
+                      aria-disabled={isLoading}
+                      className="h-11 cursor-pointer rounded-md bg-brand-dark px-6 font-semibold text-brand-white hover:bg-brand-accent disabled:cursor-not-allowed disabled:opacity-60"
                     >
-                      {isLoading ? 'Inscription...' : 'Je m’inscris'}
+                      {isLoading ? (
+                        <>
+                          <span aria-hidden="true">Inscription...</span>
+                          <span className="sr-only">
+                            Inscription en cours, veuillez patienter
+                          </span>
+                        </>
+                      ) : (
+                        'Je m\u2019inscris'
+                      )}
                     </Button>
                   </div>
                 </form>
               )}
             </div>
-          </section>
+          </div>
         </div>
       </section>
     </main>
@@ -589,6 +537,9 @@ type FormFieldProps = {
   type?: string;
   value: string;
   onChange: (value: string) => void;
+  required?: boolean;
+  describedBy?: string;
+  inputMode?: React.HTMLAttributes<HTMLInputElement>['inputMode'];
 };
 
 function FormField({
@@ -597,17 +548,22 @@ function FormField({
   type = 'text',
   value,
   onChange,
+  required = false,
+  describedBy,
+  inputMode,
 }: FormFieldProps) {
-  // Composant utilitaire réutilisable pour chaque champ de saisie.
-  // Il garantit un rendu homogène du label et de l'input partout dans la page.
   const [showPassword, setShowPassword] = useState(false);
-
   const isPasswordField = type === 'password';
 
   return (
     <div className="space-y-1.5">
       <label htmlFor={id} className="block text-sm text-brand-dark">
         {label}
+        {required && (
+          <span aria-hidden="true" className="ml-1 text-red-600">
+            *
+          </span>
+        )}
       </label>
 
       <div className="relative">
@@ -615,7 +571,10 @@ function FormField({
           id={id}
           name={id}
           type={isPasswordField ? (showPassword ? 'text' : 'password') : type}
-          required
+          required={required}
+          aria-required={required}
+          aria-describedby={describedBy}
+          inputMode={inputMode}
           value={value}
           onChange={(event) => onChange(event.target.value)}
           className="h-11 rounded-md bg-brand-white pr-10"
@@ -631,8 +590,13 @@ function FormField({
                 ? 'Masquer le mot de passe'
                 : 'Afficher le mot de passe'
             }
+            aria-controls={id}
           >
-            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            {showPassword ? (
+              <EyeOff size={18} aria-hidden="true" />
+            ) : (
+              <Eye size={18} aria-hidden="true" />
+            )}
           </button>
         )}
       </div>
@@ -641,10 +605,12 @@ function FormField({
 }
 
 function ErrorMessage({ message }: { message: string }) {
-  // Composant d'affichage d'erreur simple et visuel.
-  // Il ne contient aucune logique de validation, uniquement l'affichage du message.
   return (
-    <p className="rounded-md bg-red-50 px-4 py-3 text-sm text-red-700">
+    <p
+      role="alert"
+      aria-live="assertive"
+      className="rounded-md bg-red-50 px-4 py-3 text-sm text-red-700"
+    >
       {message}
     </p>
   );

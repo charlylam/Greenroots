@@ -19,11 +19,15 @@ export default function ProjectsPage({
   return (
     <main>
       <Title title="Nos projets" />
-      <section className="bg-brand-bg px-4 py-4 sm:px-4 lg:px-4 lg:py-2">
+
+      <section
+        className="bg-brand-bg px-4 py-4 sm:px-4 lg:px-4 lg:py-2"
+        aria-label="Notre approche"
+      >
         <div className="mx-auto max-w-7xl p-8 text-brand-dark">
           <p className="pb-4">
             Chez GreenRoots, chaque projet de reforestation naît d&apos;un
-            partenariat avec des acteurs locaux engagés : associations,
+            partenariat avec des acteurs locaux engagés&nbsp;: associations,
             coopératives agricoles et communautés qui connaissent leur
             territoire mieux que quiconque. Nous sélectionnons des essences
             indigènes, adaptées au climat et aux sols de chaque région, pour
@@ -38,13 +42,17 @@ export default function ProjectsPage({
             aussi créer des emplois locaux, protéger les ressources en eau,
             stabiliser les sols agricoles et capter durablement du carbone. En
             finançant un projet GreenRoots, vous ne plantez pas seulement un
-            arbre : vous participez à une démarche concrète de régénération
+            arbre&nbsp;: vous participez à une démarche concrète de régénération
             environnementale et sociale, dont vous pouvez suivre
             l&apos;avancement en toute transparence.
           </p>
         </div>
       </section>
-      <section className="bg-brand-bg px-4 pt-4 pb-16 sm:px-6 lg:px-8 lg:pt-4 lg:pb-20">
+
+      <section
+        className="bg-brand-bg px-4 pt-4 pb-16 sm:px-6 lg:px-8 lg:pt-4 lg:pb-20"
+        aria-label="Liste des projets de reforestation"
+      >
         <div className="mx-auto max-w-7xl p-8 text-brand-dark">
           <Suspense fallback={<ProjectsSkeleton />}>
             <ProjectsContent searchParams={searchParams} />

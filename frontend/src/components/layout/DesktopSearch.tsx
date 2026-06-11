@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Search } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import { getImageUrl } from '@/lib/images';
 
 interface Tree {
@@ -36,7 +35,6 @@ export default function DesktopSearch() {
   });
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -76,16 +74,6 @@ export default function DesktopSearch() {
     return () => clearTimeout(timeout);
   }, [query]);
 
-  function handleSearch() {
-    if (query.trim()) {
-      router.push(`/recherche?q=${encodeURIComponent(query)}`);
-
-      setOpen(false);
-      setQuery('');
-      setResults({ trees: [], projects: [] });
-    }
-  }
-
   const hasResults = results.trees.length > 0 || results.projects.length > 0;
 
   return (
@@ -104,7 +92,6 @@ export default function DesktopSearch() {
               setResults({ trees: [], projects: [] });
             }
           }}
-          onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
           placeholder="Rechercher..."
           className="w-full bg-transparent outline-none text-white placeholder:text-white/60 text-sm"
           autoComplete="off"

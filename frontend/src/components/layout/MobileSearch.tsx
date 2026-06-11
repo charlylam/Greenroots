@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Search } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import { getImageUrl } from '@/lib/images';
 
 interface Tree {
@@ -37,7 +36,6 @@ export default function MobileSearch() {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -77,16 +75,6 @@ export default function MobileSearch() {
     return () => clearTimeout(timeout);
   }, [query]);
 
-  function handleSearch() {
-    if (query.trim()) {
-      router.push(`/recherche?q=${encodeURIComponent(query)}`);
-
-      setOpen(false);
-      setQuery('');
-      setResults({ trees: [], projects: [] });
-    }
-  }
-
   const hasResults = results.trees.length > 0 || results.projects.length > 0;
 
   return (
@@ -108,7 +96,6 @@ export default function MobileSearch() {
               setResults({ trees: [], projects: [] });
             }
           }}
-          onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
           placeholder="Rechercher..."
           className="w-full bg-transparent outline-none placeholder:text-white/60 text-white text-sm"
           autoComplete="off"
@@ -210,14 +197,6 @@ export default function MobileSearch() {
           ) : (
             <p className="px-4 py-3 text-sm text-gray-400">Aucun résultat</p>
           )}
-
-          <button
-            onClick={handleSearch}
-            className="w-full flex items-center justify-between px-4 py-3 border-t border-gray-100 text-sm text-gray-600 hover:bg-gray-50"
-          >
-            <span>Rechercher « {query} »</span>
-            <span>→</span>
-          </button>
         </div>
       )}
     </div>

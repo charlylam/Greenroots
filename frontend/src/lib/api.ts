@@ -49,7 +49,16 @@ export async function apiFetch(endpoint: string, options?: RequestInit) {
     throw new ApiError(message, response.status, errorBody?.error?.code);
   }
 
-  // Si tout est OK, on retourne simplement le JSON de la réponse.
+  // 👇 ICI, à la place de l'ancien `return response.json();`
+  // Certaines réponses (DELETE → 204 No Content, ou 200 sans corps) n'ont pas
+  // de JSON à parser. On évite que response.json() lève une erreur sur un corps vide.
+  if (
+    response.status === 204 ||
+    response.headers.get('content-length') === '0'
+  ) {
+    return null;
+  }
+
   return response.json();
 }
 

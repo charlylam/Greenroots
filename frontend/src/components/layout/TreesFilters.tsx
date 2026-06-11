@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
@@ -15,6 +15,7 @@ import {
 export default function TreesFilters() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   const updateFilter = useCallback(
     (key: string, value: string) => {
@@ -30,6 +31,15 @@ export default function TreesFilters() {
     [router, searchParams]
   );
 
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+    debounceRef.current = setTimeout(() => {
+      updateFilter('search', e.target.value);
+    }, 300);
+  };
+
   return (
     <div className="flex flex-wrap items-end justify-between gap-4 mb-6">
       {/* Filtres à gauche */}
@@ -41,7 +51,7 @@ export default function TreesFilters() {
             type="text"
             placeholder="Rechercher par nom..."
             defaultValue={searchParams.get('search') ?? ''}
-            onChange={(e) => updateFilter('search', e.target.value)}
+            onChange={handleSearch}
             className="w-60"
           />
         </div>

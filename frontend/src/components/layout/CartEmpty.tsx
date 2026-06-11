@@ -30,28 +30,61 @@ export default function CartEmpty() {
   }
 
   return (
-    <>
-      {/* Bouton principal : il n'efface rien immédiatement, il ouvre d'abord
-          une confirmation explicite pour sécuriser l'action. */}
-      <Button onClick={() => setIsConfirming(true)} variant="outline">
-        Vider le panier
-      </Button>
+    // aria-live="polite" + aria-atomic="true" : les lecteurs d'écran annoncent
+    // le changement d'état quand la zone de confirmation apparaît ou disparaît,
+    // sans interrompre une lecture en cours.
+    <div aria-live="polite" aria-atomic="true">
+      {!isConfirming ? (
+        // Bouton principal : il n'efface rien immédiatement, il ouvre d'abord
+        // une confirmation explicite pour sécuriser l'action.
+        // aria-expanded indique aux lecteurs d'écran si la confirmation est ouverte.
+        <Button
+          onClick={() => setIsConfirming(true)}
+          variant="outline"
+          className="bg-brand-white"
+          aria-expanded={isConfirming}
+        >
+          Vider le panier
+        </Button>
+      ) : (
+        // role="group" + aria-label : regroupe sémantiquement les deux boutons
+        // et contextualise l'action pour les lecteurs d'écran.
+        <div
+          role="group"
+          aria-label="Confirmer la suppression du panier"
+          className="flex gap-4"
+        >
+          {/* Texte sr-only lu avant les boutons : contextualise l'action
+              pour les utilisateurs de lecteurs d'écran qui ne voient pas
+              le bouton "Vider le panier" qui a déclenché cette confirmation. */}
+          <p className="sr-only">
+            Voulez-vous vraiment vider votre panier ? Cette action est
+            irréversible.
+          </p>
 
-      {/* Les actions de confirmation n'apparaissent que lorsque l'utilisateur
-          a demandé explicitement la suppression du contenu du panier. */}
-      {isConfirming && (
-        <div className="flex gap-4">
-          {/* Bouton de validation : déclenche réellement la suppression du panier. */}
-          <Button onClick={handleClear} variant="destructive">
+          {/* Bouton de validation : déclenche réellement la suppression du panier.
+              aria-label explicite car "Valider" seul est ambigu hors contexte visuel. */}
+          <Button
+            onClick={handleClear}
+            variant="destructive"
+            className="bg-brand-white"
+            aria-label="Confirmer — vider définitivement le panier"
+          >
             Valider
           </Button>
 
-          {/* Bouton d'annulation : ferme simplement la confirmation sans rien modifier. */}
-          <Button onClick={() => setIsConfirming(false)} variant="outline">
+          {/* Bouton d'annulation : ferme simplement la confirmation sans rien modifier.
+              aria-label explicite pour la même raison qu'"Annuler" seul manque de contexte. */}
+          <Button
+            onClick={() => setIsConfirming(false)}
+            variant="outline"
+            className="bg-brand-white"
+            aria-label="Annuler — conserver le panier"
+          >
             Annuler
           </Button>
         </div>
       )}
-    </>
+    </div>
   );
 }

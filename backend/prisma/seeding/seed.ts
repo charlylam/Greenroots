@@ -958,22 +958,76 @@ async function main() {
       userId: user1.id,
       cartId: cartThomasConverti.id,
       status: OrderStatus.validated,
-      amount: 33,
+      amount: 6382.5,
       items: {
         create: [
+          {
+            treeId: chene.id,
+            projectId: projetBretagne.id,
+            treeCommonName: 'Chêne sessile',
+            quantity: 250,
+            unitPrice: 12.9,
+          },
           {
             treeId: bouleau.id,
             projectId: projetBretagne.id,
             treeCommonName: 'Bouleau blanc',
-            quantity: 2,
+            quantity: 180,
             unitPrice: 7.5,
           },
+          {
+            treeId: hetre.id,
+            projectId: projetBretagne.id,
+            treeCommonName: 'Hêtre commun',
+            quantity: 140,
+            unitPrice: 11.5,
+          },
+          {
+            treeId: pin.id,
+            projectId: projetBretagne.id,
+            treeCommonName: 'Pin sylvestre',
+            quantity: 50,
+            unitPrice: 8.9,
+          },
+        ],
+      },
+    },
+  });
+
+  await prisma.order.create({
+    data: {
+      userId: user2.id,
+      status: OrderStatus.validated,
+      amount: 18040,
+      items: {
+        create: [
           {
             treeId: acajou.id,
             projectId: projetSahel.id,
             treeCommonName: "Acajou d'Afrique",
-            quantity: 1,
+            quantity: 600,
             unitPrice: 18,
+          },
+          {
+            treeId: baobab.id,
+            projectId: projetSahel.id,
+            treeCommonName: 'Baobab africain',
+            quantity: 200,
+            unitPrice: 28,
+          },
+          {
+            treeId: eucalyptus.id,
+            projectId: projetSahel.id,
+            treeCommonName: 'Eucalyptus bleu',
+            quantity: 80,
+            unitPrice: 14.5,
+          },
+          {
+            treeId: bouleau.id,
+            projectId: projetSahel.id,
+            treeCommonName: 'Bouleau blanc',
+            quantity: 64,
+            unitPrice: 7.5,
           },
         ],
       },
@@ -985,28 +1039,96 @@ async function main() {
       userId: user3.id,
       cartId: cartEntreprise.id,
       status: OrderStatus.validated,
-      amount: 930,
+      amount: 19475,
       items: {
         create: [
           {
             treeId: pin.id,
             projectId: projetAlpes.id,
             treeCommonName: 'Pin sylvestre',
-            quantity: 50,
+            quantity: 400,
             unitPrice: 8.9,
           },
           {
-            treeId: acajou.id,
-            projectId: projetAmazonie.id,
-            treeCommonName: "Acajou d'Afrique",
-            quantity: 20,
-            unitPrice: 18,
+            treeId: sapin.id,
+            projectId: projetAlpes.id,
+            treeCommonName: 'Sapin pectiné',
+            quantity: 300,
+            unitPrice: 13.5,
+          },
+          {
+            treeId: epicea.id,
+            projectId: projetAlpes.id,
+            treeCommonName: 'Épicéa commun',
+            quantity: 250,
+            unitPrice: 9.9,
+          },
+          {
+            treeId: chene.id,
+            projectId: projetAlpes.id,
+            treeCommonName: 'Chêne sessile',
+            quantity: 140,
+            unitPrice: 12.9,
           },
           {
             treeId: sequoia.id,
             projectId: projetAlpes.id,
             treeCommonName: 'Séquoia géant',
-            quantity: 5,
+            quantity: 65,
+            unitPrice: 25,
+          },
+          {
+            treeId: meleze.id,
+            projectId: projetAlpes.id,
+            treeCommonName: 'Mélèze d’Europe',
+            quantity: 140,
+            unitPrice: 14,
+          },
+        ],
+      },
+    },
+  });
+
+  await prisma.order.create({
+    data: {
+      userId: user1.id,
+      status: OrderStatus.validated,
+      amount: 62600,
+      items: {
+        create: [
+          {
+            treeId: acajou.id,
+            projectId: projetAmazonie.id,
+            treeCommonName: "Acajou d'Afrique",
+            quantity: 1000,
+            unitPrice: 18,
+          },
+          {
+            treeId: teck.id,
+            projectId: projetAmazonie.id,
+            treeCommonName: 'Teck',
+            quantity: 400,
+            unitPrice: 24,
+          },
+          {
+            treeId: bambou.id,
+            projectId: projetAmazonie.id,
+            treeCommonName: 'Bambou géant',
+            quantity: 300,
+            unitPrice: 9,
+          },
+          {
+            treeId: manguier.id,
+            projectId: projetAmazonie.id,
+            treeCommonName: 'Manguier',
+            quantity: 200,
+            unitPrice: 16.5,
+          },
+          {
+            treeId: sequoia.id,
+            projectId: projetAmazonie.id,
+            treeCommonName: 'Séquoia géant',
+            quantity: 20,
             unitPrice: 25,
           },
         ],
@@ -1017,15 +1139,533 @@ async function main() {
   await prisma.order.create({
     data: {
       userId: user2.id,
-      status: OrderStatus.canceled,
-      amount: 45,
+      status: OrderStatus.validated,
+      amount: 54300,
       items: {
         create: [
           {
             treeId: mangrove.id,
             projectId: projetMangrove.id,
             treeCommonName: 'Palétuvier rouge',
-            quantity: 3,
+            quantity: 1500,
+            unitPrice: 15,
+          },
+          {
+            treeId: cocotier.id,
+            projectId: projetMangrove.id,
+            treeCommonName: 'Cocotier',
+            quantity: 400,
+            unitPrice: 17,
+          },
+        ],
+      },
+    },
+  });
+
+  await prisma.order.create({
+    data: {
+      userId: user3.id,
+      status: OrderStatus.validated,
+      amount: 9295,
+      items: {
+        create: [
+          {
+            treeId: pin.id,
+            projectId: projetProvence.id,
+            treeCommonName: 'Pin sylvestre',
+            quantity: 250,
+            unitPrice: 8.9,
+          },
+          {
+            treeId: olivier.id,
+            projectId: projetProvence.id,
+            treeCommonName: 'Olivier',
+            quantity: 200,
+            unitPrice: 16,
+          },
+          {
+            treeId: cypres.id,
+            projectId: projetProvence.id,
+            treeCommonName: 'Cyprès de Provence',
+            quantity: 150,
+            unitPrice: 13,
+          },
+          {
+            treeId: chene.id,
+            projectId: projetProvence.id,
+            treeCommonName: 'Chêne sessile',
+            quantity: 149,
+            unitPrice: 12.9,
+          },
+        ],
+      },
+    },
+  });
+
+  await prisma.order.create({
+    data: {
+      userId: user1.id,
+      status: OrderStatus.validated,
+      amount: 6725,
+      items: {
+        create: [
+          {
+            treeId: hetre.id,
+            projectId: projetAuvergne.id,
+            treeCommonName: 'Hêtre commun',
+            quantity: 200,
+            unitPrice: 11.5,
+          },
+          {
+            treeId: chataignier.id,
+            projectId: projetAuvergne.id,
+            treeCommonName: 'Châtaignier',
+            quantity: 175,
+            unitPrice: 11,
+          },
+          {
+            treeId: erable.id,
+            projectId: projetAuvergne.id,
+            treeCommonName: 'Érable sycomore',
+            quantity: 150,
+            unitPrice: 10.5,
+          },
+          {
+            treeId: frene.id,
+            projectId: projetAuvergne.id,
+            treeCommonName: 'Frêne commun',
+            quantity: 100,
+            unitPrice: 9.5,
+          },
+        ],
+      },
+    },
+  });
+
+  await prisma.order.create({
+    data: {
+      userId: user2.id,
+      status: OrderStatus.validated,
+      amount: 8720,
+      items: {
+        create: [
+          {
+            treeId: hetre.id,
+            projectId: projetPyrenees.id,
+            treeCommonName: 'Hêtre commun',
+            quantity: 250,
+            unitPrice: 11.5,
+          },
+          {
+            treeId: sapin.id,
+            projectId: projetPyrenees.id,
+            treeCommonName: 'Sapin pectiné',
+            quantity: 220,
+            unitPrice: 13.5,
+          },
+          {
+            treeId: pin.id,
+            projectId: projetPyrenees.id,
+            treeCommonName: 'Pin sylvestre',
+            quantity: 200,
+            unitPrice: 8.9,
+          },
+          {
+            treeId: chene.id,
+            projectId: projetPyrenees.id,
+            treeCommonName: 'Chêne sessile',
+            quantity: 85,
+            unitPrice: 12.9,
+          },
+        ],
+      },
+    },
+  });
+
+  await prisma.order.create({
+    data: {
+      userId: user3.id,
+      status: OrderStatus.validated,
+      amount: 10395,
+      items: {
+        create: [
+          {
+            treeId: pin.id,
+            projectId: projetLandes.id,
+            treeCommonName: 'Pin sylvestre',
+            quantity: 400,
+            unitPrice: 8.9,
+          },
+          {
+            treeId: chene.id,
+            projectId: projetLandes.id,
+            treeCommonName: 'Chêne sessile',
+            quantity: 200,
+            unitPrice: 12.9,
+          },
+          {
+            treeId: bouleau.id,
+            projectId: projetLandes.id,
+            treeCommonName: 'Bouleau blanc',
+            quantity: 175,
+            unitPrice: 7.5,
+          },
+          {
+            treeId: peuplier.id,
+            projectId: projetLandes.id,
+            treeCommonName: 'Peuplier noir',
+            quantity: 150,
+            unitPrice: 6.9,
+          },
+        ],
+      },
+    },
+  });
+
+  await prisma.order.create({
+    data: {
+      userId: user1.id,
+      status: OrderStatus.validated,
+      amount: 9175,
+      items: {
+        create: [
+          {
+            treeId: hetre.id,
+            projectId: projetNormandie.id,
+            treeCommonName: 'Hêtre commun',
+            quantity: 250,
+            unitPrice: 11.5,
+          },
+          {
+            treeId: chene.id,
+            projectId: projetNormandie.id,
+            treeCommonName: 'Chêne sessile',
+            quantity: 200,
+            unitPrice: 12.9,
+          },
+          {
+            treeId: frene.id,
+            projectId: projetNormandie.id,
+            treeCommonName: 'Frêne commun',
+            quantity: 150,
+            unitPrice: 9.5,
+          },
+          {
+            treeId: charme.id,
+            projectId: projetNormandie.id,
+            treeCommonName: 'Charme commun',
+            quantity: 125,
+            unitPrice: 8.5,
+          },
+          {
+            treeId: peuplier.id,
+            projectId: projetNormandie.id,
+            treeCommonName: 'Peuplier noir',
+            quantity: 100,
+            unitPrice: 6.9,
+          },
+        ],
+      },
+    },
+  });
+
+  await prisma.order.create({
+    data: {
+      userId: user2.id,
+      status: OrderStatus.validated,
+      amount: 7130,
+      items: {
+        create: [
+          {
+            treeId: pin.id,
+            projectId: projetCorse.id,
+            treeCommonName: 'Pin sylvestre',
+            quantity: 220,
+            unitPrice: 8.9,
+          },
+          {
+            treeId: olivier.id,
+            projectId: projetCorse.id,
+            treeCommonName: 'Olivier',
+            quantity: 175,
+            unitPrice: 16,
+          },
+          {
+            treeId: chataignier.id,
+            projectId: projetCorse.id,
+            treeCommonName: 'Châtaignier',
+            quantity: 200,
+            unitPrice: 11,
+          },
+          {
+            treeId: chene.id,
+            projectId: projetCorse.id,
+            treeCommonName: 'Chêne sessile',
+            quantity: 14,
+            unitPrice: 12.9,
+          },
+        ],
+      },
+    },
+  });
+
+  await prisma.order.create({
+    data: {
+      userId: user3.id,
+      status: OrderStatus.validated,
+      amount: 7750,
+      items: {
+        create: [
+          {
+            treeId: chene.id,
+            projectId: projetBourgogne.id,
+            treeCommonName: 'Chêne sessile',
+            quantity: 225,
+            unitPrice: 12.9,
+          },
+          {
+            treeId: erable.id,
+            projectId: projetBourgogne.id,
+            treeCommonName: 'Érable sycomore',
+            quantity: 175,
+            unitPrice: 10.5,
+          },
+          {
+            treeId: charme.id,
+            projectId: projetBourgogne.id,
+            treeCommonName: 'Charme commun',
+            quantity: 150,
+            unitPrice: 8.5,
+          },
+          {
+            treeId: tilleul.id,
+            projectId: projetBourgogne.id,
+            treeCommonName: 'Tilleul à grandes feuilles',
+            quantity: 173,
+            unitPrice: 10,
+          },
+        ],
+      },
+    },
+  });
+
+  await prisma.order.create({
+    data: {
+      userId: user1.id,
+      status: OrderStatus.validated,
+      amount: 10795,
+      items: {
+        create: [
+          {
+            treeId: sapin.id,
+            projectId: projetVosges.id,
+            treeCommonName: 'Sapin pectiné',
+            quantity: 250,
+            unitPrice: 13.5,
+          },
+          {
+            treeId: epicea.id,
+            projectId: projetVosges.id,
+            treeCommonName: 'Épicéa commun',
+            quantity: 225,
+            unitPrice: 9.9,
+          },
+          {
+            treeId: hetre.id,
+            projectId: projetVosges.id,
+            treeCommonName: 'Hêtre commun',
+            quantity: 200,
+            unitPrice: 11.5,
+          },
+          {
+            treeId: meleze.id,
+            projectId: projetVosges.id,
+            treeCommonName: 'Mélèze d’Europe',
+            quantity: 210,
+            unitPrice: 14,
+          },
+        ],
+      },
+    },
+  });
+
+  await prisma.order.create({
+    data: {
+      userId: user2.id,
+      status: OrderStatus.validated,
+      amount: 32775,
+      items: {
+        create: [
+          {
+            treeId: baobab.id,
+            projectId: projetMadagascar.id,
+            treeCommonName: 'Baobab africain',
+            quantity: 400,
+            unitPrice: 28,
+          },
+          {
+            treeId: manguier.id,
+            projectId: projetMadagascar.id,
+            treeCommonName: 'Manguier',
+            quantity: 1000,
+            unitPrice: 16.5,
+          },
+          {
+            treeId: eucalyptus.id,
+            projectId: projetMadagascar.id,
+            treeCommonName: 'Eucalyptus bleu',
+            quantity: 350,
+            unitPrice: 14.5,
+          },
+        ],
+      },
+    },
+  });
+
+  await prisma.order.create({
+    data: {
+      userId: user3.id,
+      status: OrderStatus.validated,
+      amount: 32900,
+      items: {
+        create: [
+          {
+            treeId: baobab.id,
+            projectId: projetKenya.id,
+            treeCommonName: 'Baobab africain',
+            quantity: 350,
+            unitPrice: 28,
+          },
+          {
+            treeId: acajou.id,
+            projectId: projetKenya.id,
+            treeCommonName: "Acajou d'Afrique",
+            quantity: 922,
+            unitPrice: 18,
+          },
+          {
+            treeId: eucalyptus.id,
+            projectId: projetKenya.id,
+            treeCommonName: 'Eucalyptus bleu',
+            quantity: 450,
+            unitPrice: 14.5,
+          },
+        ],
+      },
+    },
+  });
+
+  await prisma.order.create({
+    data: {
+      userId: user1.id,
+      status: OrderStatus.validated,
+      amount: 40000,
+      items: {
+        create: [
+          {
+            treeId: teck.id,
+            projectId: projetBorneo.id,
+            treeCommonName: 'Teck',
+            quantity: 1231,
+            unitPrice: 24,
+          },
+          {
+            treeId: bambou.id,
+            projectId: projetBorneo.id,
+            treeCommonName: 'Bambou géant',
+            quantity: 500,
+            unitPrice: 9,
+          },
+          {
+            treeId: cocotier.id,
+            projectId: projetBorneo.id,
+            treeCommonName: 'Cocotier',
+            quantity: 350,
+            unitPrice: 17,
+          },
+        ],
+      },
+    },
+  });
+
+  await prisma.order.create({
+    data: {
+      userId: user2.id,
+      status: OrderStatus.validated,
+      amount: 40475,
+      items: {
+        create: [
+          {
+            treeId: manguier.id,
+            projectId: projetCostaRica.id,
+            treeCommonName: 'Manguier',
+            quantity: 1826,
+            unitPrice: 16.5,
+          },
+          {
+            treeId: cocotier.id,
+            projectId: projetCostaRica.id,
+            treeCommonName: 'Cocotier',
+            quantity: 300,
+            unitPrice: 17,
+          },
+          {
+            treeId: mangrove.id,
+            projectId: projetCostaRica.id,
+            treeCommonName: 'Palétuvier rouge',
+            quantity: 350,
+            unitPrice: 15,
+          },
+        ],
+      },
+    },
+  });
+
+  await prisma.order.create({
+    data: {
+      userId: user3.id,
+      status: OrderStatus.validated,
+      amount: 28275,
+      items: {
+        create: [
+          {
+            treeId: acajou.id,
+            projectId: projetMataAtlantica.id,
+            treeCommonName: "Acajou d'Afrique",
+            quantity: 850,
+            unitPrice: 18,
+          },
+          {
+            treeId: manguier.id,
+            projectId: projetMataAtlantica.id,
+            treeCommonName: 'Manguier',
+            quantity: 350,
+            unitPrice: 16.5,
+          },
+          {
+            treeId: teck.id,
+            projectId: projetMataAtlantica.id,
+            treeCommonName: 'Teck',
+            quantity: 300,
+            unitPrice: 24,
+          },
+        ],
+      },
+    },
+  });
+
+  await prisma.order.create({
+    data: {
+      userId: user2.id,
+      status: OrderStatus.canceled,
+      amount: 450,
+      items: {
+        create: [
+          {
+            treeId: mangrove.id,
+            projectId: projetMangrove.id,
+            treeCommonName: 'Palétuvier rouge',
+            quantity: 30,
             unitPrice: 15,
           },
         ],
