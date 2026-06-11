@@ -350,21 +350,6 @@ Hooks dans `.husky/` :
 
 ### Convention de commits
 
-Format imposé par `commitlint` :
-
-```
-type(scope?): description
-```
-
-**Important** : un espace après les deux-points est obligatoire.
-
-Exemples valides :
-
-- `feat(backend): add user authentication`
-- `fix(frontend): correct cart total calculation`
-- `docs: update README`
-- `chore(deps): bump prisma to 7.8.0`
-
 Types courants : `feat`, `fix`, `build`, `chore`, `docs`, `style`, `refactor`, `test`, `perf`, `ci`.
 
 ## Workflow Git
