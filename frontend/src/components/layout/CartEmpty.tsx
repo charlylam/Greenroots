@@ -41,6 +41,7 @@ export default function CartEmpty() {
         <Button
           onClick={() => setIsConfirming(true)}
           variant="outline"
+          className="bg-brand-white"
           aria-expanded={isConfirming}
         >
           Vider le panier
@@ -66,6 +67,7 @@ export default function CartEmpty() {
           <Button
             onClick={handleClear}
             variant="destructive"
+            className="bg-brand-white"
             aria-label="Confirmer — vider définitivement le panier"
           >
             Valider
@@ -76,6 +78,7 @@ export default function CartEmpty() {
           <Button
             onClick={() => setIsConfirming(false)}
             variant="outline"
+            className="bg-brand-white"
             aria-label="Annuler — conserver le panier"
           >
             Annuler
