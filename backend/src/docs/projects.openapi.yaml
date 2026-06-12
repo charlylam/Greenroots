@@ -14,7 +14,7 @@ components:
           type: string
           example: Projet de plantation d’une forêt mixte en Bourgogne.
         slug: { type: string, example: foret-mixte-bourgogne }
-        localisation: { type: string, example: Bourgogne, France }
+        localisation: { type: string, example: Europe }
         picture:
           type: string
           example: /images/projects/foret-mixte-bourgogne.webp
@@ -83,9 +83,9 @@ components:
           items:
             type: string
           example:
-            - Bourgogne, France
-            - Corse, France
-            - Normandie, France
+            - Europe
+            - Afrique
+            - Amérique du Sud
 
     ProjectsResponse:
       type: object
@@ -149,7 +149,7 @@ paths:
           required: false
           schema:
             type: string
-            example: Bourgogne
+            example: Europe
           description: Filtre les projets par localisation.
         - in: query
           name: search
