@@ -264,11 +264,9 @@ JWT_SECRET=your_jwt_secret
 JWT_EXPIRES_IN=1d
 
 # Brevo (envoi d'emails transactionnels)
-MAIL_HOST=smtp-relay.brevo.com
-MAIL_PORT=587
-MAIL_USER=your_brevo_user
-MAIL_PASSWORD=your_brevo_password
-MAIL_FROM=GreenRoots <noreply@greenroots.fr>
+BREVO_API_KEY=
+MAIL_FROM_EMAIL=
+MAIL_FROM_NAME=GreenRoots
 ```
 
 ### Backend — `backend/.env`
