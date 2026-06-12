@@ -1,0 +1,15 @@
+<!-- ============================================================
+     views/admin/partials/flash-message.ejs
+     Lit les query params ?error= et ?success=
+     ============================================================ -->
+
+<% const errorMsg  = typeof query !== 'undefined' && query.error   ? query.error   : null %>
+<% const successMsg = typeof query !== 'undefined' && query.success ? query.success : null %>
+
+<% if (errorMsg) { %>
+  <div class="flash error">⚠️ <%= decodeURIComponent(errorMsg) %></div>
+<% } %>
+
+<% if (successMsg) { %>
+  <div class="flash success">✅ <%= decodeURIComponent(successMsg) %></div>
+<% } %>

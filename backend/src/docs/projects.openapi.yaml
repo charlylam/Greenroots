@@ -1,0 +1,275 @@
+openapi: 3.0.0
+info:
+  title: Projects module
+  version: 1.0.0
+
+components:
+  schemas:
+    ProjectListItem:
+      type: object
+      properties:
+        id: { type: integer, example: 1 }
+        name: { type: string, example: Forêt mixte en Bourgogne }
+        shortDescription:
+          type: string
+          example: Projet de plantation d’une forêt mixte en Bourgogne.
+        slug: { type: string, example: foret-mixte-bourgogne }
+        localisation: { type: string, example: Bourgogne, France }
+        picture:
+          type: string
+          example: /images/projects/foret-mixte-bourgogne.webp
+        progress: { type: integer, example: 65 }
+
+    ProjectDetail:
+      allOf:
+        - $ref: '#/components/schemas/ProjectListItem'
+        - type: object
+          properties:
+            longDescription:
+              type: string
+              nullable: true
+              example: Description détaillée du projet de reforestation.
+            createdAt:
+              type: string
+              format: date-time
+              example: '2026-06-08T14:34:53.567Z'
+            updatedAt:
+              type: string
+              format: date-time
+              example: '2026-06-08T14:34:53.567Z'
+
+    ProjectTree:
+      type: object
+      properties:
+        id: { type: integer, example: 3 }
+        commonName: { type: string, example: Chêne sessile }
+        scientificName: { type: string, example: Quercus petraea }
+        family: { type: string, example: Fagaceae }
+        slug: { type: string, example: chene-sessile }
+        shortDescription:
+          type: string
+          example: Arbre robuste adapté aux forêts tempérées.
+        longDescription:
+          type: string
+          nullable: true
+          example: Description détaillée de l’arbre.
+        origin:
+          type: string
+          nullable: true
+          example: Europe
+        price:
+          type: string
+          example: '12.50'
+        picture:
+          type: string
+          example: /images/trees/chene-sessile.webp
+        stock:
+          type: integer
+          example: 120
+        createdAt:
+          type: string
+          format: date-time
+          example: '2026-06-08T14:35:41.999Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2026-06-08T14:35:41.999Z'
+
+    LocalisationsResponse:
+      type: object
+      properties:
+        localisations:
+          type: array
+          items:
+            type: string
+          example:
+            - Bourgogne, France
+            - Corse, France
+            - Normandie, France
+
+    ProjectsResponse:
+      type: object
+      properties:
+        projects:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectListItem'
+        total:
+          type: integer
+          example: 18
+          description: Nombre total de projets. Présent uniquement avec la pagination.
+        limit:
+          type: integer
+          example: 6
+          description: Nombre de projets par page. Présent uniquement avec la pagination.
+
+    ProjectTreesResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+          example: 12
+        limit:
+          type: integer
+          example: 6
+        trees:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectTree'
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code: { type: string, example: NOT_FOUND }
+            message: { type: string, example: Ressource introuvable }
+
+paths:
+  /api/projects:
+    get:
+      tags: [Projects]
+      summary: Récupérer les projets
+      description: |
+        Retourne les projets de reforestation.
+
+        Sans paramètre `page`, la route retourne tous les projets.
+        Avec le paramètre `page`, la route active la pagination et peut recevoir des filtres.
+      parameters:
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+            example: 1
+          description: Numéro de page. Active la pagination si présent.
+        - in: query
+          name: localisation
+          required: false
+          schema:
+            type: string
+            example: Bourgogne
+          description: Filtre les projets par localisation.
+        - in: query
+          name: search
+          required: false
+          schema:
+            type: string
+            example: forêt
+          description: Recherche partielle sur le nom du projet.
+        - in: query
+          name: sortOrder
+          required: false
+          schema:
+            type: string
+            enum: [asc, desc]
+            example: asc
+          description: Trie les projets par nom.
+      responses:
+        '200':
+          description: Liste des projets récupérée avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectsResponse'
+        '500':
+          description: Erreur interne du serveur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/projects/localisations:
+    get:
+      tags: [Projects]
+      summary: Récupérer les localisations des projets
+      description: Retourne la liste des localisations distinctes utilisées par les projets.
+      responses:
+        '200':
+          description: Liste des localisations récupérée avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocalisationsResponse'
+        '500':
+          description: Erreur interne du serveur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/projects/{slug}:
+    get:
+      tags: [Projects]
+      summary: Récupérer un projet par son slug
+      description: Retourne le détail complet d’un projet de reforestation.
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          description: Slug du projet
+          schema:
+            type: string
+          example: foret-mixte-bourgogne
+      responses:
+        '200':
+          description: Projet récupéré avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectDetail'
+        '404':
+          description: Projet introuvable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erreur interne du serveur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/projects/{slug}/trees:
+    get:
+      tags: [Projects]
+      summary: Récupérer les arbres d’un projet
+      description: |
+        Retourne les arbres associés à un projet, avec le stock disponible
+        pour chaque arbre dans ce projet.
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          description: Slug du projet
+          schema:
+            type: string
+          example: foret-mixte-bourgogne
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+            example: 1
+          description: Numéro de page.
+      responses:
+        '200':
+          description: Liste des arbres du projet récupérée avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectTreesResponse'
+        '404':
+          description: Projet introuvable ou aucun arbre associé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Erreur interne du serveur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'

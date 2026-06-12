@@ -1,0 +1,160 @@
+openapi: 3.0.0
+info:
+  title: Carts module
+  version: 1.0.0
+
+components:
+  schemas:
+    CartItem:
+      type: object
+      properties:
+        id: { type: integer, example: 42 }
+        cartId: { type: integer, example: 7 }
+        treeId: { type: integer, example: 3 }
+        projectId: { type: integer, example: 5 }
+        quantity: { type: integer, example: 2 }
+        tree:
+          type: object
+          properties:
+            id: { type: integer }
+            commonName: { type: string, example: "Chêne sessile" }
+            picture: { type: string, example: "/images/trees/chene-sessile.webp" }
+            price: { type: string, example: "12.50" }
+        project:
+          type: object
+          properties:
+            id: { type: integer }
+            name: { type: string, example: "Forêt mixte en Bourgogne" }
+            slug: { type: string, example: "foret-mixte-bourgogne" }
+
+    Cart:
+      type: object
+      properties:
+        id: { type: integer }
+        userId: { type: integer }
+        status: { type: string, enum: [active, converted, abandoned] }
+        items:
+          type: array
+          items: { $ref: '#/components/schemas/CartItem' }
+
+    CartResponse:
+      type: object
+      properties:
+        data: { $ref: '#/components/schemas/Cart' }
+        meta:
+          type: object
+          properties:
+            total: { type: number, example: 25.0 }
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code: { type: string }
+            message: { type: string }
+
+paths:
+  /api/carts:
+    get:
+      tags: [Carts]
+      summary: Récupère le panier actif de l'utilisateur connecté
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200':
+          description: Panier retourné
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CartResponse' }
+        '401': { description: Non authentifié }
+
+    delete:
+      tags: [Carts]
+      summary: Vide complètement le panier actif
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200':
+          description: Panier vidé
+        '401': { description: Non authentifié }
+
+  /api/carts/items:
+    post:
+      tags: [Carts]
+      summary: Ajoute un arbre au panier (ou incrémente si déjà présent)
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [treeId, projectId, quantity]
+              properties:
+                treeId: { type: integer, example: 3 }
+                projectId: { type: integer, example: 5 }
+                quantity: { type: integer, minimum: 1, example: 2 }
+      responses:
+        '201':
+          description: Item ajouté
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/CartItem' }
+        '400':
+          description: Body invalide ou stock insuffisant
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '404':
+          description: Couple tree/project inexistant
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '401': { description: Non authentifié }
+
+  /api/carts/items/{id}:
+    patch:
+      tags: [Carts]
+      summary: Modifie la quantité d'un item du panier
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [quantity]
+              properties:
+                quantity: { type: integer, minimum: 1, example: 3 }
+      responses:
+        '200':
+          description: Quantité mise à jour
+        '400':
+          description: Quantité invalide ou supérieure au stock
+        '404':
+          description: Item introuvable dans le panier de l'utilisateur
+        '401': { description: Non authentifié }
+
+    delete:
+      tags: [Carts]
+      summary: Retire un item du panier
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Item supprimé
+        '404':
+          description: Item introuvable
+        '401': { description: Non authentifié }

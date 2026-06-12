@@ -1,0 +1,90 @@
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: greenroots-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - '5432:5432'
+    volumes:
+      - greenroots-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER}']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  db-test:
+    image: postgres:17-alpine
+    container_name: greenroots-db-test
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_TEST_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_TEST_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_TEST_DB}
+    ports:
+      - '5433:5432'
+    volumes:
+      - greenroots-test-data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'pg_isready -U ${POSTGRES_TEST_USER} -d ${POSTGRES_TEST_DB}',
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend
+    container_name: greenroots-backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: '${DATABASE_URL}?schema=public'
+      PORT: 3001
+      FRONTEND_URL: ${FRONTEND_URL}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
+      BREVO_API_KEY: ${BREVO_API_KEY}
+      MAIL_FROM_EMAIL: ${MAIL_FROM_EMAIL}
+      MAIL_FROM_NAME: ${MAIL_FROM_NAME}
+    ports:
+      - '3001:3001'
+      - '5555:5555' # Port pour prisma studio
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+
+  backend-test:
+    build: ./backend
+    container_name: greenroots-backend-test
+    restart: unless-stopped
+    depends_on:
+      db-test:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: '${TEST_DATABASE_URL}'
+      PORT: 3002
+      FRONTEND_URL: ${FRONTEND_URL}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
+      BREVO_API_KEY: ${BREVO_API_KEY}
+      MAIL_FROM_EMAIL: ${MAIL_FROM_EMAIL}
+      MAIL_FROM_NAME: ${MAIL_FROM_NAME}
+    ports:
+      - '3002:3002'
+      - '5556:5556'
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+
+volumes:
+  greenroots-data:
+  greenroots-test-data:

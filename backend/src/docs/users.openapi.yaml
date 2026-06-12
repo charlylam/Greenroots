@@ -1,0 +1,341 @@
+openapi: 3.0.0
+info:
+  title: Users module
+  version: 1.0.0
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id: { type: integer, example: 14 }
+        firstName: { type: string }
+        lastName: { type: string }
+        email: { type: string, format: email }
+        type:
+          type: string
+          enum: [particulier, entreprise, association]
+        address: { type: string }
+        postalCode: { type: string }
+        city: { type: string }
+        phone: { type: string, nullable: true }
+        siret: { type: string, nullable: true }
+        companyName: { type: string, nullable: true }
+
+    OrderItem:
+      type: object
+      properties:
+        id: { type: integer }
+        treeCommonName: { type: string }
+        quantity: { type: integer }
+        unitPrice: { type: string }
+        treeId: { type: integer }
+        projectId: { type: integer }
+        project:
+          type: object
+          properties:
+            name: { type: string }
+            slug: { type: string }
+
+    Order:
+      type: object
+      properties:
+        id: { type: integer }
+        status: { type: string, enum: [validated, canceled] }
+        amount: { type: string }
+        userId: { type: integer }
+        cartId: { type: integer, nullable: true }
+        createdAt: { type: string, format: date-time }
+        items:
+          type: array
+          items: { $ref: '#/components/schemas/OrderItem' }
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code: { type: string }
+            message: { type: string }
+
+    AuthUser:
+      type: object
+      properties:
+        id: { type: integer, example: 14 }
+        lastName: { type: string, example: userLastName }
+        firstName: { type: string, example: userName }
+        email: { type: string, format: email, example: userName@example.com }
+        role: { type: string, example: user }
+        type:
+          type: string
+          enum: [particulier, entreprise, association]
+          example: particulier
+
+    RegisterBody:
+      type: object
+      required:
+        - lastName
+        - firstName
+        - email
+        - password
+        - address
+        - postalCode
+        - city
+        - acceptedTerms
+      properties:
+        lastName:
+          { type: string, minLength: 1, maxLength: 80, example: userLastName }
+        firstName:
+          { type: string, minLength: 1, maxLength: 80, example: userName }
+        email: { type: string, format: email, example: userName@example.com }
+        password:
+          type: string
+          format: password
+          minLength: 8
+          maxLength: 72
+          description: Doit contenir au moins une majuscule et un caractère spécial.
+          example: Motdepasse123!
+        address:
+          {
+            type: string,
+            minLength: 1,
+            maxLength: 200,
+            example: 12 rue des arbres,
+          }
+        postalCode:
+          { type: string, minLength: 1, maxLength: 20, example: '01000' }
+        city:
+          {
+            type: string,
+            minLength: 1,
+            maxLength: 100,
+            example: Bourg-en-Bresse,
+          }
+        type:
+          type: string
+          enum: [particulier, entreprise, association]
+          default: particulier
+          example: particulier
+        siret:
+          type: string
+          pattern: '^\d{14}$'
+          nullable: true
+          description: Obligatoire pour les entreprises et associations.
+          example: '12345678900012'
+        companyName:
+          type: string
+          minLength: 1
+          maxLength: 150
+          nullable: true
+          description: Obligatoire pour les entreprises et associations.
+          example: GreenRoots Entreprise
+        phone:
+          type: string
+          minLength: 1
+          maxLength: 30
+          nullable: true
+          example: '0601020304'
+        acceptedTerms:
+          type: boolean
+          enum: [true]
+          example: true
+
+    LoginBody:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email: { type: string, format: email, example: userName@example.com }
+        password:
+          type: string
+          format: password
+          minLength: 1
+          example: Motdepasse123!
+
+paths:
+  /api/auth/register:
+    post:
+      tags: [Auth]
+      summary: Inscription d'un utilisateur
+      description: >
+        Crée un compte utilisateur. Les entreprises et associations doivent fournir
+        un SIRET et une raison sociale.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterBody'
+      responses:
+        '201':
+          description: Compte créé avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Account created successfully
+                  user:
+                    $ref: '#/components/schemas/AuthUser'
+        '400':
+          description: Données invalides
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Email ou SIRET déjà utilisé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/auth/login:
+    post:
+      tags: [Auth]
+      summary: Connexion d'un utilisateur
+      description: Authentifie un utilisateur avec son email et son mot de passe.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginBody'
+      responses:
+        '200':
+          description: Connexion réussie
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Login successful
+                  token:
+                    type: string
+                    description: JWT contenant userId et role.
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+                  user:
+                    $ref: '#/components/schemas/AuthUser'
+        '400':
+          description: Données invalides
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Email ou mot de passe invalide, ou compte supprimé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/auth/logout:
+    post:
+      tags: [Auth]
+      summary: Déconnexion de l'utilisateur
+      description: >
+        Retourne une confirmation de déconnexion. Le JWT est stateless côté backend,
+        la suppression réelle du token se fait côté client.
+      responses:
+        '200':
+          description: Déconnexion réussie
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Logout successful
+
+  /api/users/me:
+    get:
+      tags: [Users]
+      summary: Profil de l'utilisateur connecté
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200':
+          description: Profil retourné
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/User' }
+        '401': { description: Non authentifié }
+
+    put:
+      tags: [Users]
+      summary: Mise à jour partielle du profil
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                lastName: { type: string }
+                firstName: { type: string }
+                email: { type: string, format: email }
+      responses:
+        '200':
+          description: Profil mis à jour
+        '400': { description: Body invalide }
+        '401': { description: Non authentifié }
+
+    delete:
+      tags: [Users]
+      summary: Suppression (anonymisation) du compte
+      security: [{ bearerAuth: [] }]
+      responses:
+        '204': { description: Compte anonymisé }
+        '401': { description: Non authentifié }
+
+  /api/users/me/orders:
+    get:
+      tags: [Users]
+      summary: Historique des commandes
+      security: [{ bearerAuth: [] }]
+      responses:
+        '200':
+          description: Liste des commandes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/Order' }
+
+  /api/users/me/orders/{id}:
+    get:
+      tags: [Users]
+      summary: Détail d'une commande
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Détail de la commande
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Order' }
+        '404':
+          description: Commande introuvable
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }

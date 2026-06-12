@@ -1,0 +1,1092 @@
+<!-- ============================================================
+     views/admin/dashboard.ejs
+     Page unique admin — 4 sections (Projets / Arbres / Commandes / Users)
+     Navigation par JS show/hide
+
+     Données attendues du contrôleur :
+       - projects      : Project[] (avec trees[].tree + stock)
+       - trees         : Tree[] (avec projects[].project + stock, filtrés)
+       - orders        : Order[] (avec items + user)
+       - users         : User[]
+       - query         : req.query
+       - treeSearch    : string
+       - treeProjectId : number|string
+       - treeSortBy    : string  — colonne active du tri
+       - treeSortOrder : string  — 'asc' | 'desc'
+     ============================================================ -->
+
+<%- include('partials/header', { title: 'Dashboard' }) %>
+
+<div class="admin-layout">
+
+  <%
+    const activeSection = (query && query.section) ? query.section : 'projects';
+  %>
+  <%- include('partials/nav', { activeSection }) %>
+
+  <main class="admin-content">
+
+    <%- include('partials/flash-message', { query }) %>
+
+    <!-- ====================================================
+         SECTION — PROJETS
+         ==================================================== -->
+    <%
+      const projectCurrentSortBy = projectSortBy || 'name';
+      const projectCurrentSortOrder = projectSortOrder || 'asc';
+
+      function projectSortUrl(col) {
+        const newOrder =
+          projectCurrentSortBy === col && projectCurrentSortOrder === 'asc'
+            ? 'desc'
+            : 'asc';
+
+        const params = new URLSearchParams({
+          section: 'projects',
+          ...(projectSearch ? { projectSearch } : {}),
+          ...(projectTreeId ? { projectTreeId: String(projectTreeId) } : {}),
+          projectSortBy: col,
+          projectSortOrder: newOrder,
+        });
+
+        return '/admin/dashboard?' + params.toString();
+      }
+
+      function projectSortArrow(col) {
+        if (projectCurrentSortBy !== col) {
+          return '<span style="font-size:15px; color:#000; margin-left:4px;">↕</span>';
+        }
+        return projectCurrentSortOrder === 'asc'
+          ? '<span style="font-size:15px; color:#4caf50; margin-left:4px;">↑</span>'
+          : '<span style="font-size:15px; color:#4caf50; margin-left:4px;">↓</span>';
+      }
+
+      const displayedProjects = [...projects].sort((a, b) => {
+        if (projectCurrentSortBy !== 'stock') return 0;
+        const stockA = (a.trees || []).reduce((sum, ph) => sum + ph.stock, 0);
+        const stockB = (b.trees || []).reduce((sum, ph) => sum + ph.stock, 0);
+        return projectCurrentSortOrder === 'asc' ? stockA - stockB : stockB - stockA;
+      });
+    %>
+
+    <section class="section <%= activeSection === 'projects' ? 'active' : '' %>" id="section-projects">
+      <div class="page-header" style="flex-wrap:wrap; gap:12px;">
+        <div style="display:flex; flex-direction:column; gap:8px; flex:1;">
+          <h2 class="page-title" style="margin:0;">
+            Projets <span>(<%= displayedProjects.length %>)</span>
+          </h2>
+
+          <form
+            method="GET"
+            action="/admin/dashboard"
+            id="form-project-search"
+            style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;"
+          >
+            <input type="hidden" name="section" value="projects" />
+            <input type="hidden" name="projectSortBy" value="<%= projectCurrentSortBy %>" />
+            <input type="hidden" name="projectSortOrder" value="<%= projectCurrentSortOrder %>" />
+
+            <input
+              type="text"
+              name="projectSearch"
+              value="<%= projectSearch %>"
+              placeholder="Rechercher un projet…"
+              style="padding:6px 10px; border:1px solid var(--border, #ddd); border-radius:6px; font-size:13px; width:180px;"
+              oninput="clearTimeout(window._projectSearchTimer); window._projectSearchTimer = setTimeout(() => document.getElementById('form-project-search').submit(), 400)"
+            />
+
+            <select
+              name="projectTreeId"
+              style="padding:6px 10px; border:1px solid var(--border, #ddd); border-radius:6px; font-size:13px; max-width:200px;"
+              onchange="document.getElementById('form-project-search').submit()"
+            >
+              <option value="">Tous les arbres</option>
+              <% trees.forEach(tree => { %>
+                <option value="<%= tree.id %>" <%= String(projectTreeId) === String(tree.id) ? 'selected' : '' %>>
+                  <%= tree.commonName %>
+                </option>
+              <% }) %>
+            </select>
+
+            <% if (projectSearch || projectTreeId) { %>
+              <a href="/admin/dashboard?section=projects" class="btn btn-secondary btn-sm">✕ Réinitialiser</a>
+            <% } %>
+          </form>
+        </div>
+
+        <button class="btn btn-primary btn-sm" onclick="openCreateModal('project')">
+          + Nouveau projet
+        </button>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>
+                <a href="<%= projectSortUrl('name') %>" style="text-decoration:none; color:inherit; white-space:nowrap;">
+                  Nom<%- projectSortArrow('name') %>
+                </a>
+              </th>
+              <th>
+                <a href="<%= projectSortUrl('localisation') %>" style="text-decoration:none; color:inherit; white-space:nowrap;">
+                  Localisation<%- projectSortArrow('localisation') %>
+                </a>
+              </th>
+              <th>
+                <a href="<%= projectSortUrl('progress') %>" style="text-decoration:none; color:inherit; white-space:nowrap;">
+                  Progression<%- projectSortArrow('progress') %>
+                </a>
+              </th>
+              <th>
+                <a href="<%= projectSortUrl('stock') %>" style="text-decoration:none; color:inherit; white-space:nowrap;">
+                  Stock total<%- projectSortArrow('stock') %>
+                </a>
+              </th>
+              <th>Arbres associés</th>
+              <th>Créé le</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% if (displayedProjects.length === 0) { %>
+              <tr>
+                <td colspan="7" class="td-muted" style="text-align:center; padding:32px;">
+                  Aucun projet ne correspond aux filtres.
+                </td>
+              </tr>
+            <% } else { %>
+              <% displayedProjects.forEach(project => { %>
+                <% const projectTrees = project.trees || []; %>
+                <% const totalStock = projectTrees.reduce((sum, ph) => sum + ph.stock, 0); %>
+                <tr>
+                  <td>
+                    <strong><%= project.name %></strong>
+                    <div class="td-muted"><%= project.slug %></div>
+                  </td>
+                  <td><%= project.localisation %></td>
+                  <td>
+                    <span class="badge <%= project.progress === 100 ? 'badge-green' : 'badge-muted' %>">
+                      <%= project.progress %>%
+                    </span>
+                  </td>
+                  <td>
+                    <span class="badge badge-muted"><%= totalStock %> plants</span>
+                  </td>
+                  <td>
+                    <% if (projectTrees.length === 0) { %>
+                      <span class="td-muted">—</span>
+                    <% } else { %>
+                      <% projectTrees.forEach(ph => { %>
+                        <div style="font-size:12px; margin-bottom:2px;">
+                          <strong><%= ph.tree.commonName %></strong>
+                          <span class="badge badge-muted" style="margin-left:4px;">
+                            <%= ph.stock %> plants
+                          </span>
+                        </div>
+                      <% }) %>
+                    <% } %>
+                  </td>
+                  <td class="td-muted">
+                    <%= new Date(project.createdAt).toLocaleDateString('fr-FR') %>
+                  </td>
+                  <td>
+                    <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                      <a
+                        href="<%= frontendUrl %>/projets/<%= project.slug %>"
+                        target="_blank"
+                        class="btn btn-secondary btn-sm"
+                      >
+                        Voir
+                      </a>
+                      <button
+                        class="btn btn-secondary btn-sm"
+                        onclick="openEditModal('project', <%= JSON.stringify(project) %>)"
+                      >
+                        Éditer
+                      </button>
+                      <form
+                        action="/admin/projects/<%= project.id %>/delete"
+                        method="POST"
+                        onsubmit="return confirm('Supprimer ce projet ?')"
+                      >
+                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+              <% }) %>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ====================================================
+         SECTION — ARBRES
+         ==================================================== -->
+    <%
+      const sortBy    = treeSortBy    || 'commonName';
+      const sortOrder = treeSortOrder || 'asc';
+
+      function sortUrl(col) {
+        const newOrder = (sortBy === col && sortOrder === 'asc') ? 'desc' : 'asc';
+        const params = new URLSearchParams({
+          section: 'trees',
+          ...(treeSearch    ? { treeSearch }    : {}),
+          ...(treeProjectId ? { treeProjectId: String(treeProjectId) } : {}),
+          treeSortBy: col,
+          treeSortOrder: newOrder,
+        });
+        return '/admin/dashboard?' + params.toString();
+      }
+
+      function sortArrow(col) {
+        if (sortBy !== col) return '<span style="font-size:15px; color:#000; margin-left:4px;">↕</span>';
+        return sortOrder === 'asc'
+          ? '<span style="font-size:15px; color:#4caf50; margin-left:4px;">↑</span>'
+          : '<span style="font-size:15px; color:#4caf50; margin-left:4px;">↓</span>';
+      }
+    %>
+
+    <section class="section <%= activeSection === 'trees' ? 'active' : '' %>" id="section-trees">
+      <div class="page-header" style="flex-wrap:wrap; gap:12px;">
+        <div style="display:flex; flex-direction:column; gap:8px; flex:1;">
+          <h2 class="page-title" style="margin:0;">Arbres <span>(<%= trees.length %>)</span></h2>
+
+          <form
+            method="GET"
+            action="/admin/dashboard"
+            id="form-tree-search"
+            style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;"
+          >
+            <input type="hidden" name="section" value="trees" />
+            <input type="hidden" name="treeSortBy" value="<%= sortBy %>" />
+            <input type="hidden" name="treeSortOrder" value="<%= sortOrder %>" />
+
+            <input
+              type="text"
+              name="treeSearch"
+              value="<%= treeSearch %>"
+              placeholder="Rechercher un arbre…"
+              style="padding:6px 10px; border:1px solid var(--border, #ddd); border-radius:6px; font-size:13px; width:180px;"
+              oninput="clearTimeout(window._treeSearchTimer); window._treeSearchTimer = setTimeout(() => document.getElementById('form-tree-search').submit(), 400)"
+            />
+
+            <select
+              name="treeProjectId"
+              style="padding:6px 10px; border:1px solid var(--border, #ddd); border-radius:6px; font-size:13px; max-width:200px;"
+              onchange="document.getElementById('form-tree-search').submit()"
+            >
+              <option value="">Tous les projets</option>
+              <% projects.forEach(project => { %>
+                <option value="<%= project.id %>" <%= String(treeProjectId) === String(project.id) ? 'selected' : '' %>>
+                  <%= project.name %>
+                </option>
+              <% }) %>
+            </select>
+
+            <% if (treeSearch || treeProjectId) { %>
+              <a href="/admin/dashboard?section=trees" class="btn btn-secondary btn-sm">✕ Réinitialiser</a>
+            <% } %>
+          </form>
+        </div>
+
+        <button class="btn btn-primary btn-sm" onclick="openCreateModal('tree')">+ Nouvel arbre</button>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Réf.</th>
+              <th>
+                <a href="<%= sortUrl('commonName') %>" style="text-decoration:none; color:inherit; white-space:nowrap;">
+                  Nom commun<%- sortArrow('commonName') %>
+                </a>
+              </th>
+              <th>
+                <a href="<%= sortUrl('scientificName') %>" style="text-decoration:none; color:inherit; white-space:nowrap;">
+                  Nom scientifique<%- sortArrow('scientificName') %>
+                </a>
+              </th>
+              <th>
+                <a href="<%= sortUrl('family') %>" style="text-decoration:none; color:inherit; white-space:nowrap;">
+                  Famille<%- sortArrow('family') %>
+                </a>
+              </th>
+              <th>
+                <a href="<%= sortUrl('price') %>" style="text-decoration:none; color:inherit; white-space:nowrap;">
+                  Prix<%- sortArrow('price') %>
+                </a>
+              </th>
+              <th>Projets / Stock</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (trees.length === 0) { %>
+              <tr>
+                <td colspan="7" class="td-muted" style="text-align:center; padding:32px;">
+                  Aucun arbre ne correspond aux filtres.
+                </td>
+              </tr>
+            <% } else { %>
+              <% trees.forEach(tree => { %>
+                <tr>
+                  <td class="td-muted">#<%= tree.id %></td>
+                  <td>
+                    <strong><%= tree.commonName %></strong>
+                    <div class="td-muted"><%= tree.slug %></div>
+                  </td>
+                  <td class="td-muted"><em><%= tree.scientificName %></em></td>
+                  <td><%= tree.family %></td>
+                  <td><span class="badge badge-green"><%= Number(tree.price).toFixed(2) %> €</span></td>
+                  <td>
+                    <% if (tree.projects.length === 0) { %>
+                      <span class="td-muted">—</span>
+                    <% } else { %>
+                      <% const totalStock = tree.projects.reduce((sum, ph) => sum + ph.stock, 0); %>
+                      <% tree.projects.forEach(ph => { %>
+                        <div style="font-size:12px; margin-bottom:2px;">
+                          <strong><%= ph.project.name %></strong>
+                          <span class="badge badge-muted" style="margin-left:4px;"><%= ph.stock %> plants</span>
+                        </div>
+                      <% }) %>
+                      <div style="font-size:11px; margin-top:4px; color:var(--color-text-muted, #888);">
+                        Total : <strong><%= totalStock %> plants</strong>
+                      </div>
+                    <% } %>
+                  </td>
+                  <td>
+                    <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                      <a href="<%= frontendUrl %>/arbres/<%= tree.slug %>" target="_blank" class="btn btn-secondary btn-sm">Voir</a>
+                      <button
+                        class="btn btn-secondary btn-sm"
+                        onclick="openEditModal('tree', JSON.parse(this.dataset.tree))"
+                        data-tree="<%- JSON.stringify(tree).replace(/"/g, '&quot;') %>"
+                      >
+                        Éditer
+                      </button>
+                      <form action="/admin/trees/<%= tree.id %>/delete" method="POST" onsubmit="return confirm('Supprimer cet arbre ?')">
+                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+              <% }) %>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ====================================================
+         SECTION — COMMANDES
+         ==================================================== -->
+    <section class="section <%= activeSection === 'orders' ? 'active' : '' %>" id="section-orders">
+      <div class="page-header">
+        <h2 class="page-title">Commandes <span>(<%= orders.length %>)</span></h2>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>#ID</th>
+              <th>Utilisateur</th>
+              <th>Montant</th>
+              <th>Statut commande</th>
+              <th>Compte client</th>
+              <th>Date</th>
+              <th>Détail</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (orders.length === 0) { %>
+              <tr>
+                <td colspan="7" class="td-muted" style="text-align:center; padding:32px;">
+                  Aucune commande pour le moment.
+                </td>
+              </tr>
+            <% } else { %>
+              <% orders.forEach(order => { %>
+                <% const orderUserDeleted = !!order.user.deletedAt; %>
+                <tr>
+                  <td class="td-muted">#<%= order.id %></td>
+                  <td>
+                    <%# Si le compte est anonymisé, on masque nom et email %>
+                    <% if (orderUserDeleted) { %>
+                      <strong style="color: var(--color-text-muted, #888);">Utilisateur anonyme</strong>
+                      <div class="td-muted">—</div>
+                    <% } else { %>
+                      <strong><%= order.user.firstName %> <%= order.user.lastName %></strong>
+                      <div class="td-muted"><%= order.user.email %></div>
+                    <% } %>
+                  </td>
+                  <td><strong><%= Number(order.amount).toFixed(2) %> €</strong></td>
+
+                  <%# Statut de la commande (validated / canceled) %>
+                  <td>
+                    <span class="badge <%= order.status === 'validated' ? 'badge-green' : 'badge-red' %>">
+                      <%= order.status === 'validated' ? 'Validée' : 'Annulée' %>
+                    </span>
+                  </td>
+
+                  <%# Statut du compte client (actif / supprimé) %>
+                  <td>
+                    <span class="badge <%= orderUserDeleted ? 'badge-red' : 'badge-green' %>">
+                      <%= orderUserDeleted ? 'Compte supprimé' : 'Actif' %>
+                    </span>
+                  </td>
+
+                  <td class="td-muted"><%= new Date(order.createdAt).toLocaleDateString('fr-FR') %></td>
+                  <td>
+                    <button class="btn btn-secondary btn-sm" onclick="toggleOrderDetail(<%= order.id %>)">Voir</button>
+                  </td>
+                </tr>
+
+                <tr id="order-detail-<%= order.id %>" style="display:none;">
+                  <td colspan="7" style="background:var(--brand-bg); padding:12px 16px;">
+                    <strong style="font-size:13px;">Détail de la commande :</strong>
+                    <table style="margin-top:8px; width:auto;">
+                      <thead>
+                        <tr>
+                          <th style="font-size:11px;">Arbre</th>
+                          <th style="font-size:11px;">Qté</th>
+                          <th style="font-size:11px;">Prix unitaire</th>
+                          <th style="font-size:11px;">Sous-total</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% order.items.forEach(item => { %>
+                          <tr>
+                            <td style="font-size:13px;"><%= item.treeCommonName %></td>
+                            <td style="font-size:13px;"><%= item.quantity %></td>
+                            <td style="font-size:13px;"><%= Number(item.unitPrice).toFixed(2) %> €</td>
+                            <td style="font-size:13px;"><%= (item.quantity * Number(item.unitPrice)).toFixed(2) %> €</td>
+                          </tr>
+                        <% }) %>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              <% }) %>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ====================================================
+         SECTION — UTILISATEURS
+         ==================================================== -->
+    <section class="section <%= activeSection === 'users' ? 'active' : '' %>" id="section-users">
+      <div class="page-header">
+        <h2 class="page-title">Utilisateurs <span>(<%= users.length %>)</span></h2>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Email</th>
+              <th>Type</th>
+              <th>Rôle</th>
+              <th>Statut</th>
+              <th>Inscrit le</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (users.length === 0) { %>
+              <tr>
+                <td colspan="7" class="td-muted" style="text-align:center; padding:32px;">
+                  Aucun utilisateur pour le moment.
+                </td>
+              </tr>
+            <% } else { %>
+              <% users.forEach(user => { %>
+                <%
+                  // deletedAt non null = anonymisé (avait des commandes).
+                  // Les hard-deleted (sans commandes) ne sont plus en base du tout.
+                  const isAnonymized = !!user.deletedAt;
+                %>
+                <tr style="<%= isAnonymized ? 'opacity:0.6;' : '' %>">
+
+                  <%# Nom : "Utilisateur Anonyme" si anonymisé, vrai nom sinon %>
+                  <td>
+                    <% if (isAnonymized) { %>
+                      <strong style="color:var(--color-text-muted,#888);">Utilisateur Anonyme</strong>
+                    <% } else { %>
+                      <strong><%= user.firstName %> <%= user.lastName %></strong>
+                    <% } %>
+                  </td>
+
+                  <%# Email : masqué si anonymisé (l'email technique ne doit pas être exposé) %>
+                  <td class="td-muted">
+                    <% if (isAnonymized) { %>
+                      <span style="font-style:italic;">—</span>
+                    <% } else { %>
+                      <%= user.email %>
+                    <% } %>
+                  </td>
+
+                  <td><span class="badge badge-muted"><%= user.type %></span></td>
+                  <td>
+                    <span class="badge <%= user.role === 'admin' ? 'badge-green' : 'badge-muted' %>">
+                      <%= user.role %>
+                    </span>
+                  </td>
+
+                  <%# Statut : Inactif si anonymisé, Actif sinon %>
+                  <td>
+                    <span class="badge <%= isAnonymized ? 'badge-red' : 'badge-green' %>">
+                      <%= isAnonymized ? 'Inactif' : 'Actif' %>
+                    </span>
+                  </td>
+
+                  <td class="td-muted"><%= new Date(user.createdAt).toLocaleDateString('fr-FR') %></td>
+
+                  <td>
+                    <%# Bouton supprimer : uniquement pour les users actifs non admin %>
+                    <% if (!isAnonymized && user.role !== 'admin') { %>
+                      <button
+                        class="btn btn-danger btn-sm"
+                        onclick="deleteUser(<%= user.id %>, this)"
+                      >
+                        Supprimer
+                      </button>
+                    <% } else { %>
+                      <span class="td-muted" style="font-size:12px;">—</span>
+                    <% } %>
+                  </td>
+                </tr>
+              <% }) %>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ============================================================
+     MODAL — CRÉER PROJET
+     ============================================================ -->
+<div class="modal-overlay" id="modal-create-project">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">Nouveau projet</h3>
+      <button class="modal-close" onclick="closeModal('modal-create-project')">✕</button>
+    </div>
+    <form action="/admin/projects" method="POST" enctype="multipart/form-data">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="cp-name">Nom</label>
+          <input type="text" id="cp-name" name="name" required />
+        </div>
+        <div class="form-group">
+          <label for="cp-slug">Slug</label>
+          <input type="text" id="cp-slug" name="slug" required placeholder="ex: reforestation-amazonie" />
+        </div>
+        <div class="form-group">
+          <label for="cp-localisation">Localisation</label>
+          <input type="text" id="cp-localisation" name="localisation" required />
+        </div>
+        <div class="form-group">
+          <label for="cp-progress">Progression (%)</label>
+          <input type="number" id="cp-progress" name="progress" min="0" max="100" value="0" required />
+        </div>
+        <div class="form-group full">
+          <label for="cp-shortDescription">Description courte</label>
+          <textarea id="cp-shortDescription" name="shortDescription" required></textarea>
+        </div>
+        <div class="form-group full">
+          <label for="cp-longDescription">Description longue</label>
+          <textarea id="cp-longDescription" name="longDescription" style="min-height:120px;"></textarea>
+        </div>
+        <div class="form-group full">
+          <label for="cp-picture">Image</label>
+          <input type="file" id="cp-picture" name="picture" accept="image/jpeg,image/png,image/webp" required />
+        </div>
+        <div class="form-group full">
+          <label>Arbres associés &amp; stock</label>
+          <div id="cp-trees-list" style="display:flex; flex-direction:column; gap:8px; margin-top:4px;">
+            <% trees.forEach(tree => { %>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <input
+                  type="checkbox"
+                  id="cp-tree-<%= tree.id %>"
+                  name="treeIds"
+                  value="<%= tree.id %>"
+                  onchange="toggleStockInput('cp-stock-<%= tree.id %>', this.checked)"
+                />
+                <label for="cp-tree-<%= tree.id %>" style="margin:0; font-weight:normal; flex:1;">
+                  <%= tree.commonName %>
+                </label>
+                <input
+                  type="number"
+                  id="cp-stock-<%= tree.id %>"
+                  name="stocks[t<%= tree.id %>]"
+                  min="0"
+                  value="0"
+                  placeholder="Stock"
+                  disabled
+                  style="width:80px; opacity:0.4;"
+                />
+              </div>
+            <% }) %>
+          </div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-create-project')">Annuler</button>
+        <button type="submit" class="btn btn-primary">Créer le projet</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL — ÉDITER PROJET
+     ============================================================ -->
+<div class="modal-overlay" id="modal-edit-project">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">Éditer le projet</h3>
+      <button class="modal-close" onclick="closeModal('modal-edit-project')">✕</button>
+    </div>
+    <form id="form-edit-project" action="" method="POST" enctype="multipart/form-data">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="ep-name">Nom</label>
+          <input type="text" id="ep-name" name="name" required />
+        </div>
+        <div class="form-group">
+          <label for="ep-slug">Slug</label>
+          <input type="text" id="ep-slug" name="slug" required />
+        </div>
+        <div class="form-group">
+          <label for="ep-localisation">Localisation</label>
+          <input type="text" id="ep-localisation" name="localisation" required />
+        </div>
+        <div class="form-group">
+          <label for="ep-progress">Progression (%)</label>
+          <input type="number" id="ep-progress" name="progress" min="0" max="100" required />
+        </div>
+        <div class="form-group full">
+          <label for="ep-shortDescription">Description courte</label>
+          <textarea id="ep-shortDescription" name="shortDescription" required></textarea>
+        </div>
+        <div class="form-group full">
+          <label for="ep-longDescription">Description longue</label>
+          <textarea id="ep-longDescription" name="longDescription" style="min-height:120px;"></textarea>
+        </div>
+        <div class="form-group full">
+          <label for="ep-picture">Image</label>
+          <input type="file" id="ep-picture" name="picture" accept="image/jpeg,image/png,image/webp" />
+          <p class="td-muted" style="font-size:11px; margin-top:4px;">Laisser vide pour conserver l'image actuelle</p>
+          <div id="ep-picture-preview" style="margin-top:8px; display:none;">
+            <p style="font-size:11px; color:#666;">Image actuelle :</p>
+            <img id="ep-picture-img" src="" alt="aperçu" style="height:60px; border-radius:4px; object-fit:cover;" />
+          </div>
+        </div>
+        <div class="form-group full">
+          <label>Arbres associés &amp; stock</label>
+          <div id="ep-trees-list" style="display:flex; flex-direction:column; gap:8px; margin-top:4px;">
+            <% trees.forEach(tree => { %>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <input
+                  type="checkbox"
+                  id="ep-tree-<%= tree.id %>"
+                  name="treeIds"
+                  value="<%= tree.id %>"
+                  onchange="toggleStockInput('ep-stock-<%= tree.id %>', this.checked)"
+                />
+                <label for="ep-tree-<%= tree.id %>" style="margin:0; font-weight:normal; flex:1;">
+                  <%= tree.commonName %>
+                </label>
+                <input
+                  type="number"
+                  id="ep-stock-<%= tree.id %>"
+                  name="stocks[t<%= tree.id %>]"
+                  min="0"
+                  value="0"
+                  disabled
+                  style="width:80px; opacity:0.4;"
+                />
+              </div>
+            <% }) %>
+          </div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-edit-project')">Annuler</button>
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL — CRÉER ARBRE
+     ============================================================ -->
+<div class="modal-overlay" id="modal-create-tree">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">Nouvel arbre</h3>
+      <button class="modal-close" onclick="closeModal('modal-create-tree')">✕</button>
+    </div>
+    <form action="/admin/trees" method="POST" enctype="multipart/form-data">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="ct-commonName">Nom commun</label>
+          <input type="text" id="ct-commonName" name="commonName" required />
+        </div>
+        <div class="form-group">
+          <label for="ct-slug">Slug</label>
+          <input type="text" id="ct-slug" name="slug" required placeholder="ex: pin-sylvestre" />
+        </div>
+        <div class="form-group">
+          <label for="ct-scientificName">Nom scientifique</label>
+          <input type="text" id="ct-scientificName" name="scientificName" required />
+        </div>
+        <div class="form-group">
+          <label for="ct-family">Famille</label>
+          <input type="text" id="ct-family" name="family" required />
+        </div>
+        <div class="form-group">
+          <label for="ct-price">Prix (€)</label>
+          <input type="number" id="ct-price" name="price" min="0" step="0.01" required />
+        </div>
+        <div class="form-group">
+          <label for="ct-origin">Origine</label>
+          <input type="text" id="ct-origin" name="origin" />
+        </div>
+        <div class="form-group full">
+          <label for="ct-shortDescription">Description courte</label>
+          <textarea id="ct-shortDescription" name="shortDescription" required></textarea>
+        </div>
+        <div class="form-group full">
+          <label for="ct-longDescription">Description longue</label>
+          <textarea id="ct-longDescription" name="longDescription" style="min-height:120px;"></textarea>
+        </div>
+        <div class="form-group full">
+          <label for="ct-picture">Image</label>
+          <input type="file" id="ct-picture" name="picture" accept="image/jpeg,image/png,image/webp" required />
+        </div>
+        <div class="form-group full">
+          <label>Projets associés &amp; stock</label>
+          <div id="ct-projects-list" style="display:flex; flex-direction:column; gap:8px; margin-top:4px;">
+            <% projects.forEach(project => { %>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <input
+                  type="checkbox"
+                  id="ct-project-<%= project.id %>"
+                  name="projectIds"
+                  value="<%= project.id %>"
+                  onchange="toggleStockInput('ct-stock-<%= project.id %>', this.checked)"
+                />
+                <label for="ct-project-<%= project.id %>" style="margin:0; font-weight:normal; flex:1;">
+                  <%= project.name %>
+                </label>
+                <input
+                  type="number"
+                  id="ct-stock-<%= project.id %>"
+                  name="stocks[p<%= project.id %>]"
+                  min="0"
+                  value="0"
+                  placeholder="Stock"
+                  disabled
+                  style="width:80px; opacity:0.4;"
+                />
+              </div>
+            <% }) %>
+          </div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-create-tree')">Annuler</button>
+        <button type="submit" class="btn btn-primary">Créer l'arbre</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL — ÉDITER ARBRE
+     ============================================================ -->
+<div class="modal-overlay" id="modal-edit-tree">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">Éditer l'arbre</h3>
+      <button class="modal-close" onclick="closeModal('modal-edit-tree')">✕</button>
+    </div>
+    <form id="form-edit-tree" action="" method="POST" enctype="multipart/form-data">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="et-commonName">Nom commun</label>
+          <input type="text" id="et-commonName" name="commonName" required />
+        </div>
+        <div class="form-group">
+          <label for="et-slug">Slug</label>
+          <input type="text" id="et-slug" name="slug" required />
+        </div>
+        <div class="form-group">
+          <label for="et-scientificName">Nom scientifique</label>
+          <input type="text" id="et-scientificName" name="scientificName" required />
+        </div>
+        <div class="form-group">
+          <label for="et-family">Famille</label>
+          <input type="text" id="et-family" name="family" required />
+        </div>
+        <div class="form-group">
+          <label for="et-price">Prix (€)</label>
+          <input type="number" id="et-price" name="price" min="0" step="0.01" required />
+        </div>
+        <div class="form-group">
+          <label for="et-origin">Origine</label>
+          <input type="text" id="et-origin" name="origin" />
+        </div>
+        <div class="form-group full">
+          <label for="et-shortDescription">Description courte</label>
+          <textarea id="et-shortDescription" name="shortDescription" required></textarea>
+        </div>
+        <div class="form-group full">
+          <label for="et-longDescription">Description longue</label>
+          <textarea id="et-longDescription" name="longDescription" style="min-height:120px;"></textarea>
+        </div>
+        <div class="form-group full">
+          <label for="et-picture">Image</label>
+          <input type="file" id="et-picture" name="picture" accept="image/jpeg,image/png,image/webp" />
+          <p class="td-muted" style="font-size:11px; margin-top:4px;">Laisser vide pour conserver l'image actuelle</p>
+          <div id="et-picture-preview" style="margin-top:8px; display:none;">
+            <p style="font-size:11px; color:#666;">Image actuelle :</p>
+            <img id="et-picture-img" src="" alt="aperçu" style="height:60px; border-radius:4px; object-fit:cover;" />
+          </div>
+        </div>
+        <div class="form-group full">
+          <label>Projets associés &amp; stock</label>
+          <div id="et-projects-list" style="display:flex; flex-direction:column; gap:8px; margin-top:4px;">
+            <% projects.forEach(project => { %>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <input
+                  type="checkbox"
+                  id="et-project-<%= project.id %>"
+                  name="projectIds"
+                  value="<%= project.id %>"
+                  onchange="toggleStockInput('et-stock-<%= project.id %>', this.checked)"
+                />
+                <label for="et-project-<%= project.id %>" style="margin:0; font-weight:normal; flex:1;">
+                  <%= project.name %>
+                </label>
+                <input
+                  type="number"
+                  id="et-stock-<%= project.id %>"
+                  name="stocks[p<%= project.id %>]"
+                  min="0"
+                  value="0"
+                  placeholder="Stock"
+                  disabled
+                  style="width:80px; opacity:0.4;"
+                />
+              </div>
+            <% }) %>
+          </div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-edit-tree')">Annuler</button>
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ============================================================
+     JAVASCRIPT — Navigation + Modals
+     ============================================================ -->
+<script>
+  // ---- Navigation sections ----
+  const sectionIds = ['projects', 'trees', 'orders', 'users'];
+
+  document.querySelectorAll('.sidebar-link[data-section]').forEach(btn => {
+    btn.addEventListener('click', () => switchSection(btn.dataset.section));
+  });
+
+  function switchSection(target) {
+    sectionIds.forEach(id => {
+      const el = document.getElementById('section-' + id);
+      if (el) el.classList.remove('active');
+    });
+    document.querySelectorAll('.sidebar-link[data-section]').forEach(b => b.classList.remove('active'));
+    const section = document.getElementById('section-' + target);
+    if (section) section.classList.add('active');
+    const link = document.querySelector(`.sidebar-link[data-section="${target}"]`);
+    if (link) link.classList.add('active');
+  }
+
+  // ---- Toggle champ stock selon checkbox ----
+  function toggleStockInput(inputId, checked) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+    input.disabled = !checked;
+    input.style.opacity = checked ? '1' : '0.4';
+    if (!checked) input.value = '0';
+  }
+
+  // ---- Modals ----
+  function openCreateModal(type) {
+    if (type === 'tree') {
+      document.querySelectorAll('#modal-create-tree input[type="checkbox"]').forEach(cb => {
+        cb.checked = false;
+        toggleStockInput('ct-stock-' + cb.value, false);
+      });
+    }
+    if (type === 'project') {
+      document.querySelectorAll('#modal-create-project input[type="checkbox"]').forEach(cb => {
+        cb.checked = false;
+        toggleStockInput('cp-stock-' + cb.value, false);
+      });
+    }
+    document.getElementById('modal-create-' + type).classList.add('open');
+  }
+
+  function openEditModal(type, data) {
+    const modal = document.getElementById('modal-edit-' + type);
+
+    if (type === 'project') {
+      document.getElementById('form-edit-project').action     = '/admin/projects/' + data.id;
+      document.getElementById('ep-name').value                = data.name || '';
+      document.getElementById('ep-slug').value                = data.slug || '';
+      document.getElementById('ep-localisation').value        = data.localisation || '';
+      document.getElementById('ep-progress').value            = data.progress ?? 0;
+      document.getElementById('ep-shortDescription').value    = data.shortDescription || '';
+      document.getElementById('ep-longDescription').value     = data.longDescription || '';
+
+      const previewP    = document.getElementById('ep-picture-preview');
+      const previewImgP = document.getElementById('ep-picture-img');
+      if (data.picture) { previewImgP.src = '/uploads/' + data.picture; previewP.style.display = 'block'; }
+      else              { previewP.style.display = 'none'; }
+
+      const existingTrees = data.trees || [];
+      document.querySelectorAll('#modal-edit-project input[type="checkbox"]').forEach(cb => {
+        const match = existingTrees.find(ph => String(ph.treeId) === cb.value);
+        cb.checked = !!match;
+        const stockInput = document.getElementById('ep-stock-' + cb.value);
+        if (stockInput) {
+          stockInput.disabled    = !match;
+          stockInput.style.opacity = match ? '1' : '0.4';
+          stockInput.value       = match ? match.stock : '0';
+        }
+      });
+    }
+
+    if (type === 'tree') {
+      document.getElementById('form-edit-tree').action        = '/admin/trees/' + data.id;
+      document.getElementById('et-commonName').value          = data.commonName || '';
+      document.getElementById('et-slug').value                = data.slug || '';
+      document.getElementById('et-scientificName').value      = data.scientificName || '';
+      document.getElementById('et-family').value              = data.family || '';
+      document.getElementById('et-price').value               = data.price || '';
+      document.getElementById('et-origin').value              = data.origin || '';
+      document.getElementById('et-shortDescription').value    = data.shortDescription || '';
+      document.getElementById('et-longDescription').value     = data.longDescription || '';
+
+      const preview    = document.getElementById('et-picture-preview');
+      const previewImg = document.getElementById('et-picture-img');
+      if (data.picture) { previewImg.src = '/uploads/' + data.picture; preview.style.display = 'block'; }
+      else              { preview.style.display = 'none'; }
+
+      const existingProjects = data.projects || [];
+      document.querySelectorAll('#modal-edit-tree input[type="checkbox"]').forEach(cb => {
+        const match = existingProjects.find(ph => String(ph.projectId) === cb.value);
+        cb.checked = !!match;
+        const stockInput = document.getElementById('et-stock-' + cb.value);
+        if (stockInput) {
+          stockInput.disabled      = !match;
+          stockInput.style.opacity = match ? '1' : '0.4';
+          stockInput.value         = match ? match.stock : '0';
+        }
+      });
+    }
+
+    modal.classList.add('open');
+  }
+
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('open');
+  }
+
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) overlay.classList.remove('open');
+    });
+  });
+
+  // ---- Suppression utilisateur (sans rechargement de page) ----
+  //
+  // Deux comportements selon la réponse du controller :
+  //
+  // { action: 'deleted' }    → aucune commande, hard delete en BDD
+  //                            → on retire la ligne du DOM
+  //
+  // { action: 'anonymized' } → commandes existantes, anonymisation RGPD
+  //                            → on met à jour la ligne visuellement :
+  //                              nom  → "Utilisateur Anonyme"
+  //                              email → "—" (l'email technique n'est jamais affiché)
+  //                              statut → badge "Inactif"
+  //                              bouton → "—"
+  // ----------------------------------------------------------------
+  async function deleteUser(userId, btn) {
+    if (!confirm('Supprimer cet utilisateur ?')) return;
+
+    btn.disabled = true;
+    btn.textContent = '…';
+
+    try {
+      const res = await fetch('/admin/users/' + userId + '/delete', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+      });
+
+      const data = await res.json();
+      const row = btn.closest('tr');
+
+      if (data.action === 'deleted') {
+        // Aucune commande → suppression complète en BDD → on retire la ligne
+        if (row) row.remove();
+
+      } else if (data.action === 'anonymized') {
+        // Commandes existantes → anonymisation RGPD → mise à jour visuelle
+        // L'email technique (deleted-X@anonymized.local) ne doit jamais apparaître
+        const cells = row.querySelectorAll('td');
+        cells[0].innerHTML = '<strong style="color:var(--color-text-muted,#888);">Utilisateur Anonyme</strong>';
+        cells[1].innerHTML = '<span style="font-style:italic;">—</span>';
+        cells[4].innerHTML = '<span class="badge badge-red">Inactif</span>';
+        cells[6].innerHTML = '<span class="td-muted" style="font-size:12px;">—</span>';
+        row.style.opacity  = '0.6';
+
+      } else {
+        btn.disabled = false;
+        btn.textContent = 'Supprimer';
+        alert('Erreur lors de la suppression');
+      }
+    } catch {
+      btn.disabled = false;
+      btn.textContent = 'Supprimer';
+      alert('Erreur réseau lors de la suppression');
+    }
+  }
+
+  // ---- Détail commande ----
+  function toggleOrderDetail(orderId) {
+    const row = document.getElementById('order-detail-' + orderId);
+    if (row) row.style.display = row.style.display === 'none' ? 'table-row' : 'none';
+  }
+</script>
+
+</body>
+</html>

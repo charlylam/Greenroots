@@ -1,0 +1,549 @@
+/* ============================================================
+   GreenRoots Admin — admin.css
+   ============================================================ */
+
+/* ---- Variables ---- */
+:root {
+  --brand-bg: #f2efe9;
+  --brand-dark: #212a25;
+  --brand-dark-50: rgba(33, 42, 37, 0.5);
+  --brand-accent: #88b75d;
+  --brand-muted: #9f9e93;
+  --brand-white: #ffffff;
+  --sidebar-width: 220px;
+  --danger: #d9534f;
+  --danger-hover: #b94a47;
+}
+
+/* ---- Reset ---- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background-color: var(--brand-bg);
+  color: var(--brand-dark);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ============================================================
+   LOGIN PAGE
+   ============================================================ */
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--brand-bg);
+}
+
+.login-card {
+  background: var(--brand-white);
+  border-radius: 16px;
+  padding: 40px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 2px 16px rgba(33, 42, 37, 0.08);
+}
+
+.login-logo {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--brand-accent);
+  margin-bottom: 4px;
+}
+
+.login-subtitle {
+  color: var(--brand-muted);
+  font-size: 13px;
+  margin-bottom: 32px;
+}
+
+.login-card h1 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: var(--brand-dark);
+}
+
+/* ============================================================
+   LAYOUT — SIDEBAR + CONTENT
+   ============================================================ */
+
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ---- Sidebar ---- */
+.sidebar {
+  width: var(--sidebar-width);
+  background: var(--brand-white);
+  border-right: 1px solid rgba(33, 42, 37, 0.08);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 100;
+}
+
+.sidebar-logo {
+  padding: 24px 20px 20px;
+  border-bottom: 1px solid rgba(33, 42, 37, 0.08);
+}
+
+.sidebar-logo-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--brand-accent);
+}
+
+.sidebar-logo-label {
+  font-size: 11px;
+  color: var(--brand-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 2px;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 16px 0;
+}
+
+.sidebar-section-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--brand-muted);
+  padding: 8px 20px 4px;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  color: var(--brand-dark);
+  text-decoration: none;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  transition: background 0.15s, color 0.15s;
+  border-radius: 0;
+}
+
+.sidebar-link:hover {
+  background: var(--brand-bg);
+  color: var(--brand-dark);
+}
+
+.sidebar-link.active {
+  background: rgba(136, 183, 93, 0.12);
+  color: var(--brand-accent);
+  font-weight: 600;
+}
+
+.sidebar-link .icon {
+  font-size: 16px;
+  width: 18px;
+  text-align: center;
+}
+
+.sidebar-footer {
+  padding: 16px 0;
+  border-top: 1px solid rgba(33, 42, 37, 0.08);
+}
+
+/* ---- Main content ---- */
+.admin-content {
+  margin-left: var(--sidebar-width);
+  flex: 1;
+  padding: 32px;
+  min-height: 100vh;
+}
+
+/* ============================================================
+   SECTIONS
+   ============================================================ */
+
+.section {
+  display: none;
+}
+
+.section.active {
+  display: block;
+}
+
+/* ============================================================
+   PAGE HEADER
+   ============================================================ */
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.page-title {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.page-title span {
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--brand-muted);
+  margin-left: 8px;
+}
+
+/* ============================================================
+   FLASH MESSAGES
+   ============================================================ */
+
+.flash {
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.flash.success {
+  background: rgba(136, 183, 93, 0.15);
+  color: #3d6b1a;
+  border: 1px solid rgba(136, 183, 93, 0.4);
+}
+
+.flash.error {
+  background: rgba(217, 83, 79, 0.1);
+  color: var(--danger);
+  border: 1px solid rgba(217, 83, 79, 0.3);
+}
+
+/* ============================================================
+   TABLE
+   ============================================================ */
+
+.table-wrapper {
+  background: var(--brand-white);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 8px rgba(33, 42, 37, 0.06);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background: var(--brand-bg);
+}
+
+thead th {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--brand-muted);
+  font-weight: 600;
+  border-bottom: 1px solid rgba(33, 42, 37, 0.08);
+}
+
+tbody tr {
+  border-bottom: 1px solid rgba(33, 42, 37, 0.06);
+  transition: background 0.1s;
+}
+
+tbody tr:last-child {
+  border-bottom: none;
+}
+
+tbody tr:hover {
+  background: rgba(242, 239, 233, 0.6);
+}
+
+tbody td {
+  padding: 12px 16px;
+  font-size: 14px;
+  color: var(--brand-dark);
+}
+
+.td-muted {
+  color: var(--brand-muted);
+  font-size: 13px;
+}
+
+/* ============================================================
+   BADGES
+   ============================================================ */
+
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge-green {
+  background: rgba(136, 183, 93, 0.15);
+  color: #3d6b1a;
+}
+
+.badge-red {
+  background: rgba(217, 83, 79, 0.12);
+  color: var(--danger);
+}
+
+.badge-muted {
+  background: rgba(159, 158, 147, 0.15);
+  color: var(--brand-muted);
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  transition: background 0.15s, opacity 0.15s;
+}
+
+.btn-primary {
+  background: var(--brand-accent);
+  color: var(--brand-white);
+}
+
+.btn-primary:hover {
+  background: #74a04a;
+}
+
+.btn-secondary {
+  background: var(--brand-bg);
+  color: var(--brand-dark);
+  border: 1px solid rgba(33, 42, 37, 0.15);
+}
+
+.btn-secondary:hover {
+  background: #e8e4dc;
+}
+
+.btn-danger {
+  background: var(--danger);
+  color: var(--brand-white);
+}
+
+.btn-danger:hover {
+  background: var(--danger-hover);
+}
+
+.btn-action {
+  padding: 5px 10px;
+  font-size: 12px;
+  border-radius: 6px;
+}
+
+.btn-create {
+  padding: 10px 20px;
+  font-size: 15px;
+  border-radius: 8px;
+}
+
+/* ============================================================
+   FORMS
+   ============================================================ */
+
+.form-panel {
+  background: var(--brand-white);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 8px rgba(33, 42, 37, 0.06);
+}
+
+.form-panel-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(33, 42, 37, 0.08);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group.full {
+  grid-column: 1 / -1;
+}
+
+label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--brand-dark);
+}
+
+input[type="text"],
+input[type="number"],
+input[type="url"],
+textarea,
+select {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid rgba(33, 42, 37, 0.2);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--brand-dark);
+  background: var(--brand-white);
+  transition: border-color 0.15s;
+  font-family: inherit;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--brand-accent);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  justify-content: flex-end;
+}
+
+/* ============================================================
+   MODAL / OVERLAY FORMULAIRE ÉDITION
+   ============================================================ */
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(33, 42, 37, 0.4);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-overlay.open {
+  display: flex;
+}
+
+.modal {
+  background: var(--brand-white);
+  border-radius: 16px;
+  padding: 28px;
+  width: 100%;
+  max-width: 640px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(33, 42, 37, 0.18);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(33, 42, 37, 0.08);
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--brand-muted);
+  line-height: 1;
+}
+
+.modal-close:hover {
+  color: var(--brand-dark);
+}
+
+/* ============================================================
+   LOGOUT FORM
+   ============================================================ */
+
+.logout-form {
+  padding: 12px 20px;
+}
+
+/* ============================================================
+   TRI COLONNES — Icônes thead
+   ============================================================ */
+
+thead th.sortable {
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+thead th.sortable:hover {
+  color: var(--brand-dark);
+}
+
+thead th.sortable::after {
+  content: ' ⇅';
+  font-size: 15px;
+  color: black;
+  opacity: 0.6;
+}
+
+thead th.sortable.sort-asc::after {
+  content: ' ▲';
+  font-size: 15px;
+  color: var(--brand-accent);
+  opacity: 1;
+}
+
+thead th.sortable.sort-desc::after {
+  content: ' ▼';
+  font-size: 15px;
+  color: var(--brand-accent);
+  opacity: 1;
+}

@@ -1,0 +1,83 @@
+openapi: 3.0.0
+info:
+  title: GreenRoots API — Orders
+  version: 1.0.0
+  description: |
+    Endpoint de création de commande (checkout du panier actif).
+    Décrémente atomiquement le stock dans une transaction Prisma.
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    OrderItem:
+      type: object
+      properties:
+        id: { type: integer }
+        treeCommonName: { type: string }
+        quantity: { type: integer }
+        unitPrice: { type: string }
+        treeId: { type: integer }
+        projectId: { type: integer }
+        project:
+          type: object
+          properties:
+            name: { type: string }
+            slug: { type: string }
+
+    Order:
+      type: object
+      properties:
+        id: { type: integer }
+        status: { type: string, enum: [validated, canceled] }
+        amount: { type: string }
+        userId: { type: integer }
+        cartId: { type: integer, nullable: true }
+        createdAt: { type: string, format: date-time }
+        items:
+          type: array
+          items: { $ref: '#/components/schemas/OrderItem' }
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code: { type: string }
+            message: { type: string }
+
+paths:
+  /api/orders:
+    post:
+      tags: [Orders]
+      summary: Convertit le panier actif en commande
+      description: |
+        - Décrémente le stock des arbres dans la même transaction.
+        - Si le stock est insuffisant pour un item, la commande est rollback.
+        - Si pas de panier actif → 404.
+      security: [{ bearerAuth: [] }]
+      responses:
+        '201':
+          description: Commande créée
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/Order' }
+        '400':
+          description: Panier vide ou stock insuffisant
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '404':
+          description: Aucun panier actif
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '401': { description: Non authentifié }

@@ -1,0 +1,148 @@
+@baseUrl = http://localhost:3002/api
+@userToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjgsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzgwMzg4Mzg0LCJleHAiOjE3ODA0NzQ3ODR9.fvfFSW0fNfsXnH8PiKOhaKbOamZftvj-6uO7ma1ljvQ
+
+@adminToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjcsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc4MDM4ODQwNCwiZXhwIjoxNzgwNDc0ODA0fQ.KinWq--P6j6l-pFSTeu3VZ8CgyXmNJCa4qYpNNBVBYU
+#############################################
+## LOGIN
+#############################################
+
+### Login - admin seedé
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@greenroots.fr",
+  "password": "Password123@"
+}
+
+### Login - utilisateur particulier seedé Thomas
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "thomas.martin@email.fr",
+  "password": "Password123@"
+}
+
+### Login - utilisateur particulier seedé Sophie
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "sophie.bernard@email.fr",
+  "password": "Password123@"
+}
+
+### Login - entreprise seedée
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "contact@ecoentreprise.fr",
+  "password": "Password123@"
+}
+
+### Login - mauvais mot de passe
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "thomas.martin@email.fr",
+  "password": "WrongPassword123!"
+}
+
+#############################################
+## JWT MIDDLEWARE
+#############################################
+
+### Profil utilisateur - sans token
+GET {{baseUrl}}/users/me
+
+### Profil utilisateur - token invalide
+GET {{baseUrl}}/users/me
+Authorization: Bearer mauvais_token
+
+### Profil utilisateur - token valide utilisateur
+GET {{baseUrl}}/users/me
+Authorization: Bearer {{userToken}}
+
+### Profil utilisateur - token valide admin
+GET {{baseUrl}}/users/me
+Authorization: Bearer {{adminToken}}
+
+### Commandes utilisateur - token valide utilisateur
+GET {{baseUrl}}/users/me/orders
+Authorization: Bearer {{userToken}}
+
+#############################################
+## REGISTER
+#############################################
+
+### Register - particulier
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "lastName": "Test",
+  "firstName": "Register",
+  "email": "register.test@email.fr",
+  "password": "Password123!",
+  "address": "1 rue test",
+  "postalCode": "01000",
+  "city": "Bourg-en-Bresse",
+  "type": "particulier"
+}
+
+### Register - email déjà utilisé
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "lastName": "Test",
+  "firstName": "Register",
+  "email": "register.test@email.fr",
+  "password": "Password123!",
+  "address": "1 rue test",
+  "postalCode": "01000",
+  "city": "Bourg-en-Bresse",
+  "type": "particulier"
+}
+
+### Register - entreprise sans SIRET
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "lastName": "Test",
+  "firstName": "Entreprise",
+  "email": "entreprise.sans.siret@email.fr",
+  "password": "Password123!",
+  "address": "1 rue entreprise",
+  "postalCode": "01000",
+  "city": "Bourg-en-Bresse",
+  "type": "entreprise"
+}
+
+### Register - entreprise valide
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "lastName": "Test",
+  "firstName": "Entreprise",
+  "email": "entreprise.valide@email.fr",
+  "password": "Password123!",
+  "address": "1 rue entreprise",
+  "postalCode": "01000",
+  "city": "Bourg-en-Bresse",
+  "type": "entreprise",
+  "siret": "98765432109876",
+  "companyName": "Entreprise Test"
+}
+
+#############################################
+## LOGOUT
+#############################################
+
+### Logout
+POST {{baseUrl}}/auth/logout

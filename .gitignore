@@ -50,6 +50,7 @@ yarn-error.log*
 # Prisma
 # ===========================
 backend/prisma/migrations/**/migration_lock.toml
+backend/prisma/generated/
 
 # ===========================
 # Docker
@@ -74,3 +75,12 @@ Thumbs.db
 # Tests
 # ===========================
 /coverage
+
+
+# ===========================
+# Upload & images
+# ===========================
+backend/public/uploads/*
+!backend/public/uploads/.gitkeep
+!backend/public/uploads/seed/
+!backend/public/uploads/seed/**

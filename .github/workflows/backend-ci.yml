@@ -1,0 +1,57 @@
+# Pipeline CI du backend GreenRoots.
+# Ce workflow GitHub Actions démarre l’environnement Docker de test,
+# réinitialise la base PostgreSQL dédiée aux tests automatisés,
+# vérifie le code avec ESLint et TypeScript,
+# puis exécute les tests du backend dans le service Docker `backend-test`.
+
+name: Backend CI
+
+on:
+  push:
+    branches:
+      - DEV
+
+  pull_request:
+    branches:
+      - DEV
+
+jobs:
+  backend-test:
+    runs-on: ubuntu-latest
+
+    # Variables utilisées par Docker Compose pendant la CI.
+    env:
+      POSTGRES_USER: greenroots
+      POSTGRES_PASSWORD: testpassword
+      POSTGRES_DB: greenroots
+      DATABASE_URL: postgresql://greenroots:testpassword@db:5432/greenroots
+
+      POSTGRES_TEST_USER: greenroots
+      POSTGRES_TEST_PASSWORD: testpassword
+      POSTGRES_TEST_DB: greenroots_test
+      TEST_DATABASE_URL: postgresql://greenroots:testpassword@db-test:5432/greenroots_test
+
+      JWT_SECRET: ci_test_secret
+      JWT_EXPIRES_IN: 1d
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build and start Docker services
+        run: docker compose -f docker-compose.dev.yml up -d --build
+
+      - name: Reset test database
+        run: docker compose -f docker-compose.dev.yml exec -T backend-test npx prisma migrate reset --force
+
+      - name: Seed test database
+        run: docker compose -f docker-compose.dev.yml exec -T backend-test npm run db:seed
+
+      - name: Run backend lint
+        run: docker compose -f docker-compose.dev.yml exec -T backend-test npm run lint
+
+      - name: Run backend typecheck
+        run: docker compose -f docker-compose.dev.yml exec -T backend-test npm run typecheck
+
+      - name: Run backend tests
+        run: docker compose -f docker-compose.dev.yml exec -T backend-test npm test

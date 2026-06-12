@@ -1,0 +1,18 @@
+<svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+<title>Arbre de progression</title>
+<desc>Petit arbre vert utilisé comme indicateur de progression.</desc>
+<ellipse cx="48" cy="86" rx="26" ry="5" fill="#8BBF63" opacity="0.35"/>
+<path d="M45 50h8v35h-8V50Z" fill="#7A4A25"/>
+<path d="M49 58c-6 9-14 14-24 16" stroke="#7A4A25" stroke-width="4" stroke-linecap="round"/>
+<path d="M50 62c7 6 14 10 23 11" stroke="#7A4A25" stroke-width="4" stroke-linecap="round"/>
+<circle cx="35" cy="43" r="17" fill="#6FAE3F"/>
+<circle cx="51" cy="34" r="20" fill="#79BC45"/>
+<circle cx="63" cy="48" r="17" fill="#5D9F37"/>
+<circle cx="46" cy="54" r="19" fill="#76B947"/>
+<circle cx="28" cy="55" r="13" fill="#4F8F32"/>
+<circle cx="68" cy="59" r="12" fill="#5FAE3D"/>
+<circle cx="42" cy="30" r="10" fill="#8FCC4F" opacity="0.9"/>
+<circle cx="57" cy="25" r="8" fill="#9CD85B" opacity="0.8"/>
+<path d="M22 82c7-7 17-7 25 0" stroke="#5D9F37" stroke-width="4" stroke-linecap="round"/>
+<path d="M51 82c8-8 18-8 25 0" stroke="#5D9F37" stroke-width="4" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,201 @@
+openapi: 3.0.3
+info:
+  title: GreenRoots API — Trees
+  version: 1.0.0
+  description: Endpoints liés aux arbres de la plateforme GreenRoots.
+
+servers:
+  - url: http://localhost:3001/api
+    description: Serveur de développement
+
+components:
+  schemas:
+    TreeSummary:
+      type: object
+      properties:
+        id: { type: integer, example: 1 }
+        commonName: { type: string, example: Chêne sessile }
+        family: { type: string, example: Fagaceae }
+        origin: { type: string, example: Europe }
+        slug: { type: string, example: chene-sessile }
+        picture: { type: string, example: http://localhost:3001/uploads/chene.jpg }
+        price: { type: number, example: 12.50 }
+
+    ProjectHasTree:
+      type: object
+      properties:
+        projectId: { type: integer }
+        treeId: { type: integer }
+        stock: { type: integer, example: 45 }
+        project:
+          type: object
+          properties:
+            id: { type: integer }
+            name: { type: string }
+            slug: { type: string }
+            localisation: { type: string }
+            progress: { type: integer }
+
+    TreeDetail:
+      type: object
+      properties:
+        id: { type: integer, example: 1 }
+        commonName: { type: string, example: Chêne sessile }
+        scientificName: { type: string, example: Quercus petraea }
+        family: { type: string, example: Fagaceae }
+        origin: { type: string, example: Europe }
+        slug: { type: string, example: chene-sessile }
+        picture: { type: string, example: http://localhost:3001/uploads/chene.jpg }
+        price: { type: number, example: 12.50 }
+        shortDescription: { type: string }
+        longDescription: { type: string }
+        createdAt: { type: string, format: date-time }
+        projects:
+          type: array
+          items: { $ref: '#/components/schemas/ProjectHasTree' }
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code: { type: string }
+            message: { type: string }
+
+paths:
+
+  /api/trees:
+    get:
+      summary: Récupérer tous les arbres (paginés)
+      tags: [Arbres]
+      parameters:
+        - name: page
+          in: query
+          description: Numéro de page (défaut 1)
+          required: false
+          schema:
+            type: integer
+            example: 1
+
+        - name: search
+          in: query
+          description: Recherche par nom commun (insensible à la casse)
+          required: false
+          schema:
+            type: string
+            example: chêne
+
+        - name: minPrice
+          in: query
+          description: Prix minimum
+          required: false
+          schema:
+            type: number
+            example: 5.00
+
+        - name: maxPrice
+          in: query
+          description: Prix maximum
+          required: false
+          schema:
+            type: number
+            example: 50.00
+
+        - name: sortBy
+          in: query
+          description: Champ de tri (défaut commonName)
+          required: false
+          schema:
+            type: string
+            enum: [commonName, price, family]
+            example: commonName
+
+        - name: sortOrder
+          in: query
+          description: Ordre de tri
+          required: false
+          schema:
+            type: string
+            enum: [asc, desc]
+            example: asc
+
+      responses:
+        '200':
+          description: Liste des arbres paginée
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  trees:
+                    type: array
+                    items: { $ref: '#/components/schemas/TreeSummary' }
+                  total:
+                    type: integer
+                    example: 42
+                  limit:
+                    type: integer
+                    example: 9
+              example:
+                trees:
+                  - id: 1
+                    commonName: Chêne sessile
+                    family: Fagaceae
+                    origin: Europe
+                    slug: chene-sessile
+                    picture: http://localhost:3001/uploads/chene.jpg
+                    price: 12.50
+                total: 42
+                limit: 9
+
+  /api/trees/{slug}:
+    get:
+      summary: Récupérer un arbre par son slug
+      tags: [Arbres]
+      parameters:
+        - name: slug
+          in: path
+          description: Slug unique de l'arbre
+          required: true
+          schema:
+            type: string
+            example: chene-sessile
+
+      responses:
+        '200':
+          description: Détail complet de l'arbre avec ses projets associés
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TreeDetail' }
+              example:
+                id: 1
+                commonName: Chêne sessile
+                scientificName: Quercus petraea
+                family: Fagaceae
+                origin: Europe
+                slug: chene-sessile
+                picture: http://localhost:3001/uploads/chene.jpg
+                price: 12.50
+                shortDescription: Un chêne robuste et longévif
+                longDescription: Le chêne sessile est une espèce emblématique des forêts européennes.
+                createdAt: '2026-05-27T09:30:00.000Z'
+                projects:
+                  - projectId: 1
+                    treeId: 1
+                    stock: 45
+                    project:
+                      id: 1
+                      name: Reforestation Bretagne
+                      slug: reforestation-bretagne
+                      localisation: Bretagne, France
+                      progress: 60
+        '404':
+          description: Arbre introuvable
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+              example:
+                error:
+                  code: NOT_FOUND
+                  message: Tree not found

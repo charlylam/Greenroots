@@ -1,0 +1,89 @@
+openapi: 3.0.0
+info:
+  title: GreenRoots API
+  version: 1.0.0
+  description: |
+    API de la plateforme GreenRoots — reforestation solidaire.
+    Documentation modulaire : chaque scope (Users, Orders, …) est défini
+    dans son propre fichier YAML et combiné ici via $ref.
+
+tags:
+  - name: Auth
+    description: Routes d'inscription, connexion et déconnexion
+  - name: Users
+    description: Routes liées à l'utilisateur connecté
+  - name: Orders
+    description: Création et gestion des commandes
+  - name: Arbres
+    description: Routes liées aux arbres
+  - name: Projects
+    description: Routes liées aux projets de reforestation
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+paths:
+  # ============================================================
+  # AUTH — Routes importées de users.openapi.yaml
+  # ============================================================
+  /api/auth/register:
+    $ref: './users.openapi.yaml#/paths/~1api~1auth~1register'
+
+  /api/auth/login:
+    $ref: './users.openapi.yaml#/paths/~1api~1auth~1login'
+
+  /api/auth/logout:
+    $ref: './users.openapi.yaml#/paths/~1api~1auth~1logout'
+
+  # ============================================================
+  # USERS — Routes importées de users.openapi.yaml
+  # ============================================================
+  /api/users/me:
+    $ref: './users.openapi.yaml#/paths/~1api~1users~1me'
+  /api/users/me/orders:
+    $ref: './users.openapi.yaml#/paths/~1api~1users~1me~1orders'
+  /api/users/me/orders/{id}:
+    $ref: './users.openapi.yaml#/paths/~1api~1users~1me~1orders~1{id}'
+
+  # ============================================================
+  # ORDERS — Routes importées de orders.openapi.yaml
+  # ============================================================
+  /api/orders:
+    $ref: './orders.openapi.yaml#/paths/~1api~1orders'
+
+  # ============================================================
+  # TREES
+  # ============================================================
+  /api/trees:
+    get:
+      $ref: './trees.openapi.yaml#/paths/~1api~1trees/get'
+
+  /api/trees/{slug}:
+    get:
+      $ref: './trees.openapi.yaml#/paths/~1api~1trees~1{slug}/get'
+
+  # ============================================================
+  # PROJECTS — Routes importées de projects.openapi.yaml
+  # ============================================================
+  /api/projects:
+    $ref: './projects.openapi.yaml#/paths/~1api~1projects'
+  /api/projects/localisations:
+    $ref: './projects.openapi.yaml#/paths/~1api~1projects~1localisations'
+  /api/projects/{slug}:
+    $ref: './projects.openapi.yaml#/paths/~1api~1projects~1{slug}'
+  /api/projects/{slug}/trees:
+    $ref: './projects.openapi.yaml#/paths/~1api~1projects~1{slug}~1trees'
+
+  # ============================================================
+  # CARTS
+  # ============================================================
+  /api/carts:
+    $ref: './carts.openapi.yaml#/paths/~1api~1carts'
+  /api/carts/items:
+    $ref: './carts.openapi.yaml#/paths/~1api~1carts~1items'
+  /api/carts/items/{id}:
+    $ref: './carts.openapi.yaml#/paths/~1api~1carts~1items~1{id}'

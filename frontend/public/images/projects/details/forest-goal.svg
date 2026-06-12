@@ -1,0 +1,16 @@
+<svg width="220" height="120" viewBox="0 0 220 120" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+<title>Forêt objectif</title>
+<desc>Petit groupe d'arbres verts symbolisant l'objectif final à 100%.</desc>
+<ellipse cx="110" cy="108" rx="96" ry="8" fill="#8BBF63" opacity="0.35"/>
+<path d="M24 91h8v17h-8V91Z" fill="#79512A"/>
+<circle cx="21" cy="79" r="12" fill="#5FAE3D"/><circle cx="32" cy="75" r="14" fill="#7BC64D"/><circle cx="40" cy="88" r="11" fill="#5A9E34"/>
+<path d="M55 99h9v10h-9V99Z" fill="#79512A"/><path d="M59.5 20L33 99h53L59.5 20Z" fill="#0F4D2A"/><path d="M59.5 36L39 97h41L59.5 36Z" fill="#176437"/><path d="M59.5 55L44 99h31L59.5 55Z" fill="#1F7A42"/>
+<path d="M90 96h8v13h-8V96Z" fill="#79512A"/><path d="M94 30L72 98h44L94 30Z" fill="#135A32"/><path d="M94 47L78 98h32L94 47Z" fill="#1C7441"/>
+<path d="M124 92h10v17h-10V92Z" fill="#79512A"/><path d="M129 9L96 100h66L129 9Z" fill="#0B3F24"/><path d="M129 28L103 101h52L129 28Z" fill="#145C33"/><path d="M129 51L109 101h40L129 51Z" fill="#1F7A42"/>
+<path d="M168 98h7v11h-7V98Z" fill="#79512A"/><path d="M171.5 34L151 100h41L171.5 34Z" fill="#155E35"/><path d="M171.5 50L156 101h31L171.5 50Z" fill="#207B43"/>
+<path d="M190 91h8v17h-8V91Z" fill="#79512A"/>
+<circle cx="188" cy="77" r="13" fill="#6FAE3F"/><circle cx="200" cy="73" r="15" fill="#8ACB54"/><circle cx="204" cy="88" r="12" fill="#5A9E34"/>
+<path d="M38 105c10-12 27-12 38 0" stroke="#4F8F32" stroke-width="5" stroke-linecap="round"/>
+<path d="M77 106c14-13 35-13 49 0" stroke="#5FAE3D" stroke-width="5" stroke-linecap="round"/>
+<path d="M132 106c16-13 41-13 58 0" stroke="#4F8F32" stroke-width="5" stroke-linecap="round"/>
+</svg>

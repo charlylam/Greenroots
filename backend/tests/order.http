@@ -1,0 +1,157 @@
+### order.http — Tests de POST /api/orders (checkout panier → commande)
+### Extension REST Client requise.
+### Utilise les endpoints panier de Camille (cart.http) pour préparer un panier
+### avant de tester le checkout, puis vérifie la conversion.
+
+@baseUrl = http://localhost:3002/api
+@contentType = application/json
+
+
+# ============================================================
+# CAS 1 — Sophie : panier déjà rempli par le seed
+# ============================================================
+
+### 1. Login Sophie (panier actif avec 5× Palétuvier rouge depuis le seed)
+# @name loginSophie
+POST {{baseUrl}}/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "sophie.bernard@email.fr",
+  "password": "Password123@"
+}
+
+###
+@tokenSophie = {{loginSophie.response.body.token}}
+
+
+### 2. GET /carts — voir le panier actif (5 palétuviers attendus)
+GET {{baseUrl}}/carts
+Authorization: Bearer {{tokenSophie}}
+
+
+### 3. POST /orders — convertit le panier en commande (201 attendu)
+POST {{baseUrl}}/orders
+Authorization: Bearer {{tokenSophie}}
+Content-Type: {{contentType}}
+
+### Réponse attendue (201 Created) :
+### {
+###   "data": {
+###     "status": "validated",
+###     "amount": "75",
+###     "items": [
+###       { "treeCommonName": "Palétuvier rouge", "quantity": 5, "unitPrice": "15", ... }
+###     ]
+###   }
+### }
+
+
+### 4. GET /me/orders — la nouvelle commande doit apparaître
+GET {{baseUrl}}/users/me/orders
+Authorization: Bearer {{tokenSophie}}
+
+
+### 5. POST /orders rejoué — 404 attendu (panier maintenant "converted")
+POST {{baseUrl}}/orders
+Authorization: Bearer {{tokenSophie}}
+Content-Type: {{contentType}}
+
+### Réponse attendue (404) :
+### { "error": { "code": "NOT_FOUND", "message": "Aucun panier actif" } }
+
+
+# ============================================================
+# CAS 2 — Construire un panier from scratch (Thomas) puis checkout
+# ============================================================
+
+### 6. Login Thomas
+# @name loginThomas
+POST {{baseUrl}}/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "thomas.martin@email.fr",
+  "password": "Password123@"
+}
+
+###
+@tokenThomas = {{loginThomas.response.body.token}}
+
+
+### 7. POST /carts/items — ajouter un chêne au panier
+POST {{baseUrl}}/carts/items
+Authorization: Bearer {{tokenThomas}}
+Content-Type: {{contentType}}
+
+{
+  "treeId": 1,
+  "projectId": 1,
+  "quantity": 3
+}
+
+
+### 8. POST /carts/items — ajouter un pin sylvestre
+POST {{baseUrl}}/carts/items
+Authorization: Bearer {{tokenThomas}}
+Content-Type: {{contentType}}
+
+{
+  "treeId": 2,
+  "projectId": 1,
+  "quantity": 2
+}
+
+
+### 9. GET /carts — vérifier le panier rempli
+GET {{baseUrl}}/carts
+Authorization: Bearer {{tokenThomas}}
+
+
+### 10. POST /orders — checkout du panier construit (201 attendu)
+POST {{baseUrl}}/orders
+Authorization: Bearer {{tokenThomas}}
+Content-Type: {{contentType}}
+
+
+### 11. GET /me/orders — confirmer la nouvelle commande
+GET {{baseUrl}}/users/me/orders
+Authorization: Bearer {{tokenThomas}}
+
+
+# ============================================================
+# CAS 3 — Panier vide → 400 ValidationError
+# ============================================================
+
+### 12. DELETE /carts — vider le panier de Thomas (re-crée un nouveau actif vide)
+DELETE {{baseUrl}}/carts
+Authorization: Bearer {{tokenThomas}}
+
+
+### 13. GET /carts pour confirmer qu'il est vide
+GET {{baseUrl}}/carts
+Authorization: Bearer {{tokenThomas}}
+
+
+### 14. POST /orders sur panier vide (400 attendu)
+POST {{baseUrl}}/orders
+Authorization: Bearer {{tokenThomas}}
+Content-Type: {{contentType}}
+
+### Réponse attendue (400) :
+### { "error": { "code": "VALIDATION_ERROR", "message": "Le panier est vide" } }
+
+
+# ============================================================
+# CAS 4 — Sécurité
+# ============================================================
+
+### 15. POST /orders sans Authorization (401 attendu)
+POST {{baseUrl}}/orders
+Content-Type: {{contentType}}
+
+
+### 16. POST /orders avec token invalide (401 attendu)
+POST {{baseUrl}}/orders
+Authorization: Bearer un.token.bidon
+Content-Type: {{contentType}}

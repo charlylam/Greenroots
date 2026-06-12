@@ -1,18 +1,19 @@
-FORM : node 
+
 # Image de developpement du backend GreenRoots
 FROM node:24-alpine
 
 WORKDIR /app
 
-# Installation des dependances (--ignore-scripts : on genere le client Prisma plus tard)
-COPY package*.json ./
-RUN npm install --ignore-scripts
+# Installation des dependances (les scripts postinstall de Prisma telechargent
+# les moteurs binaires et generent le client — necessaire pour la CI).
 
+COPY package*.json ./
+COPY prisma ./prisma
+RUN npm install
 # Code source
 COPY . .
 
-EXPOSE 4000
+EXPOSE 3001
 
-# Au demarrage : generer le client Prisma puis lancer le serveur en mode dev.
-# (la generation se fait ici pour fonctionner avec le volume monte par docker-compose)
+# Au demarrage : on regenere le client (utile en dev car le code est monte via volume).
 CMD ["sh", "-c", "npx prisma generate && npm run dev"]

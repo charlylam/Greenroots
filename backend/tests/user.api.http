@@ -1,0 +1,123 @@
+
+@baseUrl = http://localhost:3002/api
+@contentType = application/json
+
+
+### 1. Register
+# @name register
+POST {{baseUrl}}/auth/register
+Content-Type: {{contentType}}
+
+{
+  "lastName": "Martin",
+  "firstName": "Thomas",
+  "email": "thomas.martin@email.fr",
+  "password": "Password123@",
+  "address": "45 avenue des Chênes",
+  "postalCode": "69001",
+  "city": "Lyon",
+  "type": "particulier",
+  "phone": "0612345678"
+}
+
+
+### 2. Login → stocke le token
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "thomas.martin@email.fr",
+  "password": "Password123@"
+}
+
+
+
+###
+@token = {{login.response.body.token}}
+
+
+### 3. GET /me — profil
+GET {{baseUrl}}/users/me
+Authorization: Bearer {{token}}
+
+
+### 4. PUT /me — mise à jour
+PUT {{baseUrl}}/users/me
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{
+  "city": "Lyon",
+  "postalCode": "69000",
+  "phone": "0612345678"
+}
+
+
+### 5. PUT /me — KO email invalide (400)
+PUT {{baseUrl}}/users/me
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{ "email": "pas-un-email" }
+
+
+### 6. PUT /me — KO body vide (400)
+PUT {{baseUrl}}/users/me
+Authorization: Bearer {{token}}
+Content-Type: {{contentType}}
+
+{}
+
+
+### 7. GET /me — KO sans token (401)
+GET {{baseUrl}}/users/me
+
+
+### 8. GET /me — KO token invalide (401)
+GET {{baseUrl}}/users/me
+Authorization: Bearer un.token.invalide
+
+
+### 9. GET /me/orders — historique
+# @name listOrders
+GET {{baseUrl}}/users/me/orders
+Authorization: Bearer {{token}}
+
+###
+@orderId = {{listOrders.response.body.data[0].id}}
+
+
+### 10. GET /me/orders/:id — détail
+GET {{baseUrl}}/users/me/orders/{{orderId}}
+Authorization: Bearer {{token}}
+
+
+### 11. GET /me/orders/:id — KO id inexistant (404)
+GET {{baseUrl}}/users/me/orders/999999
+Authorization: Bearer {{token}}
+
+
+### 12. GET /me/orders/:id — KO id non numérique (400)
+GET {{baseUrl}}/users/me/orders/abc
+Authorization: Bearer {{token}}
+
+
+### 13. GET /me/orders — KO sans token (401)
+GET {{baseUrl}}/users/me/orders
+
+
+### 14. DELETE /me — suppression (204)
+DELETE {{baseUrl}}/users/me
+Authorization: Bearer {{token}}
+
+
+### 15. GET /me — après suppression (401)
+GET {{baseUrl}}/users/me
+Authorization: Bearer {{token}}
+
+
+### 16. POST /auth/logout — déconnexion (200)
+### Stateless JWT : le serveur renvoie juste un message,
+### c'est au frontend de jeter le token.
+POST {{baseUrl}}/auth/logout

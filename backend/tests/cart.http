@@ -1,0 +1,156 @@
+### Test du controller Cart
+@baseUrl = http://localhost:3002/api
+@userToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzgwNDgyMzI4LCJleHAiOjE3ODA1Njg3Mjh9.H23l9f3-l2rRJS0xtuwyloqcfjjjIePCmw2q5XRUUyc
+
+
+### Login - récupère le token
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "thomas.martin@email.fr",
+  "password": "Password123@"
+}
+
+
+# ============================================================
+# GET /carts — voir le panier actif
+# ============================================================
+
+### Récupérer le panier actif (en crée un vide si aucun)
+GET {{baseUrl}}/carts
+Authorization: Bearer {{userToken}}
+
+
+# ============================================================
+# POST /carts/items — ajouter un arbre
+# ============================================================
+
+### Ajouter un item (cas nominal → 201)
+POST {{baseUrl}}/carts/items
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "treeId": 1,
+  "projectId": 1,
+  "quantity": 2
+}
+
+### Ajouter le MÊME item → incrémente la quantité (→ 200)
+POST {{baseUrl}}/carts/items
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "treeId": 1,
+  "projectId": 3,
+  "quantity": 1
+}
+
+### Body invalide : quantity négative (→ erreur Zod)
+POST {{baseUrl}}/carts/items
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "treeId": 1,
+  "projectId": 1,
+  "quantity": -3
+}
+
+### Body invalide : champ manquant (→ erreur Zod)
+POST {{baseUrl}}/carts/items
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "treeId": 1,
+  "quantity": 2
+}
+
+### Stock insuffisant (→ ValidationError)
+POST {{baseUrl}}/carts/items
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "treeId": 1,
+  "projectId": 1,
+  "quantity": 99999
+}
+
+### Couple arbre/projet inexistant (→ NotFoundError)
+POST {{baseUrl}}/carts/items
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "treeId": 9999,
+  "projectId": 9999,
+  "quantity": 1
+}
+
+
+# ============================================================
+# PATCH /carts/items/:id — modifier la quantité
+# ============================================================
+# Adapte l':id avec un id de CartItem réel renvoyé par le POST
+
+### Modifier la quantité (cas nominal → 200)
+PATCH {{baseUrl}}/carts/items/9
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "quantity": 5
+}
+
+### Quantité au-dessus du stock (→ ValidationError)
+PATCH {{baseUrl}}/carts/items/9
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "quantity": 99999
+}
+
+### Item inexistant ou n'appartenant pas au user (→ NotFoundError)
+PATCH {{baseUrl}}/carts/items/999999
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "quantity": 1
+}
+
+
+# ============================================================
+# DELETE /carts/items/:id — retirer un arbre
+# ============================================================
+
+### Supprimer un item (cas nominal → 200)
+DELETE {{baseUrl}}/carts/items/10
+Authorization: Bearer {{userToken}}
+
+### Supprimer un item inexistant (→ NotFoundError)
+DELETE {{baseUrl}}/carts/items/999999
+Authorization: Bearer {{userToken}}
+
+
+# ============================================================
+# DELETE /carts — vider le panier
+# ============================================================
+
+### Vider tous les items du panier actif (→ 200)
+DELETE {{baseUrl}}/carts
+Authorization: Bearer {{userToken}}
+
+
+# ============================================================
+# Sécurité — sans token (→ 401)
+# ============================================================
+
+### GET sans Authorization (doit être rejeté par le middleware)
+GET {{baseUrl}}/carts

@@ -1,0 +1,63 @@
+<!-- ============================================================
+     views/admin/partials/nav.ejs
+     Sidebar de navigation admin
+     activeSection est passé par le contrôleur ou query param
+     ============================================================ -->
+
+<aside class="sidebar">
+
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-name">🌿 GreenRoots</div>
+    <div class="sidebar-logo-label">Administration</div>
+  </div>
+
+  <nav class="sidebar-nav">
+
+    <div class="sidebar-section-label">Contenu</div>
+
+    <button
+      class="sidebar-link <%= activeSection === 'projects' ? 'active' : '' %>"
+      data-section="projects"
+    >
+      <span class="icon">📁</span>
+      Projets
+    </button>
+
+    <button
+      class="sidebar-link <%= activeSection === 'trees' ? 'active' : '' %>"
+      data-section="trees"
+    >
+      <span class="icon">🌳</span>
+      Arbres
+    </button>
+
+    <div class="sidebar-section-label">Gestion</div>
+
+    <button
+      class="sidebar-link <%= activeSection === 'orders' ? 'active' : '' %>"
+      data-section="orders"
+    >
+      <span class="icon">🛒</span>
+      Commandes
+    </button>
+
+    <button
+      class="sidebar-link <%= activeSection === 'users' ? 'active' : '' %>"
+      data-section="users"
+    >
+      <span class="icon">👤</span>
+      Utilisateurs
+    </button>
+
+  </nav>
+
+  <div class="sidebar-footer">
+    <form action="/admin/logout" method="POST" class="logout-form">
+      <button type="submit" class="sidebar-link" style="color: var(--brand-muted);">
+        <span class="icon">↩</span>
+        Déconnexion
+      </button>
+    </form>
+  </div>
+
+</aside>

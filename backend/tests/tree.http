@@ -1,0 +1,41 @@
+@baseUrl = http://localhost:3001
+
+### =========================
+### GET ALL TREES
+### =========================
+GET {{baseUrl}}/api/trees
+Accept: application/json
+
+
+### =========================
+### GET ONE TREE BY SLUG
+### =========================
+
+### Chêne sessile
+GET {{baseUrl}}/api/trees/chene-sessile
+Accept: application/json
+
+
+### Pin sylvestre
+GET {{baseUrl}}/api/trees/pin-sylvestre
+Accept: application/json
+
+
+### Bouleau blanc
+GET {{baseUrl}}/api/trees/bouleau-blanc
+Accept: application/json
+
+
+### Acajou d'Afrique
+GET {{baseUrl}}/api/trees/acajou-afrique
+Accept: application/json
+
+
+### Séquoia géant
+GET {{baseUrl}}/api/trees/sequoia-geant
+Accept: application/json
+
+
+### Palétuvier rouge
+GET {{baseUrl}}/api/trees/paletuvier-rouge
+Accept: application/json
