@@ -25,4 +25,4 @@ RUN npm run build
 EXPOSE 3001
 
 # Au démarrage : applique les migrations en attente, puis lance le serveur compilé
-CMD ["sh", "-c", "mkdir -p public/uploads/seed && cp -rn /app/seed-backup/. public/uploads/seed/ && DATABASE_URL=$DIRECT_URL npm run db:deploy && npm run start:prod"]
+CMD ["sh", "-c", "mkdir -p public/uploads/seed && cp -rn /app/seed-backup/* public/uploads/seed/ 2>/dev/null; DATABASE_URL=$DIRECT_URL npm run db:deploy && npm run start:prod"]
