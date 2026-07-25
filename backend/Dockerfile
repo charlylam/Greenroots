@@ -11,6 +11,7 @@ RUN npm install
 
 # Code source et fichiers statiques (vues EJS, assets admin, uploads seed)
 COPY . .
+RUN cp -r public/uploads/seed /app/seed-backup
 
 # Génère le client Prisma avec le schéma définitif
 # DATABASE_URL factice : uniquement pour satisfaire la validation de
@@ -24,4 +25,4 @@ RUN npm run build
 EXPOSE 3001
 
 # Au démarrage : applique les migrations en attente, puis lance le serveur compilé
-CMD ["sh", "-c", "DATABASE_URL=$DIRECT_URL npm run db:deploy && npm run start:prod"]
+CMD ["sh", "-c", "mkdir -p public/uploads/seed && cp -rn /app/seed-backup/. public/uploads/seed/ && DATABASE_URL=$DIRECT_URL npm run db:deploy && npm run start:prod"]
