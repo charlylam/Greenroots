@@ -29,13 +29,9 @@ export default function OrderModal({ items, total }: OrderModalProps) {
     setErrMessage('');
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/payment/checkout-session`,
-        {
-          method: 'POST',
-          credentials: 'include',
-        }
-      );
+      const response = await fetch('/api/payment/checkout-session', {
+        method: 'POST',
+      });
 
       const data = await response.json();
 
