@@ -240,6 +240,13 @@ export async function createOrder() {
   });
 }
 
+/** POST /api/payment/checkout-session — crée une session Stripe Checkout pour le panier actif. */
+export async function createCheckoutSession() {
+  return apiFetchPrivate(`/api/payment/checkout-session`, {
+    method: 'POST',
+  });
+}
+
 // --- CART ---
 
 export async function getCart(): Promise<{

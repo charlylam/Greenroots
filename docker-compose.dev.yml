@@ -55,6 +55,8 @@ services:
       BREVO_API_KEY: ${BREVO_API_KEY}
       MAIL_FROM_EMAIL: ${MAIL_FROM_EMAIL}
       MAIL_FROM_NAME: ${MAIL_FROM_NAME}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
     ports:
       - '3001:3001'
       - '5555:5555' # Port pour prisma studio
@@ -81,9 +83,6 @@ services:
     ports:
       - '3002:3002'
       - '5556:5556'
-    volumes:
-      - ./backend:/app
-      - /app/node_modules
 
 volumes:
   greenroots-data:

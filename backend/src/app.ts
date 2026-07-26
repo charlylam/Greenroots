@@ -9,7 +9,7 @@ import { errorHandler } from './middlewares/errorHandler.js';
 import { router } from './routers/index.router.js';
 import searchRouter from './routers/search.router.js';
 import { adminRouter } from './routers/admin.router.js';
-// import { router as stripeWebhookRouter } from './routers/stripe-webhook.router.js';
+import { router as stripeWebhookRouter } from './routers/stripe-webhook.router.js';
 
 import swaggerUi from 'swagger-ui-express';
 import SwaggerParser from '@apidevtools/swagger-parser';
@@ -52,7 +52,7 @@ app.use(
 // Route dédiée aux webhooks Stripe.
 // Elle reçoit les événements envoyés par Stripe après un paiement,
 // sans passer par les routes API classiques, pour valider la commande.
-// app.use('/api/webhooks', stripeWebhookRouter);
+app.use('/api/webhooks', stripeWebhookRouter);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
