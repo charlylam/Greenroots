@@ -4,6 +4,4 @@ npm-debug.log
 .env
 .env.*
 !.env.example
-tests
-*.test.ts
 .git

@@ -39,7 +39,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build and start Docker services
-        run: docker compose -f docker-compose.dev.yml up -d --build
+        run: docker compose -f docker-compose.dev.yml up -d --build backend-test db-test
 
       - name: Reset test database
         run: docker compose -f docker-compose.dev.yml exec -T backend-test npx prisma migrate reset --force
