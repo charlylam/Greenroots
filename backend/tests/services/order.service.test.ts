@@ -140,8 +140,15 @@ describe('[Service] createOrderFromActiveCart — stock pile au seuil', () => {
     await emptyCart();
   });
 
-  it('should succeed when ordering exactly the available stock, and leave stock at zero', async () => {
-    await addItem(treeStock);
+it('should succeed when ordering exactly the available stock, and leave stock at zero', async () => {
+    const currentStock = await prisma.projectHasTree.findUnique({
+      where: { projectId_treeId: { projectId, treeId } },
+    });
+    if (!currentStock || currentStock.stock === 0) {
+      throw new Error('Stock déjà à zéro avant ce test, impossible de le tester');
+    }
+
+    await addItem(currentStock.stock);
     const cartId = await getActiveCartId();
 
     const result = await prisma.$transaction((tx) =>
