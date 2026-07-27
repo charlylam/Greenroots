@@ -63,26 +63,29 @@ export async function handleStripeWebhook(req: Request, res: Response) {
     try {
       // La création de la commande, la décrémentation du stock et la conversion
       // du panier sont réalisées dans une transaction Prisma.
-      const order = await prisma.$transaction((tx) =>
+      const { order, wasAlreadyExisting } = await prisma.$transaction((tx) =>
         createOrderFromActiveCart(tx, userId, cartId)
       );
 
       console.log('Order created after Stripe payment', {
         userId,
         cartId,
+        wasAlreadyExisting,
       });
 
-      try {
-        await sendOrderConfirmationEmail(
-          order.user.email,
-          order.user.firstName,
-          String(order.id)
-        );
-      } catch (error) {
-        console.error(
-          "Erreur lors de l'envoi du mail de confirmation après paiement Stripe",
-          error
-        );
+      if (!wasAlreadyExisting) {
+        try {
+          await sendOrderConfirmationEmail(
+            order.user.email,
+            order.user.firstName,
+            String(order.id)
+          );
+        } catch (error) {
+          console.error(
+            "Erreur lors de l'envoi du mail de confirmation après paiement Stripe",
+            error
+          );
+        }
       }
     } catch (error) {
       // Un paiement Stripe a été encaissé mais la commande n'a pas pu être créée
