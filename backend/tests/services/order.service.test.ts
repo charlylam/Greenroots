@@ -16,7 +16,6 @@ let token: string;
 let userId: number;
 let projectId: number;
 let treeId: number;
-let treeStock: number;
 
 async function login(): Promise<string> {
   const res = await fetch(`${API_URL}/api/auth/login`, {
@@ -84,7 +83,6 @@ before(async () => {
   const treesRes = await fetch(`${API_URL}/api/projects/${project.slug}/trees`);
   const treesBody = await treesRes.json();
   treeId = treesBody.trees[0].id;
-  treeStock = treesBody.trees[0].stock;
 });
 
 // ------------------------------------------------------------
