@@ -7,18 +7,20 @@ export const orderController = {
   async create(req: Request, res: Response): Promise<void> {
     const userId = req.user!.userId;
 
-    const order = await prisma.$transaction((tx) =>
+    const { order, wasAlreadyExisting } = await prisma.$transaction((tx) =>
       createOrderFromActiveCart(tx, userId)
     );
 
-    try {
-      await sendOrderConfirmationEmail(
-        order.user.email,
-        order.user.firstName,
-        String(order.id)
-      );
-    } catch (error) {
-      console.error('Erreur lors de l’envoi du mail de confirmation', error);
+    if (!wasAlreadyExisting) {
+      try {
+        await sendOrderConfirmationEmail(
+          order.user.email,
+          order.user.firstName,
+          String(order.id)
+        );
+      } catch (error) {
+        console.error('Erreur lors de l\'envoi du mail de confirmation', error);
+      }
     }
 
     res.status(201).json({ data: order });

@@ -31,7 +31,7 @@ export async function createOrderFromActiveCart(
     });
 
     if (existingOrder) {
-      return existingOrder;
+      return { order: existingOrder, wasAlreadyExisting: true };
     }
   }
   const cart = await tx.cart.findFirst({
@@ -120,5 +120,5 @@ export async function createOrderFromActiveCart(
     },
   });
 
-  return order;
+  return { order, wasAlreadyExisting: false };
 }
