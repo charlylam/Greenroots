@@ -1,0 +1,1278 @@
+*   b25326e Merge pull request #5 from charlylam/fix/npm-audit-dependencies
+|\  
+| * f9c44e1 fix: corrige les vulnérabilités npm audit (fast-uri, js-yaml)
+| *   e48a7d9 Merge pull request #4 from charlylam/DEV
+| |\  
+| |/  
+|/|   
+* |   5d2fd36 Merge pull request #3 from charlylam/fix/webhook-idempotence-email
+|\ \  
+| |/  
+|/|   
+| * c47d76f fix(test): retire la variable treeStock devenue inutilisée
+| * 197442d fix(test): relit le stock courant avant le test de seuil, plutôt qu'une valeur capturée en amont
+| * 625b8f5 Add tests for createOrderFromActiveCart service
+| * 7c3abe1 Update order creation logic and email confirmation
+| * 8847abf Update Stripe webhook to manage existing orders
+| * a1b7a68 Modify order return structure to include existence flag
+|/  
+* 15eb599 chore: déclenche un déploiement Vercel depuis main
+*   8fe6fc6 Merge pull request #2 from charlylam/DEV
+|\  
+| * c690470 fix(ci): corrige le pipeline CI backend, jamais fonctionnel sur DEV
+| * d38043a fix(payment): corrige l'authentification cross-domain pour le paiement
+| * 3475cc3 fix(docker): corrige la syntaxe cp incompatible avec busybox
+| * 4161ace fix(docker): restaure les images seed sur le disque persistant Render
+| * e9acd79 chore: déclenche un déploiement Vercel depuis DEV
+| * 757be30 fix(docker): corrige le Dockerfile backend pour la production
+| *   6242981 Merge pull request #1 from charlylam/feat/reactivate-stripe-payment
+| |\  
+| | * b8dfdce feat(stripe): réactive le paiement Stripe et corrige les emails de confirmation
+| |/  
+* | 47310dc Merge branch 'DEV'
+|\| 
+* |   19a0685 chore: merge DEV into main - final project
+|\ \  
+| | | * 714a9c8 WIP on DEV: 3313d4d Merge pull request #438 from O-clock-Helsinki/fix/swagger-projects
+| | |/| 
+| | | * 026c839 index on DEV: 3313d4d Merge pull request #438 from O-clock-Helsinki/fix/swagger-projects
+| | |/  
+| | * 3313d4d Merge pull request #438 from O-clock-Helsinki/fix/swagger-projects
+| |/| 
+| | * 38016ef fix: update project localisation examples
+| |/  
+| | *   7aedaa8 Merge branch 'DEV' into test/deploy
+| | |\  
+| | |/  
+| |/|   
+| * |   3b5b987 Merge pull request #436 from O-clock-Helsinki/docs/update-readme
+| |\ \  
+| | * | 6b17295 docs: update README
+| | | *   d7c1383 Merge branch 'DEV' into test/deploy
+| | | |\  
+| | |_|/  
+| |/| |   
+| * | | 5338665 Merge pull request #433 from O-clock-Helsinki/docs/update-readme
+| |\| | 
+| | * | cf53112 docs: update README with current project state
+| | * | 750a2b4 docs: update README with current project state
+| * | |   b92abfe Merge pull request #434 from O-clock-Helsinki/fix/bug-cart
+| |\ \ \  
+| | * | | 0a3d7c9 fix: improuve button styles in CartEmpty component
+| | * | | 1b9a79d fix: improve cart page rendering and structure
+| |/ / /  
+| * | |   d04575a Merge pull request #431 from O-clock-Helsinki/fix/add-debounce-page-trees
+| |\ \ \  
+| | * | | e7d93ca fix: debounce page trees
+| | |/ /  
+| * | |   db1ed5a Merge pull request #430 from O-clock-Helsinki/fix/bug-projects-n-type
+| |\ \ \  
+| | * | | 5f1d12a fix: update project response format to include only needed fields
+| | * | | cead5ac fix: handle 404 error for out-of-range project pages and redirect to page 1
+| | * | | 59fde1d fix: remove unused type definition for Express request extension
+| | |/ /  
+| * | |   beac452 Merge pull request #429 from O-clock-Helsinki/fix/delete-overlay-home
+| |\ \ \  
+| | |/ /  
+| |/| |   
+| | * | 52220e0 fix: delete-overlay-home
+| |/ /  
+| * |   b93bd40 Merge pull request #424 from O-clock-Helsinki/feat/email-confirmation-deleted-account
+| |\ \  
+| | * | dcec9eb feat: add account deletion confirmation email
+| * | |   4cda04d Merge pull request #426 from O-clock-Helsinki/fix/delete-unuse-files-fix-sizes-image
+| |\ \ \  
+| | * | | 6e656a9 fix: add sizes attribute to image in TopTreesSection
+| | * | | 57b0cb7 chore: remove unused frontend files
+| | |/ /  
+| * | |   c261749 Merge pull request #420 from O-clock-Helsinki/fix/remove-overlay-contact
+| |\ \ \  
+| | * | | 98518ab Merge branch 'DEV' into fix/remove-overlay-contact
+| | |\| | 
+| | * | | 4e2f7b9 fix: remove overlay contact
+| * | | |   7578101 Merge pull request #425 from O-clock-Helsinki/feat/favicon
+| |\ \ \ \  
+| | * | | | 2549749 feat: add SVG icon for application
+| | |/ / /  
+| * | | |   b274890 Merge pull request #423 from O-clock-Helsinki/fix/about-page-image-warnings
+| |\ \ \ \  
+| | |_|/ /  
+| |/| | |   
+| | * | | 296a500 fix: correct image warnings on about page
+| |/ / /  
+| * | |   3ffe721 Merge pull request #419 from O-clock-Helsinki/fix/swagger-orders-tag
+| |\ \ \  
+| | * | | 9340646 fix: add missing Orders tag
+| | * | |   544789b Merge remote-tracking branch 'origin/DEV' into feat/wafa
+| | |\ \ \  
+| | * \ \ \   a650e39 Merge branch 'DEV' into feat/wafa
+| | |\ \ \ \  
+| | * \ \ \ \   4d3fd8c Merge branch 'DEV' into feat/wafa
+| | |\ \ \ \ \  
+| | * \ \ \ \ \   ea63080 Merge remote-tracking branch 'origin/DEV' into feat/wafa
+| | |\ \ \ \ \ \  
+| | * \ \ \ \ \ \   0e1aabb Merge remote-tracking branch 'origin/dev' into feat/wafa
+| | |\ \ \ \ \ \ \  
+| * | \ \ \ \ \ \ \   3c8c212 Merge pull request #421 from O-clock-Helsinki/feat/accessibility
+| |\ \ \ \ \ \ \ \ \  
+| | * | | | | | | | | 7a312b6 feat: accessibility
+| | | |_|_|_|_|_|/ /  
+| | |/| | | | | | |   
+| * | | | | | | | |   e94ddbb Merge pull request #422 from O-clock-Helsinki/fix/seed-add-orders
+| |\ \ \ \ \ \ \ \ \  
+| | |/ / / / / / / /  
+| |/| | | | | | | |   
+| | * | | | | | | | c90ecca feat: improve seed orders for project progress
+| |/ / / / / / / /  
+| * | | | | | | |   f24f2b5 Merge pull request #418 from O-clock-Helsinki/fix/apifetch-fix-response
+| |\ \ \ \ \ \ \ \  
+| | |_|_|_|_|_|/ /  
+| |/| | | | | | |   
+| | * | | | | | | c289415 fix: handle empty responses in apiFetch
+| |/ / / / / / /  
+| * | | | | | |   f781511 Merge pull request #410 from O-clock-Helsinki/feat/delete-account-button
+| |\ \ \ \ \ \ \  
+| | * | | | | | | deb518f feat: add delete account button with confirmation modal in user space
+| * | | | | | | |   e954d1b Merge pull request #416 from O-clock-Helsinki/fix/type-getprojects
+| |\ \ \ \ \ \ \ \  
+| | * | | | | | | | 8f2c45f fix: make total property optional in getProjects return type
+| | | |_|_|_|_|/ /  
+| | |/| | | | | |   
+| * | | | | | | |   06d474d Merge pull request #412 from O-clock-Helsinki/fix/home-top-trees-image-path
+| |\ \ \ \ \ \ \ \  
+| | * | | | | | | | 297adbc fix: correct home top trees image path
+| | |/ / / / / / /  
+| * | | | | | | |   28bdded Merge pull request #411 from O-clock-Helsinki/feat/project-progress-calculation
+| |\ \ \ \ \ \ \ \  
+| | |/ / / / / / /  
+| |/| | | | | | |   
+| | * | | | | | | 6f4c2e7 feat: calculate project progress from validated orders
+| |/ / / / / / /  
+| | | | | | | *   961caf6 Merge branch 'DEV' into test/deploy
+| | | | | | | |\  
+| | |_|_|_|_|_|/  
+| |/| | | | | |   
+| * | | | | | |   555c62d Merge pull request #401 from O-clock-Helsinki/feat/auth-swagger
+| |\ \ \ \ \ \ \  
+| | * | | | | | | d469e09 feat: doc auth
+| * | | | | | | |   8270a70 Merge pull request #404 from O-clock-Helsinki/fix/refresh-cartprovider
+| |\ \ \ \ \ \ \ \  
+| | * | | | | | | | ccbc126 fix: integrate cart refresh functionality in OrderModal
+| |/ / / / / / / /  
+| * | | | | | | |   e230109 Merge pull request #402 from O-clock-Helsinki/fix/nodemailer-to-brevo
+| |\ \ \ \ \ \ \ \  
+| | |_|/ / / / / /  
+| |/| | | | | | |   
+| * | | | | | | |   e3eee09 Merge pull request #403 from O-clock-Helsinki/feat/admin_tags_active_or_notActive
+| |\ \ \ \ \ \ \ \  
+| | * | | | | | | | 0295a6e feat: admin anonymisation
+| | * | | | | | | |   f9d259e Merge branch 'DEV' into feat/admin_tags_active_or_notActive
+| | |\ \ \ \ \ \ \ \  
+| | | | |_|_|_|_|/ /  
+| | | |/| | | | | |   
+| | * | | | | | | | 5688a26 feat: admin tags active or not active
+| | | | | | | | | * 06f7e43 feat: integrate cart refresh functionality in OrderModal
+| | | | | | | | | * 85b1104 Merge branch 'fix/nodemailer-to-brevo' into test/deploy
+| | | | | | | | | *   dc3e527 Merge branch 'fix/nodemailer-to-brevo' into test/deploy
+| | | | | | | | | |\  
+| | | | | |_|_|_|_|/  
+| | | | |/| | | | |   
+| | | | * | | | | | 45dab4f fix: configure brevo environment and cors
+| | | | * | | | | |   b72c4fa Merge branch 'DEV' into fix/nodemailer-to-brevo
+| | | | |\ \ \ \ \ \  
+| | |_|_|/ / / / / /  
+| |/| | | | | | | |   
+| | | | * | | | | | 8078c9b feat: replace nodemailer with brevo
+| | | |/ / / / / /  
+| | | | | | | | * 76cad42 Merge branch 'DEV' into test/deploy
+| | | | | | | | *   b2729a0 Merge branch 'DEV' into test/deploy
+| | | | | | | | |\  
+| | |_|_|_|_|_|_|/  
+| |/| | | | | | |   
+| * | | | | | | |   c6e346c Merge pull request #399 from O-clock-Helsinki/fix/for-deploy
+| |\ \ \ \ \ \ \ \  
+| | * | | | | | | | 837bba7 fix: update API URL in search components to use environment variable
+| * | | | | | | | |   4565346 Merge pull request #398 from O-clock-Helsinki/feat/404-funky-page
+| |\ \ \ \ \ \ \ \ \  
+| | |_|_|/ / / / / /  
+| |/| | | | | | | |   
+| | * | | | | | | | ee450f8 feat(404): add custom not-found page with SEO metadata and responsive design
+| | | | | | | | | * fdbdfa0 fix: update API URL in search functions for DesktopSearch and MobileSearch components
+| | | | | | | | | *   660d2a4 Merge branch 'fix/for-deploy' into test/deploy
+| | | | | | | | | |\  
+| | | | |_|_|_|_|_|/  
+| | | |/| | | | | |   
+| | | * | | | | | | 5f42df3 feat: add API routes for cart and user, update build scripts, and adjust TypeScript configuration
+| | |/ / / / / / /  
+| |/| | | | | | |   
+| * | | | | | | |   feffaec Merge pull request #396 from O-clock-Helsinki/feat/delete-user-conditional
+| |\ \ \ \ \ \ \ \  
+| | * | | | | | | | aa51962 feat: delete account hard if no orders, anonymize if orders exist
+| * | | | | | | | |   1d1896f Merge pull request #397 from O-clock-Helsinki/fix/home-trees-link
+| |\ \ \ \ \ \ \ \ \  
+| | |_|_|/ / / / / /  
+| |/| | | | | | | |   
+| | * | | | | | | | 0a70e78 fix: correct trees page link on home section
+| |/ / / / / / / /  
+| * | | | | | | |   d2b5a5b Merge pull request #395 from O-clock-Helsinki/feat/test_front_ButtonLogout
+| |\ \ \ \ \ \ \ \  
+| | * | | | | | | | 9742993 feat: test_front_ButtonLogout
+| * | | | | | | | |   2707c09 Merge pull request #394 from O-clock-Helsinki/feat/test_front_cartItemQuantity
+| |\ \ \ \ \ \ \ \ \  
+| | * | | | | | | | | 50d7555 feat: test front CartItemQuantity
+| | |/ / / / / / / /  
+| * | | | | | | | |   e29610d Merge pull request #393 from O-clock-Helsinki/feat/admin-project-management
+| |\ \ \ \ \ \ \ \ \  
+| | |_|_|_|/ / / / /  
+| |/| | | | | | | |   
+| | * | | | | | | | 900886e fix: use frontend url for tree preview links
+| | | | | | | | | * d1038b3 fix: add await to sendOrderConfirmationEmail in order creation
+| | | | | | | | | * c0e8360 feat: implement cart and user API routes, update fetch calls in components
+| | | | | | | | | * 3a74f19 fix: remove unnecessary await from sendOrderConfirmationEmail in order creation
+| | | | | | | | | *   8983fd5 Merge branch 'DEV' into test/deploy
+| | | | | | | | | |\  
+| | |_|_|_|_|_|_|_|/  
+| |/| | | | | | | |   
+| * | | | | | | | |   bf303fd Merge pull request #391 from O-clock-Helsinki/fix/header-cart-update
+| |\ \ \ \ \ \ \ \ \  
+| | * | | | | | | | | fa74c1c fix: restore cart badge positioning
+| | | |/ / / / / / /  
+| | |/| | | | | | |   
+| * | | | | | | | |   89837d6 Merge pull request #392 from O-clock-Helsinki/fix/for-build
+| |\ \ \ \ \ \ \ \ \  
+| | |/ / / / / / / /  
+| |/| | | | | | | |   
+| | * | | | | | | | 6c8809b fix: update package.json scripts and tsconfig for build process
+| | * | | | | | | | 2e160cc fix: update getProjects type  to include total and limit in response
+| |/ / / / / / / /  
+| * | | | | | | |   bdd5346 Merge pull request #389 from O-clock-Helsinki/feat/seo-content
+| |\ \ \ \ \ \ \ \  
+| | |_|/ / / / / /  
+| |/| | | | | | |   
+| | * | | | | | |   57ac364 Merge branch 'DEV' into feat/seo-content
+| | |\ \ \ \ \ \ \  
+| | |/ / / / / / /  
+| |/| | | | | | |   
+| * | | | | | | |   9f88116 Merge pull request #336 from O-clock-Helsinki/feat/add-swagger-trees
+| |\ \ \ \ \ \ \ \  
+| | * \ \ \ \ \ \ \   c3c3d44 Merge branch 'DEV' into feat/add-swagger-trees
+| | |\ \ \ \ \ \ \ \  
+| | * | | | | | | | | dc75016 feat: add swagger trees
+| | * | | | | | | | | 3cdad65 feat: trees swagger
+| * | | | | | | | | |   fb7b858 Merge pull request #388 from O-clock-Helsinki/test/xss-security-check
+| |\ \ \ \ \ \ \ \ \ \  
+| | * | | | | | | | | | e99b61f test: add xss security test campaign
+| * | | | | | | | | | | b25309f Merge pull request #387 from O-clock-Helsinki/fix/admin-dashboard-sorting
+| |\| | | | | | | | | | 
+| | |_|/ / / / / / / /  
+| |/| | | | | | | | |   
+| | * | | | | | | | | caceabc fix: use frontend url env variable in admin dashboard
+| | | |_|/ / / / / /  
+| | |/| | | | | | |   
+| * | | | | | | | | 913ce84 Merge pull request #386 from O-clock-Helsinki/feat/admin-project-management
+| |\| | | | | | | | 
+| | * | | | | | | | 444c574 feat: add project filters and sorting in admin dashboard
+| * | | | | | | | |   08ea063 Merge pull request #381 from O-clock-Helsinki/feat/tests/front-components
+| |\ \ \ \ \ \ \ \ \  
+| | |/ / / / / / / /  
+| |/| | | | | | | |   
+| | * | | | | | | | e285321 test: add Field tests and refine Next.js mocks
+| | * | | | | | | |   44e9f43 Merge branch 'DEV' into feat/tests/front-components
+| | |\ \ \ \ \ \ \ \  
+| | * | | | | | | | | 74ea5b0 chore: setup Vitest + RTL with first Header test
+| * | | | | | | | | |   24ad1f3 Merge pull request #385 from O-clock-Helsinki/fix/footer
+| |\ \ \ \ \ \ \ \ \ \  
+| | |_|_|_|_|/ / / / /  
+| |/| | | | | | | | |   
+| | * | | | | | | | | 7d67602 style: improve footer alignment
+| |/ / / / / / / / /  
+| * | | | | | | | |   62ea3a3 Merge pull request #383 from O-clock-Helsinki/fix/mobile-menu-close-on-outside-click
+| |\ \ \ \ \ \ \ \ \  
+| | * | | | | | | | | 6cda42d feat: close mobile menu on outside click
+| * | | | | | | | | | aca8f7a Merge pull request #382 from O-clock-Helsinki/fix/mobile-tree-page
+| |\| | | | | | | | | 
+| | * | | | | | | | | 093d64c fix: improve trees pagination spacing
+| | * | | | | | | | | da52762 fix: improve mobile tree page and carousel behavior
+| * | | | | | | | | |   5cdeeb3 Merge pull request #377 from O-clock-Helsinki/fix/landing-page
+| |\ \ \ \ \ \ \ \ \ \  
+| | * \ \ \ \ \ \ \ \ \   206e76c fix: resolve merge conflicts with DEV
+| | |\ \ \ \ \ \ \ \ \ \  
+| | |/ / / / / / / / / /  
+| |/| / / / / / / / / /   
+| | |/ / / / / / / / /    
+| * | | | | | | | | |   291987a Merge pull request #384 from O-clock-Helsinki/feat/accessibility_contrast_colors
+| |\ \ \ \ \ \ \ \ \ \  
+| | * \ \ \ \ \ \ \ \ \   beb16b0 Merge branch 'DEV' into feat/accessibility_contrast_colors
+| | |\ \ \ \ \ \ \ \ \ \  
+| | |/ / / / / / / / / /  
+| |/| | | | | | | | | |   
+| * | | | | | | | | | |   ba1250f Merge pull request #374 from O-clock-Helsinki/feat/header-user-name
+| |\ \ \ \ \ \ \ \ \ \ \  
+| * \ \ \ \ \ \ \ \ \ \ \   ac24aa1 Merge pull request #373 from O-clock-Helsinki/fix/contact-form-height
+| |\ \ \ \ \ \ \ \ \ \ \ \  
+| * \ \ \ \ \ \ \ \ \ \ \ \   d3962aa Merge pull request #372 from O-clock-Helsinki/feat/cart-badge
+| |\ \ \ \ \ \ \ \ \ \ \ \ \  
+| * \ \ \ \ \ \ \ \ \ \ \ \ \   ea857ec Merge pull request #371 from O-clock-Helsinki/feat/footer-cookie-improvements
+| |\ \ \ \ \ \ \ \ \ \ \ \ \ \  
+| | |_|_|_|_|_|_|/ / / / / / /  
+| |/| | | | | | | | | | | | |   
+| | * | | | | | | | | | | | | ea90c44 feat: improve footer layout and branding
+| | | | | | * | | | | | | | | ffb6e93 feat: add text alternatif
+| | | | | | * | | | | | | | | 182b3c5 feat: add accessibility color
+| | | | | | * | | | | | | | |   d3bf03e Merge branch 'DEV' into feat/accessibility_contrast_colors
+| | | | | | |\ \ \ \ \ \ \ \ \  
+| | |_|_|_|_|/ / / / / / / / /  
+| |/| | | | | | | | | | | | |   
+| | | | | | * | | | | | | | | 9f9e060 feat: acceessibility and constrast color
+| | | | | | * | | | | | | | | a79a651 fix: erros_typages_ok
+| | | | | | | * | | | | | | |   b0f6a74 Merge remote-tracking branch 'origin/DEV' into fix/landing-page
+| | | | | | | |\ \ \ \ \ \ \ \  
+| | |_|_|_|_|_|/ / / / / / / /  
+| |/| | | | | | | | | | | | |   
+| * | | | | | | | | | | | | |   9568cfc Merge pull request #375 from O-clock-Helsinki/feat/images-to-backend
+| |\ \ \ \ \ \ \ \ \ \ \ \ \ \  
+| | * | | | | | | | | | | | | | b4c1825 feat: update dangerouslyAllowLocalIP setting to use environment variable for development mode
+| | * | | | | | | | | | | | | | c05c5f0 feat: update image preview paths to include '/uploads/' directory for consistency
+| | * | | | | | | | | | | | | | a7f6142 feat: integrate getImageUrl function for consistent image handling across components
+| | * | | | | | | | | | | | | | ce0a90d feat: add image URL construction function to handle uploaded images
+| | * | | | | | | | | | | | | | a08a016 feat: add images to backend /seed
+| | * | | | | | | | | | | | | | 9b55236 fix: update next.config.ts to optimize backend image handling
+| | * | | | | | | | | | | | | | 2f39b6b fix: update image paths in seed data to use 'seed/' directory
+| | * | | | | | | | | | | | | | 8dd6e2b fix: update .gitignore to reflect new upload path in backend
+| | * | | | | | | | | | | | | | 6c7eca1 fix: update .gitignore to include seed directory for uploads
+| |/ / / / / / / / / / / / / /  
+| | | | | | | * / / / / / / / 8bf2103 feat: improve homepage cards layout
+| | | | | | |/ / / / / / / /  
+| | | | | |/| | | | | | | |   
+| | | | | * | | | | | | | | ffe003b feat: display user first name in header
+| | | | |/ / / / / / / / /  
+| | | | * / / / / / / / / 69899e0 style: adjust contact form layout
+| | | |/ / / / / / / / /  
+| | | * / / / / / / / / 0317d37 feat: add dynamic cart badge
+| | |/ / / / / / / / /  
+| | * | / / / / / / / 52aff98 feat: improve footer layout and cookie banner styling
+| | | |/ / / / / / /  
+| | |/| | | | | | |   
+| | | | | * | | | | 5820c0b feat: refactor authentication page by moving form logic to AuthForm component - for SEO
+| | | | | * | | | | ade43a8 feat: refactor contact page by moving form logic to ContactForm component - for SEO
+| | | | | * | | | | baf67b5 feat: update project description with real text
+| | | | | * | | | | b1ee743 feat: replace <a> with Link component for improved navigation in ProjectTreePurchase
+| | | | | * | | | | 0963278 feat: replace <a> with Link components for improved navigation in authentication and contact pages
+| | | | | * | | | | 3e0b190 feat: update page metadata for SEO optimization across multiple pages
+| | | | | * | | | | bea0bfa feat: add getAllTrees function to retrieve all trees for sitemap generation
+| | | | | * | | | | ba39b7a feat: add robots.txt and sitemap generation for SEO optimization
+| | | | | * | | | | 2c445d7 feat: update SEO configuration and indexing settings
+| | |_|_|/ / / / /  
+| |/| | | | | | |   
+| * | | | | | | |   ccb9635 Merge pull request #370 from O-clock-Helsinki/fix/images_upload
+| |\ \ \ \ \ \ \ \  
+| | |/ / / / / / /  
+| |/| / / / / / /   
+| | |/ / / / / /    
+| | * / / / / / 65b773e fix: upload_images
+| |/ / / / / /  
+| * | | | | |   25b4733 Merge pull request #368 from O-clock-Helsinki/feat/change-projects-localisations
+| |\ \ \ \ \ \  
+| | * | | | | | 5492d39 feat: update project localisations for improved accuracy
+| * | | | | | |   52019ba Merge pull request #366 from O-clock-Helsinki/feat/graceful-error-loading
+| |\ \ \ \ \ \ \  
+| | * | | | | | | 40223dd feat: improve error handling in TreeDetailsPage with console.error
+| | * | | | | | | 0ff5256 feat: enhance error handling in ProjectDetailsPage and remove artificial delay in TreesContent
+| | * | | | | | | c23a75d feat: implement TreesContent and TreesSkeleton for improved loading and error handling in TreesPage
+| | * | | | | | | d815e82 feat: enhance ProjectsContent to improve error handling and loading states
+| | * | | | | | | a73c7e9 feat: update Project interface to require trees and enhance ProjectsSearchParams type
+| | * | | | | | | 33675a5 feat: refactor ProjectsPage to use ProjectsContent and add skeleton loading
+| | * | | | | | | a3a5ea3 feat: enhance error handling and fallback UI for ProjectsCarouselFetcher and TopTreesSection
+| | * | | | | | | 5b3238f feat: remove artificial delay in ProjectsCarouselFetcher and TopTreesSection
+| | * | | | | | | 2d475e3 feat: implement skeleton loading for ProjectsCarousel and TopTreesSection in Homepage
+| | * | | | | | | 78df68c feat: refactor homepage to use ProjectsCarouselFetcher and simplify TopTreesSection
+| * | | | | | | |   4e59ba8 Merge pull request #365 from O-clock-Helsinki/feat/check-password
+| |\ \ \ \ \ \ \ \  
+| | * | | | | | | | 288b814 feat: add password visibility toggle
+| * | | | | | | | |   a915442 Merge pull request #369 from O-clock-Helsinki/fix/aut-controller-tests
+| |\ \ \ \ \ \ \ \ \  
+| | |_|_|/ / / / / /  
+| |/| | | | | | | |   
+| | * | | | | | | | 773d772 test: add acceptedTerms to register test payloads
+| |/ / / / / / / /  
+| * | | | | | | |   a9318fd Merge pull request #367 from O-clock-Helsinki/docs/swagger-projects
+| |\ \ \ \ \ \ \ \  
+| | |/ / / / / / /  
+| |/| | | | | | |   
+| | * | | | | | |   168e716 docs: merge DEV into swagger projects branch
+| | |\ \ \ \ \ \ \  
+| | |/ / / / / / /  
+| |/| | | | | | |   
+| * | | | | | | |   a780227 Merge pull request #364 from O-clock-Helsinki/feat/nodemailer-registration-email
+| |\ \ \ \ \ \ \ \  
+| | * | | | | | | | 698b47b feat: send registration confirmation email
+| | * | | | | | | | aabb466 fix: restore rgpd consent handling
+| | * | | | | | | |   d74783c Merge branch 'DEV' into feat/nodemailer-registration-email
+| | |\ \ \ \ \ \ \ \  
+| | |/ / / / / / / /  
+| |/| | | | | | | |   
+| * | | | | | | | |   386e769 Merge pull request #360 from O-clock-Helsinki/feat/nodemailer
+| |\ \ \ \ \ \ \ \ \  
+| * \ \ \ \ \ \ \ \ \   ab4b0f5 Merge pull request #356 from O-clock-Helsinki/fix/footer-header-hover
+| |\ \ \ \ \ \ \ \ \ \  
+| | * | | | | | | | | | 15ee0d1 fix: improve header and footer hover states
+| * | | | | | | | | | | 0135d1c Merge pull request #353 from O-clock-Helsinki/fix/mobile-header-logo
+| |\| | | | | | | | | | 
+| | * | | | | | | | | | 6fb8040 fix: improve mobile header and form consent
+| * | | | | | | | | | |   ddcced3 Merge pull request #348 from O-clock-Helsinki/fix/test-fail-projects
+| |\ \ \ \ \ \ \ \ \ \ \  
+| | * | | | | | | | | | | 060e364 fix: handle empty project list correctly in getAllProjects
+| | | |_|_|_|/ / / / / /  
+| | |/| | | | | | | | |   
+| * | | | | | | | | | |   4febf89 Merge pull request #362 from O-clock-Helsinki/feat/add-feature-admin-back-office
+| |\ \ \ \ \ \ \ \ \ \ \  
+| | * | | | | | | | | | | 7705be1 fix: password
+| * | | | | | | | | | | |   96a977d Merge pull request #334 from O-clock-Helsinki/docs/swagger-carts
+| |\ \ \ \ \ \ \ \ \ \ \ \  
+| | |_|_|/ / / / / / / / /  
+| |/| | | | | | | / / / /   
+| | | |_|_|_|_|_|/ / / /    
+| | |/| | | | | | | | |     
+| | * | | | | | | | | | 86a1637 docs: add Carts module to OpenAPI documentation
+| | | |_|_|_|_|/ / / /  
+| | |/| | | | | | | |   
+| | | | | | * | | | | 1e3fcff Merge branch 'DEV' into feat/nodemailer-registration-email
+| | | | | |/| | | | | 
+| | |_|_|_|/ / / / /  
+| |/| | | | | | | |   
+| | | | | * | | | | db2bdd7 feat: add user terms consent tracking
+| | | | | | * | | | 3114cb5 docs: add swagger documentation for projects routes
+| | |_|_|_|/ / / /  
+| |/| | | | | | |   
+| * | | | | | | |   dddac84 Merge pull request #352 from O-clock-Helsinki/feat/add-feature-admin-back-office
+| |\ \ \ \ \ \ \ \  
+| | | |/ / / / / /  
+| | |/| | | | | |   
+| | * | | | | | | 7d2a9ac feat: add a filter by tree
+| |/ / / / / / /  
+| * | | | | | |   52986d5 Merge pull request #339 from O-clock-Helsinki/feat/nodemailer
+| |\ \ \ \ \ \ \  
+| | | |_|/ / / /  
+| | |/| | | | |   
+| | * | | | | | 46c688f chore: merge DEV into feat nodemailer
+| | * | | | | |   803b0b2 chore: merge DEV into feat nodemailer
+| | |\ \ \ \ \ \  
+| | | | |/ / / /  
+| | | |/| | | |   
+| | * | | | | | 710b59d feat: send order confirmation email
+| | * | | | | | 2613b87 feat: send order confirmation email
+| | * | | | | | 4da67cb chore: merge DEV into feat nodemailer
+| | | |/ / / /  
+| | |/| | | |   
+| * | | | | |   2d11d42 Merge pull request #350 from O-clock-Helsinki/feat/add-feature-admin-back-office
+| |\ \ \ \ \ \  
+| | * | | | | | 4364c18 fix: deleteuser
+| * | | | | | |   e077ace Merge pull request #349 from O-clock-Helsinki/fix/admin-dashboard-project-trees
+| |\ \ \ \ \ \ \  
+| | |_|_|/ / / /  
+| |/| | | | | |   
+| | * | | | | | 724c5ec fix: handle missing project trees in admin dashboard
+| |/ / / / / /  
+| * | | | | |   4756f03 Merge pull request #338 from O-clock-Helsinki/feat/header-accueil
+| |\ \ \ \ \ \  
+| | * | | | | | cf70ff0 feat: add Accueil link to navigation menu
+| | | |_|_|/ /  
+| | |/| | | |   
+| * | | | | |   867cfc5 Merge pull request #341 from O-clock-Helsinki/feat/error-loading-pages
+| |\ \ \ \ \ \  
+| | * | | | | | 615f9bb feat: implement loading spinner component and update loading page
+| | * | | | | | 5f98012 feat: enhance error and not found pages with improved UI and messaging
+| | | |_|/ / /  
+| | |/| | | |   
+| * | | | | |   01e6262 Merge pull request #340 from O-clock-Helsinki/feat/admin-project-management
+| |\ \ \ \ \ \  
+| | |_|/ / / /  
+| |/| | | | |   
+| | * | | | |   6d3a3c3 Merge branch 'DEV' into feat/admin-project-management
+| | |\ \ \ \ \  
+| | |/ / / / /  
+| |/| | | | |   
+| * | | | | |   6f92812 Merge pull request #335 from O-clock-Helsinki/feat/add-feature-admin-back-office
+| |\ \ \ \ \ \  
+| | | |_|/ / /  
+| | |/| | | |   
+| | * | | | |   3c184d8 Merge branch 'DEV' into feat/add-feature-admin-back-office
+| | |\ \ \ \ \  
+| | |/ / / / /  
+| |/| | | | |   
+| | * | | | |   5034a5f fix: correction orders
+| | |\ \ \ \ \  
+| | | | |/ / /  
+| | | |/| | |   
+| | * | | | | dd37d3a feat: add filter by tree
+| | * | | | | 4774250 feat: add filter trees back office
+| | * | | | | c7933ad feat: add real-time stock updates to back office and frontend
+| | | | * | | f825f00 feat: add project-tree associations and stock management
+| | | | | | * 67fdf48 fix: update build script to copy documentation files to distribution directory
+| | | | | | * 25035fe fix: update project and tree validation to use nullish for longDescription and origin fields
+| | | | | | *   b67307f Merge branch 'DEV' into test/deploy
+| | | | | | |\  
+| | |_|_|_|_|/  
+| |/| | | | |   
+| * | | | | |   6f62da8 Merge pull request #332 from O-clock-Helsinki/fix/payment-system
+| |\ \ \ \ \ \  
+| | |_|_|_|/ /  
+| |/| | | | |   
+| | * | | | | 64c2199 fix: comment out unused Stripe webhook and payment router imports
+| |/ / / / /  
+| * | | | |   d04f8e9 Merge pull request #331 from O-clock-Helsinki/fix/return-old-ordersytem
+| |\ \ \ \ \  
+| | |_|/ / /  
+| |/| | | |   
+| | * | | | 31306dc fix: remove old payment and webhook controllers, update payment flow in frontend
+| |/ / / /  
+| * | | |   1608cb1 Merge pull request #325 from O-clock-Helsinki/feat/stripe-payment
+| |\ \ \ \  
+| | * \ \ \   30343c1 Merge remote-tracking branch 'origin/DEV' into feat/stripe-payment
+| | |\ \ \ \  
+| | |/ / / /  
+| |/| | | |   
+| * | | | |   1d32b25 Merge pull request #327 from O-clock-Helsinki/docs/swagger-users-orders
+| |\ \ \ \ \  
+| | * \ \ \ \   0709e5f Merge remote-tracking branch 'origin/DEV' into docs/swagger-users-orders
+| | |\ \ \ \ \  
+| | | | |_|/ /  
+| | | |/| | |   
+| | * | | | | e8ce7bf docs: add Users and Orders OpenAPI documentation
+| * | | | | |   bcada24 Merge pull request #328 from O-clock-Helsinki/feat/add-project-tree-images
+| |\ \ \ \ \ \  
+| | |_|_|_|/ /  
+| |/| | | | |   
+| | * | | | | fda8b9a feat: add responsive sizes attribute for images in TreeDetails and Cart pages
+| | * | | | | 3db9291 feat: add new tree images to the project
+| | * | | | | 5403032 feat: add optimized pictures for projects and change the seed
+| * | | | | |   261f8f6 Merge pull request #326 from O-clock-Helsinki/feat/add-feature-admin-back-office
+| |\ \ \ \ \ \  
+| | |_|_|/ / /  
+| |/| | | | |   
+| | * | | | | ab8590f fix: correction du bug de la page arbre
+| | * | | | |   c4db76f Merge branch 'DEV' into feat/add-feature-admin-back-office
+| | |\ \ \ \ \  
+| | |/ / / / /  
+| |/| | | | |   
+| | * | | | | 73d9d26 feat: add projet by tree
+| | | | | * |   9b2cf1d feat(stripe): integrate checkout and webhook
+| | | | | |\ \  
+| | |_|_|_|/ /  
+| |/| | | | |   
+| * | | | | |   b97d2c3 Merge pull request #313 from O-clock-Helsinki/feat/privacy-policy
+| |\ \ \ \ \ \  
+| * \ \ \ \ \ \   9173be0 Merge pull request #322 from O-clock-Helsinki/feat/espace-client
+| |\ \ \ \ \ \ \  
+| | * | | | | | | 3fb0d06 feat: display project name and restyle validated badge
+| | | |_|/ / / /  
+| | |/| | | | |   
+| * | | | | | |   12e6495 Merge pull request #323 from O-clock-Helsinki/feat/add-feature-admin-back-office
+| |\ \ \ \ \ \ \  
+| | | |_|/ / / /  
+| | |/| | | | |   
+| | * | | | | | 983cb8e feat: edit image
+| | * | | | | |   e7f42c2 fix: correction bug
+| | |\ \ \ \ \ \  
+| | | | |_|/ / /  
+| | | |/| | | |   
+| | * | | | | | 28adbde fix: correction name
+| | * | | | | | 8c673fe fix: upload path
+| | * | | | | | 3d506dc feat: upload picture
+| | | | | | * | 9d2d20f feat: integrate stripe checkout and webhook
+| | | | | | * |   f88f5a0 Merge branch 'DEV' into feat/stripe-payment
+| | | | | | |\ \  
+| | |_|_|_|_|/ /  
+| |/| | | | | |   
+| * | | | | | |   79b1eb3 Merge pull request #319 from O-clock-Helsinki/feat/create-order-from-cart
+| |\ \ \ \ \ \ \  
+| | |_|_|/ / / /  
+| |/| | | | | |   
+| | * | | | | |   56d9a0c Merge branch 'DEV' into feat/create-order-from-cart
+| | |\ \ \ \ \ \  
+| | |/ / / / / /  
+| |/| | | | | |   
+| | * | | | | | bf445d9 feat: enhance cart addition with useTransition for improved UI responsiveness
+| | * | | | | | 22ab77c feat: integrate OrderModal for order processing and remove inline price formatting
+| | * | | | | | 43e7e25 feat: implement createOrderAction for order creation from cart
+| | * | | | | | 8bf317b feat: add formatPrice function for currency formatting in EUR
+| | * | | | | | 9d32326 feat: implement OrderModal component for order confirmation and summary
+| | * | | | | | f0d9c83 feat: add Dialog and Separator components for UI enhancements
+| | * | | | | | 9cf3a4d feat: change button variant to outline in CartEmpty component
+| | | |/ / / /  
+| | |/| | | |   
+| | | | | * | b124536 Merge branch 'DEV' into feat/stripe-payment
+| | | | |/| | 
+| | |_|_|/ /  
+| |/| | | |   
+| * | | | |   eda1d4e Merge pull request #317 from O-clock-Helsinki/fix/order-decrement-stock
+| |\ \ \ \ \  
+| | * | | | | 833f64e fix: decrement project stock atomically on checkout
+| | |/ / / /  
+| * | | | |   7b5502a Merge pull request #316 from O-clock-Helsinki/feat/add-filter-projects
+| |\ \ \ \ \  
+| | |/ / / /  
+| |/| | | |   
+| | * | | |   303a066 Merge branch 'DEV' into feat/add-filter-projects
+| | |\ \ \ \  
+| | |/ / / /  
+| |/| | | |   
+| * | | | |   241a593 Merge pull request #314 from O-clock-Helsinki/feat/frontend-add-to-cart-tree
+| |\ \ \ \ \  
+| | * | | | | cbe499f feat: wire TreeQuantity to add-to-cart from tree detail page
+| * | | | | | 03f7f5e Merge pull request #312 from O-clock-Helsinki/feat/frontend-add-to-cart-tree
+| |\| | | | | 
+| | * | | | | 2c7459e feat: wire add-to-cart from tree detail page
+| | | * | | | d5d0ae8 feat: add filtering and search options for projects
+| | | * | | | e5ac68a feat: enhance project retrieval with filtering and add localisations endpoint
+| | | * | | | a98d760 fix: add orderBy to getActiveCart to fix a bug in front
+| | | * | | | bda75b5 feat: add a progress bar to projects card to fit with homepage and fix the color
+| | |/ / / /  
+| | | | * / ddce3fd feat: add privacy policy page
+| | |_|/ /  
+| |/| | |   
+| * | | |   43f11fd Merge pull request #305 from O-clock-Helsinki/feat/auth-header-indicator
+| |\ \ \ \  
+| | * | | | 676328c feat: update auth header indicator
+| * | | | |   c85858a Merge pull request #311 from O-clock-Helsinki/feat/tarteaucitron-clean
+| |\ \ \ \ \  
+| | * | | | | b0568ca chore: ignore tarteaucitron assets in eslint
+| | * | | | | 8daaf8c feat: add cookie consent management with tarteaucitron
+| * | | | | |   7e4eb1f Merge pull request #309 from O-clock-Helsinki/fix/cookie-maxage-name-middleware
+| |\ \ \ \ \ \  
+| | * | | | | | 6011712 fix: change middleware name to proxy (according Next standard)
+| | * | | | | | f1170f0 fix: update cookie maxAge to 1 day
+| | |/ / / / /  
+| * | | | | |   11bb370 Merge pull request #310 from O-clock-Helsinki/feat/admin-filters-and-image-upload
+| |\ \ \ \ \ \  
+| | |_|_|/ / /  
+| |/| | | | |   
+| | * | | | |   a81f1b4 fix: resolve merge conflicts with dev
+| | |\ \ \ \ \  
+| | |/ / / / /  
+| |/| | | | |   
+| * | | | | |   09bdebc Merge pull request #307 from O-clock-Helsinki/feat/add-to-cart-from-project
+| |\ \ \ \ \ \  
+| | * | | | | | b311367 feat: add comments
+| | * | | | | | cfa1cfd feat: implement add to cart functionality in ProjectTreePurchase component
+| | * | | | | | 9b44609 refactor: change place for description to fit with the detail page of a tree
+| | * | | | | | 0694425 refactor: cart actions and update imports for better organization
+| | | |_|/ / /  
+| | |/| | | |   
+| * | | | | | 244eb51 fix: correction bug photo
+| | |_|/ / /  
+| |/| | | |   
+| | | * | | e2c1277 fix: resolve admin validator import casing issue
+| | |/ / /  
+| |/| | |   
+| * | | |   a62e362 Merge pull request #306 from O-clock-Helsinki/feat/add-feature-admin-back-office
+| |\ \ \ \  
+| | | |/ /  
+| | |/| |   
+| | * | | d5d3a3d feat: maj packagejson
+| | * | | abb411e feat: dashboard and validators
+| * | | |   e4cb590 Merge pull request #304 from O-clock-Helsinki/feat/frontend-api-user-routes
+| |\ \ \ \  
+| | |/ / /  
+| |/| | |   
+| | * | | 25cf67f feat: add user API helpers and wire espace-client page
+| |/ / /  
+| * | |   422193e Merge pull request #303 from O-clock-Helsinki/feat/admin-auth
+| |\ \ \  
+| | |/ /  
+| |/| |   
+| | * | b6b8b69 feat: setup-admin-authentication
+| * | |   0e63cc5 Merge pull request #302 from O-clock-Helsinki/feat/frontend-cart
+| |\ \ \  
+| | * | | 09e39f5 fix: correct comments and streamline cookie deletion in logout route
+| | * | | b211e54 fix: update login credentials in cart tests
+| | * | | a8a1a6a feat: implement cart actions and UI components for managing cart items
+| | * | | ffd6e54 feat: enhance error handling in apiFetch with ApiError class
+| | * | | def06f0 feat: create calls to api/carts
+| | * | | ed72c04 feat: add /panier to private route
+| * | | |   9db7909 Merge pull request #301 from O-clock-Helsinki/fix/project-details-types
+| |\ \ \ \  
+| | |_|/ /  
+| |/| | |   
+| | * | | b3af521 fix: correct tree typing in project details page
+| | * | | 8593382 feat: admin.middleware added, auth.middleware updated
+| * | | |   a565059 Merge pull request #299 from O-clock-Helsinki/feat/add-feature-admin-back-office
+| |\ \ \ \  
+| | |/ / /  
+| |/| | |   
+| | * | | f249635 feat: setup admin
+| |/ / /  
+| * | |   0e605a9 Merge pull request #298 from O-clock-Helsinki/feat/auth-header-state
+| |\ \ \  
+| | * | | 9b0ccf1 feat: handle auth state in header
+| * | | |   75b9396 Merge pull request #291 from O-clock-Helsinki/feat/api-order
+| |\ \ \ \  
+| | * | | | 4f4e847 feat: add POST /api/orders to convert active cart
+| | * | | |   a9a8891 Merge remote-tracking branch 'origin/DEV' into feat/api-order
+| | |\ \ \ \  
+| | | | |/ /  
+| | | |/| |   
+| * | | | | 1b23830 Merge pull request #285 from O-clock-Helsinki/refactor/rename-user-router
+| |\| | | | 
+| | * | | | 0f36e21 refactor: rename user.routes to user.router for consistency
+| * | | | |   84aa917 Merge pull request #294 from O-clock-Helsinki/feat/front-projects-details
+| |\ \ \ \ \  
+| | | |_|/ /  
+| | |/| | |   
+| | * | | | 6bb40e5 feat: add project detail purchase section
+| | | |/ /  
+| | |/| |   
+| * | | |   d02cb07 Merge pull request #274 from O-clock-Helsinki/fix/delete-me-with-orders
+| |\ \ \ \  
+| | * | | | c01771c feat: anonymize account on DELETE /me instead of hard delete
+| * | | | |   904688a Merge pull request #293 from O-clock-Helsinki/feat/create-home-page
+| |\ \ \ \ \  
+| | * | | | | 41b68d2 feat: complete homepage implementation
+| | * | | | |   c4843b3 Merge branch 'DEV' into feat/create-home-page
+| | |\ \ \ \ \  
+| | |/ / / / /  
+| |/| | | | |   
+| * | | | | |   f3efb9a Merge pull request #292 from O-clock-Helsinki/feat/add-feature-search-frontend
+| |\ \ \ \ \ \  
+| | |_|_|/ / /  
+| |/| | | | |   
+| | * | | | | 8c9457c feat: add feature search for mobile and desktop
+| |/ / / / /  
+| * | | | |   08613ec Merge pull request #290 from O-clock-Helsinki/fix/tests-carts
+| |\ \ \ \ \  
+| | * | | | | 73daead fix: change credentials for tests cart controller
+| |/ / / / /  
+| * | | | |   97dee69 Merge pull request #289 from O-clock-Helsinki/feat/api-carts
+| |\ \ \ \ \  
+| | * | | | | b0a8465 test: test auto for cart controller
+| | * | | | | b40583f feat: finalize cart controller
+| | * | | | | d1d5ce9 feat: add a validator to verify body POST carts/items and test OK
+| | * | | | | 96a4bc3 test: add a test to add an item to cart (not ok for now)
+| | * | | | | d8f6c91 feat: add a POST  route to /carts/items
+| | * | | | | cd74bb2 feat: implement getOrCreateActiveCart function to manage active carts
+| | * | | | | 6734e25 feat: add comments on controller and begin the addItemToCart function
+| | * | | | | cd94f87 test: add a file to test with restclient
+| | * | | | | fbdef65 feat: add GET /api/carts to get the active cart
+| | * | | | | 33c6691 feat: add file for route /cart and add it in the index.router.ts
+| * | | | | |   928b337 Merge pull request #288 from O-clock-Helsinki/fix/api-project-all
+| |\ \ \ \ \ \  
+| | * | | | | | fe461d1 fix: change tests to be ok with new controller
+| | * | | | | | d8807e9 fix: change call projects all
+| | | |_|_|/ /  
+| | |/| | | |   
+| * | | | | |   b9da739 Merge pull request #284 from O-clock-Helsinki/feat/about-page
+| |\ \ \ \ \ \  
+| | * | | | | | f7738c3 feat: add a-propos page
+| * | | | | | |   e91865b Merge pull request #287 from O-clock-Helsinki/feat/frontend-page-contact
+| |\ \ \ \ \ \ \  
+| | * | | | | | | a629519 feat: add-page-contact with emailJS
+| | | |/ / / / /  
+| | |/| | | | |   
+| * | | | | | |   5a3afe4 Merge pull request #286 from O-clock-Helsinki/feat/user-anonymization
+| |\ \ \ \ \ \ \  
+| | |/ / / / / /  
+| |/| | | | | |   
+| | * | | | | | 56763c2 feat: add user soft delete support
+| | * | | | | | bcab40a fix: restore seed script
+| | * | | | | | 15bd14b test: fix auth controller integration tests
+| | | | | * | | b7ec0ca feat: improve-homepage-sections-and-design
+| | | | | * | |   ce96bb8 Merge branch 'DEV' into feat/create-home-page
+| | | | | |\ \ \  
+| | |_|_|_|/ / /  
+| |/| | | | | |   
+| * | | | | | |   b28f4b0 Merge pull request #281 from O-clock-Helsinki/feat/add-front-end-all-trees
+| |\ \ \ \ \ \ \  
+| | * \ \ \ \ \ \   d88a404 Merge branch 'DEV' into feat/add-front-end-all-trees
+| | |\ \ \ \ \ \ \  
+| | * \ \ \ \ \ \ \   7ba274c Merge branch 'DEV' into feat/add-front-end-all-trees
+| | |\ \ \ \ \ \ \ \  
+| | * | | | | | | | | 9b098b9 feat: add label for trees
+| * | | | | | | | | |   49c593c Merge pull request #280 from O-clock-Helsinki/feat/add-details-tree
+| |\ \ \ \ \ \ \ \ \ \  
+| | |_|_|_|/ / / / / /  
+| |/| | | | | | | | |   
+| | * | | | | | | | | 62ec105 feat: add stock and project - tree detail
+| | * | | | | | | | |   e7734bb Merge branch 'DEV' into feat/add-details-tree
+| | |\ \ \ \ \ \ \ \ \  
+| | | | |_|/ / / / / /  
+| | | |/| | | | | | |   
+| | * | | | | | | | | 0cd3ded feat: add detail tree
+| | | |_|/ / / / / /  
+| | |/| | | | | | |   
+| * | | | | | | | |   a74eac3 Merge pull request #278 from O-clock-Helsinki/feat/frontend-auth
+| |\ \ \ \ \ \ \ \ \  
+| | |_|/ / / / / / /  
+| |/| | | | | | | |   
+| | * | | | | | | |   7cc06e1 chore: merge DEV into frontend auth
+| | |\ \ \ \ \ \ \ \  
+| | |/ / / / / / / /  
+| |/| | | | | | | |   
+| * | | | | | | | |   ad4259e Merge pull request #276 from O-clock-Helsinki/feat/espace-client
+| |\ \ \ \ \ \ \ \ \  
+| | | |_|_|/ / / / /  
+| | |/| | | | | | |   
+| | * | | | | | | |   055cbb5 Merge remote-tracking branch 'origin/DEV' into feat/espace-client
+| | |\ \ \ \ \ \ \ \  
+| | | | |/ / / / / /  
+| | | |/| | | | | |   
+| | * | | | | | | | 20e67a2 feat: connect page to /me and /me/orders endpoints
+| | * | | | | | | |   c9e2bc3 Merge branch 'DEV' into feat/espace-client
+| | |\ \ \ \ \ \ \ \  
+| | | | |_|_|_|_|/ /  
+| | | |/| | | | | |   
+| | * | | | | | | |   e9ddd3a Merge branch 'DEV' into feat/espace-client
+| | |\ \ \ \ \ \ \ \  
+| * | \ \ \ \ \ \ \ \   dfbc859 Merge pull request #277 from O-clock-Helsinki/feat/backend-create-router-controller-tree
+| |\ \ \ \ \ \ \ \ \ \  
+| | |_|_|_|/ / / / / /  
+| |/| | | | | | | | |   
+| | * | | | | | | | |   f5b9596 Merge branch 'DEV' into feat/backend-create-router-controller-tree
+| | |\ \ \ \ \ \ \ \ \  
+| | |/ / / / / / / / /  
+| |/| | | | | | | | |   
+| | * | | | | | | | | 99af66d feat: add include in api/trees/:slug for recover project
+| | * | | | | | | | | 25a57d1 feat: add router projectbyTreeSlug
+| | | | | | * | | | | e382cd4 feat: authentication page
+| | | | | | | |/ / /  
+| | | | | | |/| | |   
+| | | | | | | | * | c7dc652 feat: add-homepage-sections-and-projects-carousel
+| | |_|_|_|_|_|/ /  
+| |/| | | | | | |   
+| * | | | | | | |   37a7544 Merge pull request #275 from O-clock-Helsinki/feat/test-for-trees
+| |\ \ \ \ \ \ \ \  
+| | * \ \ \ \ \ \ \   5171814 Merge branch 'DEV' into feat/test-for-trees
+| | |\ \ \ \ \ \ \ \  
+| | |/ / / / / / / /  
+| |/| | | | | | | |   
+| * | | | | | | | |   fe2d2e0 Merge pull request #273 from O-clock-Helsinki/feat/add-front-end-all-trees
+| |\ \ \ \ \ \ \ \ \  
+| | | |_|_|_|_|_|/ /  
+| | |/| | | | | | |   
+| | * | | | | | | | fd4edca feat: add controllers trees
+| | * | | | | | | | 1de4279 feat: add filter and correction pagination back-end
+| | * | | | | | | |   b6d1c6c Merge branch 'DEV' into feat/add-front-end-all-trees
+| | |\ \ \ \ \ \ \ \  
+| | | | |_|_|_|_|/ /  
+| | | |/| | | | | |   
+| | * | | | | | | | 9c04e0a feat: add image trees and pagination
+| | * | | | | | | |   b79367d Merge branch 'DEV' into feat/add-front-end-all-trees
+| | |\ \ \ \ \ \ \ \  
+| | * | | | | | | | | 8ad21f9 feat: add-front-end-all-trees
+| | * | | | | | | | | 3334050 feat: add front end all trees
+| | * | | | | | | | |   9f250ef Merge branch 'DEV' into feat/add-front-end-all-trees
+| | |\ \ \ \ \ \ \ \ \  
+| | * | | | | | | | | | 238f7bc feat: add trees page with cards, pagination, and UI components
+| | | | | | * | | | | | 94120ca fix: update trees controller with price, filters and limit
+| | | | | | * | | | | | 469e9e8 fix: correction router
+| | | | | | * | | | | | e75d10a feat: add tests for trees
+| | |_|_|_|/ / / / / /  
+| |/| | | | | | | | |   
+| * | | | | | | | | |   db7a892 Merge pull request #271 from O-clock-Helsinki/test/projects
+| |\ \ \ \ \ \ \ \ \ \  
+| | |_|_|_|/ / / / / /  
+| |/| | | | | | | | |   
+| | * | | | | | | | | 2b7d938 test: add a test for project controller
+| | | |_|_|_|_|_|/ /  
+| | |/| | | | | | |   
+| * | | | | | | | |   4a724ca Merge pull request #148 from O-clock-Helsinki/refactor/auth.http
+| |\ \ \ \ \ \ \ \ \  
+| | |/ / / / / / / /  
+| |/| | | | | | | |   
+| | * | | | | | | | 1b6f392 chore: update env example
+| | * | | | | | | |   cf1ba91 Merge branch 'DEV' into refactor/auth.http
+| | |\ \ \ \ \ \ \ \  
+| | * | | | | | | | | 3823758 refactor: structure modified
+| * | | | | | | | | |   b77e620 Merge pull request #160 from O-clock-Helsinki/feat/api-call-route-handler
+| |\ \ \ \ \ \ \ \ \ \  
+| | * | | | | | | | | | 3ce3a78 fix: limit in front project page
+| | * | | | | | | | | | eed3a0d fix: fix sending limit and  types of controller project and name of test rest client
+| | * | | | | | | | | | 67c4e52 feat: secure access to pages with authentification needs
+| | * | | | | | | | | | 7ba0035 feat: add route handler for logout: delete the cookie
+| | * | | | | | | | | | 1e9993e feat: add route handler for login : add the token to a cookie HTTP only
+| | * | | | | | | | | | 636a957 refactor: change api calls with new file /lib/api.ts
+| | * | | | | | | | | | 3ab2261 feat: centralize api calls
+| | * | | | | | | | | | d6f298c fix: validator unnecessary
+| | | |_|_|_|/ / / / /  
+| | |/| | | | | | | |   
+| * | | | | | | | | |   72a845a Merge pull request #159 from O-clock-Helsinki/feat/chore/update-seed
+| |\ \ \ \ \ \ \ \ \ \  
+| | * | | | | | | | | | 7f800c4 chore: update seed
+| | |/ / / / / / / / /  
+| * | | | | | | | | |   35d8da0 Merge pull request #157 from O-clock-Helsinki/feat/api-user-orders
+| |\ \ \ \ \ \ \ \ \ \  
+| | |_|_|/ / / / / / /  
+| |/| | | | | | | | |   
+| | * | | | | | | | | 4ef254f Merge remote-tracking branch 'origin/DEV' into feat/api-user-orders
+| | |\| | | | | | | | 
+| | * | | | | | | | | aceb1ce feat: add /me/orders endpoints (list + detail)
+| * | | | | | | | | |   af061b9 Merge pull request #86 from O-clock-Helsinki/test/add-backend-tests
+| |\ \ \ \ \ \ \ \ \ \  
+| | |_|/ / / / / / / /  
+| |/| | | | | | | | |   
+| | * | | | | | | | |   98ceae9 Merge remote-tracking branch 'origin/DEV' into test/add-backend-tests
+| | |\ \ \ \ \ \ \ \ \  
+| | | | |_|/ / / / / /  
+| | | |/| | | | | | |   
+| | * | | | | | | | | bcf8a26 test: reorganize-backend-test-structure
+| | | | | | | | | | * 661264f fix: configure typescript build for production
+| | | | | | | | | | * 1496823 feat: add script prisma deploy
+| | |_|_|_|_|_|_|_|/  
+| |/| | | | | | | |   
+| * | | | | | | | |   55ee811 Merge pull request #151 from O-clock-Helsinki/feat/legal-pages
+| |\ \ \ \ \ \ \ \ \  
+| | * | | | | | | | | 2b7f10c feat: add CGU-CGV-and-legal-notice-pages
+| * | | | | | | | | |   de4fe38 Merge pull request #152 from O-clock-Helsinki/feat/frontend-get-projects
+| |\ \ \ \ \ \ \ \ \ \  
+| | * \ \ \ \ \ \ \ \ \   dc9711d Merge branch 'DEV' into feat/frontend-get-projects
+| | |\ \ \ \ \ \ \ \ \ \  
+| | |/ / / / / / / / / /  
+| |/| | | | | | | | | |   
+| * | | | | | | | | | |   6d9e24c Merge pull request #150 from O-clock-Helsinki/feat/api-get-projects
+| |\ \ \ \ \ \ \ \ \ \ \  
+| | |_|_|_|_|_|/ / / / /  
+| |/| | | | | | | | | |   
+| | * | | | | | | | | |   49a1e83 Merge branch 'DEV' into feat/api-get-projects
+| | |\ \ \ \ \ \ \ \ \ \  
+| | |/ / / / / / / / / /  
+| |/| | | | | | | | | |   
+| * | | | | | | | | | |   f1bfc86 Merge pull request #144 from O-clock-Helsinki/feat/auth-node-tests
+| |\ \ \ \ \ \ \ \ \ \ \  
+| | |_|_|_|_|_|/ / / / /  
+| |/| | | | | | | | | |   
+| | * | | | | | | | | | e9b8ef7 fix: remove duplicate JWT env variables
+| | * | | | | | | | | | 75713ca fix: remove duplicate JWT env variables
+| | * | | | | | | | | |   3331173 Merge branch 'DEV' of github.com:O-clock-Helsinki/projet-cda-GreenRoots into feat/auth-node-tests
+| | |\ \ \ \ \ \ \ \ \ \  
+| | |/ / / / / / / / / /  
+| |/| | | | | | | | | |   
+| * | | | | | | | | | |   848bf08 Merge pull request #147 from O-clock-Helsinki/feat/api-user
+| |\ \ \ \ \ \ \ \ \ \ \  
+| | * \ \ \ \ \ \ \ \ \ \   531a6ba Merge remote-tracking branch 'origin/DEV' into feat/api-user
+| | |\ \ \ \ \ \ \ \ \ \ \  
+| | * | | | | | | | | | | | e9fb90a feat: add /api/users/me endpoints (GET, PUT, DELETE)
+| | | |_|_|_|/ / / / / / /  
+| | |/| | | | | | | | | |   
+| * | | | | | | | | | | |   02d14f0 Merge pull request #146 from O-clock-Helsinki/ci/fix-github-actions-auth-tests
+| |\ \ \ \ \ \ \ \ \ \ \ \  
+| | |_|/ / / / / / / / / /  
+| |/| | | | | | | | | | |   
+| | * | | | | | | | | | | e9b65bb ci: fix authentication tests workflow
+| | | |_|_|_|_|_|/ / / /  
+| | |/| | | | | | | | |   
+| * | | | | | | | | | |   393b614 Merge pull request #145 from O-clock-Helsinki/fix/dockerfile-prisma-postinstall
+| |\ \ \ \ \ \ \ \ \ \ \  
+| | |/ / / / / / / / / /  
+| |/| | | | | | | | | |   
+| | * | | | | | | | | | 341e867 fix: enable prisma postinstall to generate client at build time
+| |/ / / / / / / / / /  
+| * | | | | | | | | |   d39d721 Merge pull request #141 from O-clock-Helsinki/feat/espace-client
+| |\ \ \ \ \ \ \ \ \ \  
+| | | |_|_|_|_|_|_|/ /  
+| | |/| | | | | | | |   
+| | * | | | | | | | | acd6c99 feat: add static espace-client page and testing CI documentation
+| | | |_|_|_|_|/ / /  
+| | |/| | | | | | |   
+| * | | | | | | | |   8cfa09e Merge pull request #82 from O-clock-Helsinki/feat/backend-create-router-controller-tree
+| |\ \ \ \ \ \ \ \ \  
+| | |_|/ / / / / / /  
+| |/| | | | | | / /   
+| | | |_|_|_|_|/ /    
+| | |/| | | | | |     
+| | * | | | | | |   012d7e0 fix: correction-router
+| | |\ \ \ \ \ \ \  
+| | |/ / / / / / /  
+| |/| | | | | | |   
+| * | | | | | | |   bb72764 Merge pull request #142 from O-clock-Helsinki/test/auth-jwt
+| |\ \ \ \ \ \ \ \  
+| * \ \ \ \ \ \ \ \   f4e09fa Merge pull request #89 from O-clock-Helsinki/feat/auth-middleware
+| |\ \ \ \ \ \ \ \ \  
+| | |_|_|_|_|_|_|_|/  
+| |/| | | | | | | |   
+| | | | * | | | | | e132844 feat: add-test-restClient-trees
+| | | | * | | | | |   eb8a4f3 feat: add trees controller
+| | | | |\ \ \ \ \ \  
+| | | | | | |_|_|_|/  
+| | | | | |/| | | |   
+| | | | * | | | | | 8c6cbc3 feat: add backend contollers trees
+| | | | * | | | | | 77ca16c feat: add router and controllers for all trees
+| | | | | | | * | | 3dfcce2 test: add authentication integration tests
+| | | | | | | * | | 14bb364 test: validate authentication workflow
+| | | | |_|_|/ / /  
+| | | |/| | | | |   
+| | | * | | | | | c1c7b80 fix: handle invalid JWT tokens
+| | |/ / / / / /  
+| | * | | | | | 668156a feat: add auth middleware
+| | | | | | * | 0e25e6a fix: change name of file test to tests
+| | | | | | * | f6c4497 feat: fix name of controller and add a validation with zod
+| | | | | | | | * 6756684 feat: new seed with more trees and projects to easily test on front
+| | | | | | | |/  
+| | | | | | | * 7b0d78a fix: route /api/projects (/projects)
+| | | | | | | *   3508132 Merge branch 'DEV' into feat/frontend-get-projects
+| | | | | | | |\  
+| | |_|_|_|_|_|/  
+| |/| | | | | |   
+| * | | | | | | ce70048 Merge pull request #88 from O-clock-Helsinki/chore/generated-to-gitignore
+| |\| | | | | | 
+| | |_|_|/ / /  
+| |/| | | | |   
+| | * | | | | 3d172d6 fix: .env.example modified
+| | * | | | | 170c636 fix: dockercompose and db
+| * | | | | | fab0e36 Merge pull request #87 from O-clock-Helsinki/chore/generated-to-gitignore
+| |\| | | | | 
+| | * | | | | 0a5059e chore: update gitignore
+| * | | | | | d51724d Merge pull request #85 from O-clock-Helsinki/feat/auth-controller
+| |\| | | | | 
+| | |_|/ / /  
+| |/| | | |   
+| | * | | | 998935d fix: correct jwt typing
+| | * | | | f82fe0c fix: add jsonwebtoken TypeScript types
+| | * | | |   e3a0ec6 Merge branch 'DEV' into feat/auth-controller
+| | |\ \ \ \  
+| | |/ / / /  
+| |/| | | |   
+| * | | | |   3d6fba4 Merge pull request #83 from O-clock-Helsinki/feat/validator-auth
+| |\ \ \ \ \  
+| | * | | | | 66fa8e2 chore: add zod 4 and use z.email()
+| * | | | | |   8d80fda Merge pull request #72 from O-clock-Helsinki/ci/setup-github-actions
+| |\ \ \ \ \ \  
+| | * | | | | | d19f6cf ci: finalize-backend-github-actions-workflow
+| | * | | | | | 7500a6e ci: improve backend github actions workflow
+| | * | | | | | a528653 ci: debug docker containers
+| | * | | | | | 53d39d5 ci: add-backend-github-actions-workflow
+| |/ / / / / /  
+| | | * | | | 6c64cf4 feat: auth.controller, updates dockercompose and prisma
+| | | * | | |   e4784da Merge branch 'DEV' into feat/auth-controller
+| | | |\ \ \ \  
+| | |_|/ / / /  
+| |/| | | | |   
+| * | | | | | 5dd245d Merge pull request #80 from O-clock-Helsinki/feat/validator-auth
+| |\| | | | | 
+| | * | | | | 255f8a6 feat(auth): add password strength rules to register validator
+| | | * | | |   6c5e8b5 Merge branch 'DEV' into feat/auth-controller
+| | | |\ \ \ \  
+| | |_|/ / / /  
+| |/| | | | |   
+| | | * | | |   cdd7e7b Merge branch 'DEV' into feat/auth-controller
+| | | |\ \ \ \  
+| | | |/ / / /  
+| | |/| | | |   
+| | | | | | * 51b585b feat: add pagination component to projects page
+| | | | | | * 979f05f feat: add metadata, fetch data from backend, pagination but not done
+| | | | | | * 3a3776b fix: delete fake data
+| | | | | | * 20e1c71 feat: add components pagination and progress. It actualized button component
+| | | | | | * 995ba70 feat: add pics according to database infos
+| | | | | | * 9a97d16 feat: add an index.ts to put every types in front
+| | | | | | * 38e1335 feat: change page with components
+| | | | | | * 1303c5a feat: add components card and badge
+| | | | | | * 8651431 feat: add data projects to simulate real data. import data into projects page
+| | | | | |/  
+| | | | | * b70a927 fix: remove prefix api from router
+| | | | | * 202135b feat: controller projects with pagination, but no test for now
+| | | | | * 894c823 feat: router project and link into index.router
+| | |_|_|/  
+| |/| | |   
+| * | | |   4e76397 Merge pull request #69 from O-clock-Helsinki/feat/setup-error-handler
+| |\ \ \ \  
+| | * \ \ \   ccdc7f5 Merge remote-tracking branch 'origin/DEV' into feat/setup-error-handler
+| | |\ \ \ \  
+| | * | | | | 7eff788 feat: add centralized error handling+prisma scripts
+| | * | | | | 8394c23 feat(backend): add centralized error handling with custom error classes
+| * | | | | |   a79d4a7 Merge pull request #71 from O-clock-Helsinki/feat/global-styles
+| |\ \ \ \ \ \  
+| | |_|/ / / /  
+| |/| | | | |   
+| | * | | | | 32a5851 fix: isOpen function
+| | * | | | | d5b380f feat: add background image and changes on import components in layout
+| | * | | | | 94cb594 feat: adapt header to mobile with components and tailwind hidden fonction
+| | * | | | | c2ed8cb fix: simplify homepage
+| | * | | | | c3ddf88 fix: change Footer component name
+| | * | | | | 888c0f1 fix: change name for Title component
+| | * | | | | de485fc feat: add the same structure to every pages (some pages will need changes to be ok with template)
+| | * | | | | 2386319 feat: create a component Title to show the good title and the background image in every pages
+| | * | | | | a096362 feat: add brand colors to globals.css
+| | * | | | | 408c02e fix: modify import for components
+| * | | | | |   5f33f82 Merge pull request #73 from O-clock-Helsinki/fix/prisma-schema-with-seeding
+| |\ \ \ \ \ \  
+| | | |_|_|/ /  
+| | |/| | | /   
+| | |_|_|_|/    
+| |/| | | |     
+| | * | | | 6140a1d fix: modifications des imports de seed.ts, installation d'Argon2, MAJ de certaines données de tests
+| * | | | |   7d84ff9 Merge pull request #70 from O-clock-Helsinki/test/setup-test-postgres-database
+| |\ \ \ \ \  
+| | |_|_|_|/  
+| |/| | | |   
+| | * | | |   6f11e84 test: setup docker test environment
+| | |\ \ \ \  
+| | |/ / / /  
+| |/| | | |   
+| * | | | |   c5008b1 Merge pull request #68 from O-clock-Helsinki/feat/auth-route
+| |\ \ \ \ \  
+| | | |/ / /  
+| | |/| | |   
+| | * | | | 73c4aee feat: auth.router.ts and index.ts added with routes /register, /login and /logout linked with app.ts
+| |/ / / /  
+| * | | |   af89816 Merge pull request #66 from O-clock-Helsinki/feat/footer-layout
+| |\ \ \ \  
+| | | |/ /  
+| | |/| |   
+| | * | | 1ffc6d6 feat: add header into layout
+| | * | |   900586d Merge branch 'DEV' into feat/footer-layout
+| | |\ \ \  
+| | |/ / /  
+| |/| | |   
+| * | | |   218ba06 Merge pull request #65 from O-clock-Helsinki/feat/add-component-navbar-footer
+| |\ \ \ \  
+| | * | | | 51c0bea fix: move files
+| | * | | | 0f8de98 feat: add-header-component
+| | * | | | 5ef3a9f feat: add header component
+| | * | | |   c2597d4 fix: add fix global.css
+| | |\ \ \ \  
+| | | | |_|/  
+| | | |/| |   
+| | * | | | 5030bcc feat: add component navbar
+| | | | * | 295068d feat: changes on footer structure
+| | | | * | 5da2124 feat: add basic footer structure
+| | | | * | eceff4d fix: change directory for globals.css and add other styling files
+| | | | * | 06c947e fix: tsconfig change paths
+| | | | * | f532d1b feat: add fonts to layout
+| | | | | * 01b69b9 test: setup-docker-test-environment
+| | | | | *   1f837e3 Merge branch 'DEV' into test/setup-test-postgres-database
+| | | | | |\  
+| | |_|_|_|/  
+| |/| | | |   
+| * | | | |   63c15de Merge pull request #60 from O-clock-Helsinki/feature/setup-helmet-cors
+| |\ \ \ \ \  
+| | * | | | | aebaceb feat: add helmet and cors security middlewares
+| * | | | | |   198ff15 Merge pull request #59 from O-clock-Helsinki/feat/prisma-migration
+| |\ \ \ \ \ \  
+| | |_|_|/ / /  
+| |/| | | | |   
+| | * | | | | d0c0f5d feat: prisma migration creation, updates on all .env, update on docker-compose
+| | | | | | * 77e6ed1 test: setup-postgres-test-database
+| | |_|_|_|/  
+| |/| | | |   
+| * | | | |   3c06454 Merge pull request #58 from O-clock-Helsinki/feat/frontend-layout
+| |\ \ \ \ \  
+| | |_|/ / /  
+| |/| | | /   
+| | | |_|/    
+| | |/| |     
+| | * | | 0f84925 feat: add an example of homepage
+| | * | | efa1484 feat: add error, loading and not-found
+| | * | | 0f7e873 feat: add layout to app (comments on components header and footer)
+| | * | | 555f4a5 feat: add globals.css to app
+| | * | | e16d6da fix: change place for app in src
+| * | | |   2f86963 Merge pull request #56 from O-clock-Helsinki/feat/create-app-and-server
+| |\ \ \ \  
+| | * | | | aa38b61 feat: add-app-and-server-entry-points
+| * | | | |   ce65586 Merge pull request #57 from O-clock-Helsinki/feat/readme
+| |\ \ \ \ \  
+| | |_|_|_|/  
+| |/| | | |   
+| * | | | |   a9aebeb Merge pull request #55 from O-clock-Helsinki/feat/update-prisma-schema-decimal
+| |\ \ \ \ \  
+| | |_|_|/ /  
+| |/| | | /   
+| | | |_|/    
+| | |/| |     
+| | * | | d9c6be1 feat: update decimal on  prisma schema
+| | | |/  
+| | |/|   
+| * | |   a0c61a4 Merge pull request #54 from O-clock-Helsinki/fix/correction-structure-front-end
+| |\ \ \  
+| | |/ /  
+| |/| |   
+| | * | eb30ac4 fix: add correction structure front-end
+| | | | * 1fcb2b9 docs: readme correction
+| | | |/  
+| | | * b3937f6 docs: add comprehensive project documentation to README
+| | | *   98a8926 Merge branch 'DEV' of github.com:O-clock-Helsinki/projet-cda-GreenRoots into DEV
+| | | |\  
+| | |_|/  
+| |/| |   
+| * | |   4ebdd5c Merge pull request #35 from O-clock-Helsinki/feat/Dockerfile
+| |\ \ \  
+| | |/ /  
+| |/| |   
+| | * | e2d5fc0 build(backend): add .dockerignore rules
+| | * |   84f2224 Merge branch 'feat/Dockerfile' of github.com:O-clock-Helsinki/projet-cda-GreenRoots into feat/Dockerfile
+| | |\ \  
+| | | * \   2095762 Merge branch 'DEV' into feat/Dockerfile
+| | | |\ \  
+| | * | \ \   b2ae129 Merge remote-tracking branch 'origin/DEV' into feat/Dockerfile
+| | |\ \ \ \  
+| | | |/ / /  
+| | |/| / /   
+| | | |/ /    
+| | * | | 3ac6208 build(backend): add pg adapter dependencies and .dockerignore
+| * | | |   280f86d Merge pull request #36 from O-clock-Helsinki/chore/change-prettier
+| |\ \ \ \  
+| | |_|/ /  
+| |/| | |   
+| | * | | ed2c0b4 chore: add prettierignore
+| |/ / /  
+| * | |   b88f74f Merge pull request #34 from O-clock-Helsinki/fix/prisma-decimal-and-docker
+| |\ \ \  
+| | * | | d3df2dc fix: update prisma decimal types and dockerfile
+| | * | | 18a9da8 fix: update prisma decimal types and dockerfile
+| | * | | d7b5202 feat: add test setup
+| | | | * 950f75a fix: resolve merge conflict in .gitignore
+| | |_|/  
+| |/| |   
+| * | |   55bade1 Merge pull request #33 from O-clock-Helsinki/fix/correction-bug-dockerfile
+| |\ \ \  
+| | |/ /  
+| |/| |   
+| | * | 46aadc5 Fix:correction-bug-dockerfile
+| |/ /  
+|/| |   
+| * | d459cab Merge pull request #32 from O-clock-Helsinki/feat/Dockerfile
+| |\| 
+| | * e471275 fix: resolve merge conflict in .gitignore
+| * |   7ae0c1e Merge pull request #30 from O-clock-Helsinki/feat/add-frontend-structure
+| |\ \  
+| | * \   50fd055 Merge branch 'DEV' into feat/add-frontend-structure
+| | |\ \  
+| | |/ /  
+| |/| |   
+| * | |   3fd1268 Merge pull request #31 from O-clock-Helsinki/feat/Dockerfile
+| |\ \ \  
+| | | |/  
+| | |/|   
+| | * | 5512fc1 chore: remove duplicate docker-compose file
+| | * | faff6fb chore: use environment variables for docker-compose credentials
+| | * | 3b14a13 chore: add docker-compose configuration
+| * | |   931ff04 Merge remote-tracking branch 'origin/main' into DEV
+| |\ \ \  
+| |/ / /  
+|/| | |   
+* | | |   c112985 Merge pull request #28 from O-clock-Helsinki/feat/Dockerfile
+|\ \ \ \  
+| | |/ /  
+| |/| |   
+| * | | 0e14df6 chore: configure docker for backend and database
+| | | * 7fb5c22 feat: add-frontend-structure
+| | | * d0a6979 feat: add-frontend-structure
+| | |/  
+| | * 05f42aa Merge pull request #27 from O-clock-Helsinki/feat/schema-prisma
+| |/| 
+| | * 177d235 feat: update prisma schema
+| * | 1359708 Merge pull request #26 from O-clock-Helsinki/feat/schema-prisma
+| |\| 
+| | * a652eca feat:add schema prisma
+| * | 3f9b1ea Merge pull request #25 from O-clock-Helsinki/feat/adding-back-end-structure
+|/| | 
+| * | 8a0f9bb fix:MAJ PR
+| * | 009cc4d feat:add-structure-back-end
+* | | 383d2b4 Merge pull request #24 from O-clock-Helsinki/feat/adding-back-end-structure
+|\| | 
+| * | c18bd48 fix:apps-by-app-correction
+| * | 84bfdac feat/adding-back-end-structure
+| |/  
+| * 6c20023 Merge pull request #13 from O-clock-Helsinki/chore/init
+|/| 
+| * e011b85 chore: fix eslint config frontend
+| * 7f10af9 chore: init project structure
+|/  
+* 6284311 chore: initial commit
