@@ -6,14 +6,15 @@ import {
   loginUser,
   logoutUser,
 } from '../controllers/auth.controller.js';
+import { authRateLimiter } from '../middlewares/rateLimit.middleware.js';
 
 //Instanciation du router
 export const router = Router();
 
 //Définition des routes d'authentification
 
-router.post('/register', registerUser);
+router.post('/register', authRateLimiter, registerUser);
 
-router.post('/login', loginUser);
+router.post('/login', authRateLimiter, loginUser);
 
 router.post('/logout', logoutUser);

@@ -80,6 +80,7 @@ services:
       BREVO_API_KEY: ${BREVO_API_KEY}
       MAIL_FROM_EMAIL: ${MAIL_FROM_EMAIL}
       MAIL_FROM_NAME: ${MAIL_FROM_NAME}
+      DISABLE_RATE_LIMIT: 'true'
     ports:
       - '3002:3002'
       - '5556:5556'
