@@ -65,24 +65,25 @@ services:
       - /app/node_modules
 
   backend-test:
-    build: ./backend
-    container_name: greenroots-backend-test
-    restart: unless-stopped
-    depends_on:
-      db-test:
-        condition: service_healthy
-    environment:
-      DATABASE_URL: '${TEST_DATABASE_URL}'
-      PORT: 3002
-      FRONTEND_URL: ${FRONTEND_URL}
-      JWT_SECRET: ${JWT_SECRET}
-      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
-      BREVO_API_KEY: ${BREVO_API_KEY}
-      MAIL_FROM_EMAIL: ${MAIL_FROM_EMAIL}
-      MAIL_FROM_NAME: ${MAIL_FROM_NAME}
-    ports:
-      - '3002:3002'
-      - '5556:5556'
+      build: ./backend
+      container_name: greenroots-backend-test
+      restart: unless-stopped
+      depends_on:
+        db-test:
+          condition: service_healthy
+      environment:
+        DATABASE_URL: '${TEST_DATABASE_URL}'
+        PORT: 3002
+        FRONTEND_URL: ${FRONTEND_URL}
+        JWT_SECRET: ${JWT_SECRET}
+        JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
+        BREVO_API_KEY: ${BREVO_API_KEY}
+        MAIL_FROM_EMAIL: ${MAIL_FROM_EMAIL}
+        MAIL_FROM_NAME: ${MAIL_FROM_NAME}
+        DISABLE_RATE_LIMIT: 'true'
+      ports:
+        - '3002:3002'
+        - '5556:5556'
 
 volumes:
   greenroots-data:
