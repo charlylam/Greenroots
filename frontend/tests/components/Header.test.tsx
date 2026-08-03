@@ -1,14 +1,17 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import Header from '@/components/layout/Header';
-
+import { CartProvider } from '@/components/cart/CartProvider';
 // Les mocks next/link, next/navigation et next/image sont définis
 // globalement dans tests/setup.tsx (appliqués automatiquement à tous les tests).
 
 describe('Header', () => {
   it('affiche le lien Accueil pointant vers /', () => {
-    render(<Header isLoggedIn={false} />);
-
+    render(
+      <CartProvider isLoggedIn={false}>
+        <Header isLoggedIn={false} />
+      </CartProvider>
+    );
     const accueilLinks = screen.getAllByRole('link', { name: /accueil/i });
     expect(accueilLinks.length).toBeGreaterThan(0);
     accueilLinks.forEach((link) => {
@@ -17,8 +20,11 @@ describe('Header', () => {
   });
 
   it('affiche tous les liens du menu', () => {
-    render(<Header isLoggedIn={false} />);
-
+    render(
+      <CartProvider isLoggedIn={false}>
+        <Header isLoggedIn={false} />
+      </CartProvider>
+    );
     expect(
       screen.getAllByRole('link', { name: /accueil/i }).length
     ).toBeGreaterThan(0);
