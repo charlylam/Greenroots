@@ -1,6 +1,7 @@
 import { apiFetch } from '@/lib/api';
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
+import { ApiError } from '@/lib/errors';
 
 // ================================================================
 // ROUTE API : AUTHENTIFICATION / CONNEXION UTILISATEUR
@@ -53,11 +54,17 @@ export const POST = async (request: Request) => {
     // Retourne une réponse JSON indiquant le succès de l'authentification.
     return NextResponse.json({ message: 'Connexion réussie' }, { status: 200 });
   } catch (error) {
-    // En cas d'erreur (échec du login, backend inaccessible, etc.), on renvoie un message générique.
+    // Une ApiError vient du backend avec un vrai code HTTP (401, 429, 409...) :
+    // on le transmet tel quel plutôt que de l'écraser en 500 générique.
+    if (error instanceof ApiError) {
+      return NextResponse.json(
+        { message: error.message },
+        { status: error.status }
+      );
+    }
+    // Erreur inattendue (backend inaccessible, etc.) : 500 générique légitime.
     return NextResponse.json(
-      {
-        message: error instanceof Error ? error.message : 'Erreur de connexion',
-      },
+      { message: 'Erreur de connexion' },
       { status: 500 }
     );
   }
